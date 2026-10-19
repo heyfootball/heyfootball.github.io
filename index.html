@@ -1937,7 +1937,7 @@ ${homeBlog()}
 let MUS=null;
 const mFreq=m=>440*Math.pow(2,(m-69)/12),PROG=[[57,60,64,45],[53,57,60,41],[52,55,60,48],[50,55,59,43]];// Am F C G (last number = bass)
 function musicStart(){if(MUS||!ST.music||document.hidden)return;try{const ac=new (window.AudioContext||window.webkitAudioContext)(),master=ac.createGain();
-  master.gain.setValueAtTime(0,ac.currentTime);master.gain.linearRampToValueAtTime(.13,ac.currentTime+2.5);master.connect(ac.destination);
+  master.gain.setValueAtTime(0,ac.currentTime);master.gain.linearRampToValueAtTime(.32,ac.currentTime+2.5);master.connect(ac.destination);
   const nb=ac.createBuffer(1,Math.floor(ac.sampleRate*.2),ac.sampleRate),nd=nb.getChannelData(0);for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;
   const echo=ac.createDelay(),fb=ac.createGain(),ef=ac.createBiquadFilter();echo.delayTime.value=.47;fb.gain.value=.28;ef.type="lowpass";ef.frequency.value=2200;echo.connect(fb).connect(echo);echo.connect(ef).connect(master);
   MUS={ac,master,nb,echo,next:ac.currentTime+.15,step:0,timer:0};MUS.timer=setInterval(musicTick,120);musicTick()}catch(e){MUS=null}musicBtn()}
