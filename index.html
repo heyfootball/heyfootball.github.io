@@ -434,7 +434,14 @@ header{transition:box-shadow .3s}body.scrolled header{box-shadow:0 8px 24px #000
 :root[data-ev=football] main h1,:root[data-ev=football] main h2{text-shadow:0 3px 0 #063d1f,0 0 20px #fff4}
 :root[data-ev=football] .tabbar{background:rgba(4,35,18,.95)!important;border-top:3px solid #fff!important}
 :root[data-ev=football] #evfx .evp{animation-name:evbounce}@keyframes evbounce{0%{transform:translateY(-10vh) rotate(0)}60%{transform:translateY(80vh) rotate(300deg)}75%{transform:translateY(62vh) rotate(380deg)}100%{transform:translateY(110vh) rotate(540deg)}}
-/* Social bar, match room, card battles, leagues, club war, fanzone */
+#loadscr{position:fixed;inset:0;z-index:9998;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:rgba(6,12,30,.72);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);color:#fff;font:800 18px Outfit,sans-serif;opacity:0;visibility:hidden;transition:opacity .2s,visibility 0s .2s}
+#loadscr.on{opacity:1;visibility:visible;transition:opacity .2s .25s,visibility 0s .25s}
+#loadscr.first{background:var(--bg,#0b1430);transition:none}
+#loadscr .lb{font-size:56px;animation:lbounce .55s ease-in-out infinite alternate}
+@keyframes lbounce{from{transform:translateY(0) rotate(0)}to{transform:translateY(-28px) rotate(200deg)}}
+#loadscr .lbar{width:170px;height:6px;border-radius:9px;background:#ffffff22;overflow:hidden}#loadscr .lbar i{display:block;height:100%;width:40%;background:#ffd23f;border-radius:9px;animation:lslide 1s linear infinite}
+@keyframes lslide{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
+@media(prefers-reduced-motion:reduce){#loadscr .lb,#loadscr .lbar i{animation:none}}/* Social bar, match room, card battles, leagues, club war, fanzone */
 .fzmini{font-size:13px;margin:4px 8px 0 0}.fzpostbtn{white-space:nowrap}.fzdtbar{display:flex;justify-content:flex-end;margin:0 0 10px}
 .tlink{background:none;border:0;padding:0;color:inherit;font:inherit;cursor:pointer;text-align:left}.tlink:hover{text-decoration:underline}
 .bar nav [data-t=friends]{display:none!important}
@@ -882,7 +889,7 @@ function matchRoomHtml(){if(MR.key!==(MR.id||"")){MR.key=MR.id||"";MR.data=null;
 const btIn=()=>(BT.list||[]).filter(b=>b.status==="pending"&&!b.mine);
 const btLine=p=>["GK","CB","RB","LB","LWB","RWB"].includes(p.position)?"D":["CDM","CM","CAM","LM","RM"].includes(p.position)?"M":"A";
 // expected points for each card (same power-ups as Supabase; the random roll counted at its average)
-function btPts(sel){return sel.map(p=>{const k=perkOf(p),o=sel.filter(q=>q!==p);let b=k===0?6:k===1?Math.min(15,3*o.filter(q=>q.club===p.club).length):k===2?Math.min(15,3*o.filter(q=>q.nation===p.nation).length):k===5?(btLine(p)==="D"?10:0):k===6?(btLine(p)==="A"?8:0):k===7?10:0;
+function btPts(sel){return sel.map(p=>{const k=perkOf(p),o=sel.filter(q=>q!==p);let b=k===0?6:k===1?Math.min(15,3*o.filter(q=>q.club===p.club).length):k===2?Math.min(15,3*o.filter(q=>q.nation===p.nation).length):k===5?Math.min(10,2*o.filter(q=>btLine(q)==="D"&&(q.club===p.club||q.nation===p.nation)).length):k===6?Math.min(8,4*o.filter(q=>btLine(q)==="A"&&(q.club===p.club||q.nation===p.nation)).length):k===7?10:0;
   b+=3*o.filter(q=>perkOf(q)===3&&btLine(q)===btLine(p)).length;return p.rating+(k===4?2:0)+b})}
 const btVal=p=>btPts([p])[0],btEst=sel=>btPts(sel).reduce((a,b)=>a+b,0);
 async function btLoad(){if(!(SB&&me)||BT.loading)return;BT.loading=true;const{data,error}=await SB.rpc("battle_list");BT.loading=false;if(error){BT.list=BT.list||[];BT.msg="⚠️ "+socErr(error)}else BT.list=data||[];if(tab==="gallery")render()}
@@ -3281,9 +3288,9 @@ Leader|Líder|Líder
 Wildcard|Imprevisível|Comodín
 Scores −10 to +15 around his rating instead of −5 to +5|Marca entre −10 e +15 em vez de −5 a +5|Puntúa entre −10 y +15 en vez de −5 a +5
 Rock|Muralha|Muralla
-+10 if he plays in defence or goal|+10 se jogar na defesa ou na baliza|+10 si juega en defensa o portería
++2 for each defender or goalkeeper in your team from his club or country (max +10)|+2 por cada defesa ou guarda-redes da equipa do mesmo clube ou país (máx. +10)|+2 por cada defensa o portero del equipo del mismo club o país (máx. +10)
 Finisher|Finalizador|Rematador
-+8 if he plays in attack|+8 se jogar no ataque|+8 si juega en ataque
++4 for each attacker in your team from his club or country (max +8)|+4 por cada avançado da equipa do mesmo clube ou país (máx. +8)|+4 por cada delantero del equipo del mismo club o país (máx. +8)
 Wonderkid|Jovem prodígio|Joven prodigio
 +10 every day|+10 todos os dias|+10 cada día
 Captain|Capitão|Capitán
@@ -3363,8 +3370,8 @@ Link copied!|Link copiado!|¡Enlace copiado!
 +3 per same-country teammate|+3 por colega do mesmo país|+3 por compañero del mismo país
 +3 to his line|+3 à sua linha|+3 a su línea
 −10 to +15 swing|varia de −10 a +15|varía de −10 a +15
-+10 in defence or goal|+10 na defesa ou baliza|+10 en defensa o portería
-+8 in attack|+8 no ataque|+8 en ataque
++2 per defender from his club/country|+2 por defesa do seu clube/país|+2 por defensa de su club/país
++4 per attacker from his club/country|+4 por avançado do seu clube/país|+4 por delantero de su club/país
 +10 every day|+10 todos os dias|+10 cada día
 Max per day|Máximo por dia|Máximo por día
 Min per day|Mínimo por dia|Mínimo por día
@@ -3558,15 +3565,15 @@ async function loadGallery(){if(!SB||!me)return;gTried=true;loadPools();loadCred
 if(er)gMsg=/relation|does not exist|schema cache|function/i.test(er.message)?"Cards aren't set up in Supabase yet.":"Couldn't load your cards. Check your connection.";else{GP=pl.data||[];WAL=w.data;COL={};(c.data||[]).forEach(r=>COL[r.player_id]=r.copies);if(!/coins/.test(gMsg))gMsg=""}}catch(e){gMsg="Couldn't load your cards. Check your connection."}if(tab==="gallery"||tab==="derby"||tab==="home")render()}
 const initials=n=>n.split(/\s+/).filter(Boolean).map(w=>w[0]).slice(0,2).join("").toUpperCase();
 /* ---- DREAM TEAM POWER-UPS: every card has one (worked out the same way as in Supabase), plus a captain who scores double ---- */
-const PERKS=[["🔥","Hot streak","+6 points every day"],["🤝","Club link","+3 for each teammate from the same club (max +15)"],["🌍","Nation link","+3 for each teammate from the same country (max +15)"],["👑","Leader","+3 to every other player in his line (defence, midfield or attack)"],["🎲","Wildcard","Scores −10 to +15 around his rating instead of −5 to +5"],["🧱","Rock","+10 if he plays in defence or goal"],["🎯","Finisher","+8 if he plays in attack"],["🌟","Wonderkid","+10 every day"]];
+const PERKS=[["🔥","Hot streak","+6 points every day"],["🤝","Club link","+3 for each teammate from the same club (max +15)"],["🌍","Nation link","+3 for each teammate from the same country (max +15)"],["👑","Leader","+3 to every other player in his line (defence, midfield or attack)"],["🎲","Wildcard","Scores −10 to +15 around his rating instead of −5 to +5"],["🧱","Rock","+2 for each defender or goalkeeper in your team from his club or country (max +10)"],["🎯","Finisher","+4 for each attacker in your team from his club or country (max +8)"],["🌟","Wonderkid","+10 every day"]];
 // short version of each power-up, shown on the card under its name
-const PERK_SHORT=["+6 every day","+3 per same-club teammate","+3 per same-country teammate","+3 to his line","−10 to +15 swing","+10 in defence or goal","+8 in attack","+10 every day"];
+const PERK_SHORT=["+6 every day","+3 per same-club teammate","+3 per same-country teammate","+3 to his line","−10 to +15 swing","+2 per defender from his club/country","+4 per attacker from his club/country","+10 every day"];
 const perkOf=p=>p.rising?7:((p.id*37+11)%7),pcPerk=p=>{if(p.special)return"";const i=perkOf(p),k=PERKS[i];return`<div class="pc-perk" title="${esc(L(k[1])+": "+L(k[2]))}"><b>${k[0]} ${esc(L(k[1]))}</b><small>${esc(L(PERK_SHORT[i]))}</small></div>`};
 let DTCAP=null;
 // expected points per day for a team (wildcards counted at their average); index 0-4 defence, 5-7 midfield, 8-10 attack
 // m: "exp" (average day), "min" (worst day) or "max" (best day)
 function dtEst(arr,cap,m){const ps=arr.map(id=>id?GP.find(p=>p.id===id):null),line=i=>i<=4?0:i<=7?1:2;let tot=0;
-  ps.forEach((p,i)=>{if(!p)return;const k=perkOf(p),others=ps.filter((q,j)=>q&&j!==i);let b=k===0?6:k===1?Math.min(15,3*others.filter(q=>q.club===p.club).length):k===2?Math.min(15,3*others.filter(q=>q.nation===p.nation).length):k===5?(i<=4?10:0):k===6?(i>=8?8:0):k===7?10:0;
+  ps.forEach((p,i)=>{if(!p)return;const k=perkOf(p),others=ps.filter((q,j)=>q&&j!==i);let b=k===0?6:k===1?Math.min(15,3*others.filter(q=>q.club===p.club).length):k===2?Math.min(15,3*others.filter(q=>q.nation===p.nation).length):k===5?Math.min(10,2*ps.filter((q,j)=>q&&j!==i&&j<=4&&(q.club===p.club||q.nation===p.nation)).length):k===6?Math.min(8,4*ps.filter((q,j)=>q&&j!==i&&j>=8&&(q.club===p.club||q.nation===p.nation)).length):k===7?10:0;
     b+=3*ps.filter((q,j)=>q&&j!==i&&perkOf(q)===3&&line(j)===line(i)).length;const off=m==="min"?(k===4?-10:-5):m==="max"?(k===4?15:5):(k===4?2.5:0);tot+=(p.rating+off+b)*(cap===i?2:1)});return Math.round(tot)}
 function pcard(p,copies,badge,delay){const r=rarOf(p.rarity);return `<div class="pc r-${p.rarity}${p.release_at?" s2":""}${p.special==="derby"?" derbycard":""}" style="--rc:${r[3]};${delay!=null?`animation-delay:${delay}s`:""}">${badge||""}${p.special==="derby"?'<span class="derbybadge">🔥 DERBY</span>':""}<div class="pc-top"><b>${p.rating}</b><span>${esc(p.position)}</span></div><div class="pc-av">${esc(initials(p.name))}</div><div class="pc-name">${esc(p.name)}</div><div class="pc-club">${esc(p.club)}</div><div class="pc-meta">${esc(p.nation)}${p.rising?" · 🌟":""}</div><div class="pc-r">${r[2]} ${r[1]}${copies>1?` · x${copies}`:""}</div>${pcPerk(p)}</div>`}
 const hiddenCard=p=>`<div class="pc pc-hid" aria-label="Not collected yet"><div class="pc-q">?</div><div class="pc-name">#${p.id}</div></div>`;
@@ -3829,8 +3836,18 @@ function stopAll(){Object.keys(T).forEach(stop);gameStop();liveStop()}
 function play(id){const l=LEARN.find(x=>x.id===id);if(!VIEWED.has("tut:"+id)){VIEWED.add("tut:"+id);logAct("tutorial",{t:l.t})}if(T[id]&&T[id].h){stop(id);return}
 LEARN.forEach(x=>x.id!==id&&stop(x.id));if(T[id].i>=l.f.length-1)show(id,0);
 $(`[data-play=${id}]`).textContent="Pause";T[id].h=setInterval(()=>{if(T[id].i>=l.f.length-1){stop(id);return}show(id,T[id].i+1)},2600)}
-document.addEventListener("click",e=>{const t=e.target.closest("button,i,[data-open]");if(!t)return;if(t.dataset.open)e.preventDefault();const d=t.dataset;
-if(d.t){if(d.t==="friends"&&tab!=="friends")FD.loaded=false;if(d.t==="leagues"){LQ.list=null;LQ.msg=""}if(d.t==="clubs"){CW.d=null;CW.msg="";CW.pick=null}if(d.t==="fanzone"&&tab!=="fanzone"){FZ.list=null;FZ.msg=""}if(d.t==="gallery"&&tab!=="gallery"){BT.list=null;BT.msg=""}if(d.t==="matches"){MR.on=false;MR.id=null}tab=d.t;open=null;$("#more").hidden=true;$(".tabbar [data-more]").setAttribute("aria-expanded","false");scrollTo(0,0)}else if(d.more!==undefined){const m=$("#more");m.hidden=!m.hidden;t.closest(".tabbar")&&t.setAttribute("aria-expanded",String(!m.hidden));$(".tabbar [data-more]").setAttribute("aria-expanded",String(!m.hidden));return}else if(d.cat)cat=d.cat;else if(d.g)curGame=d.g;else if(d.wk){wKey(d.wk);return}else if(d.mt)msub=d.mt;else if(d.room){room=d.room;NEWG=null;LEAVEASK=null;markSeen(room)}else if(d.send!==undefined){doSend();return}else if(d.addf!==undefined){addFriend();return}else if(d.lg){lg=d.lg;lgSet=true}else if(d.qa!==undefined){qAns(+d.qa);return}else if(d.mc!==undefined){mFlip(+d.mc);return}else if(d.yt!==undefined){const y=CFG.YT[+d.yt];logAct("tutorial",{t:y.t});t.closest(".yt").querySelector(".thumb").outerHTML=`<iframe class="ytf" src="https://www.youtube-nocookie.com/embed/${y.id}?autoplay=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="${y.t}"></iframe>`;return}else if(d.open){closeSearch();openFrom=tab==="news"?openFrom||"news":tab;open=d.open;tab="news";setTimeout(()=>scrollTo(0,0),0);const n=ANY().find(x=>x.id===d.open);if(n&&n.url&&!VIEWED.has(n.id)){VIEWED.add(n.id);logAct("view",{t:n.t.slice(0,200),url:n.url})}}
+/* ---- LOADING SCREEN: shows when you switch tabs or your action waits for Supabase, instead of the page looking frozen.
+   It only appears if something takes longer than a quarter of a second, so quick things don't flash. ---- */
+var LOADN=0,LOADNEXT=false,LOADT=0,LASTCLICK=0;
+const loadEl=(()=>{const d=document.createElement("div");d.id="loadscr";d.className="on first";d.setAttribute("role","status");d.setAttribute("aria-live","polite");d.innerHTML='<div class="lb" aria-hidden="true">⚽</div><b class="lt">Loading…</b><div class="lbar" aria-hidden="true"><i></i></div>';document.body.appendChild(d);setTimeout(()=>{if(!LOADN)d.classList.remove("on","first")},8000);return d})();
+function showLoad(){LOADN++;try{loadEl.querySelector(".lt").textContent=L("Loading…")}catch(e){}loadEl.classList.add("on");clearTimeout(LOADT);LOADT=setTimeout(()=>{LOADN=0;loadEl.classList.remove("on","first")},15000)}
+function hideLoad(){LOADN=Math.max(0,LOADN-1);if(!LOADN){loadEl.classList.remove("on","first");clearTimeout(LOADT)}}
+// switching tabs: show the loading screen first, then build the page
+(()=>{const real=render;render=function(){if(LOADNEXT){LOADNEXT=false;showLoad();setTimeout(()=>{try{real()}finally{hideLoad()}},30);return}real();if(authReady&&loadEl.classList.contains("first")&&!LOADN)loadEl.classList.remove("on","first")}})();
+// anything you tapped that waits for Supabase (opening packs, battles, posting...) shows it too
+document.addEventListener("click",()=>{LASTCLICK=Date.now()},true);
+if(SB){const rr=SB.rpc.bind(SB),quiet=["ping","mark_seen","fz_my_stats","live_room"];SB.rpc=function(fn,args,opt){const p=Promise.resolve(rr(fn,args,opt));if(Date.now()-LASTCLICK<1500&&!quiet.includes(fn)){showLoad();p.then(hideLoad,hideLoad)}return p}}document.addEventListener("click",e=>{const t=e.target.closest("button,i,[data-open]");if(!t)return;if(t.dataset.open)e.preventDefault();const d=t.dataset;
+if(d.t){if(d.t!==tab)LOADNEXT=true;if(d.t==="friends"&&tab!=="friends")FD.loaded=false;if(d.t==="leagues"){LQ.list=null;LQ.msg=""}if(d.t==="clubs"){CW.d=null;CW.msg="";CW.pick=null}if(d.t==="fanzone"&&tab!=="fanzone"){FZ.list=null;FZ.msg=""}if(d.t==="gallery"&&tab!=="gallery"){BT.list=null;BT.msg=""}if(d.t==="matches"){MR.on=false;MR.id=null}tab=d.t;open=null;$("#more").hidden=true;$(".tabbar [data-more]").setAttribute("aria-expanded","false");scrollTo(0,0)}else if(d.more!==undefined){const m=$("#more");m.hidden=!m.hidden;t.closest(".tabbar")&&t.setAttribute("aria-expanded",String(!m.hidden));$(".tabbar [data-more]").setAttribute("aria-expanded",String(!m.hidden));return}else if(d.cat)cat=d.cat;else if(d.g)curGame=d.g;else if(d.wk){wKey(d.wk);return}else if(d.mt)msub=d.mt;else if(d.room){room=d.room;NEWG=null;LEAVEASK=null;markSeen(room)}else if(d.send!==undefined){doSend();return}else if(d.addf!==undefined){addFriend();return}else if(d.lg){lg=d.lg;lgSet=true}else if(d.qa!==undefined){qAns(+d.qa);return}else if(d.mc!==undefined){mFlip(+d.mc);return}else if(d.yt!==undefined){const y=CFG.YT[+d.yt];logAct("tutorial",{t:y.t});t.closest(".yt").querySelector(".thumb").outerHTML=`<iframe class="ytf" src="https://www.youtube-nocookie.com/embed/${y.id}?autoplay=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="${y.t}"></iframe>`;return}else if(d.open){closeSearch();openFrom=tab==="news"?openFrom||"news":tab;open=d.open;tab="news";setTimeout(()=>scrollTo(0,0),0);const n=ANY().find(x=>x.id===d.open);if(n&&n.url&&!VIEWED.has(n.id)){VIEWED.add(n.id);logAct("view",{t:n.t.slice(0,200),url:n.url})}}
 else if(d.fs){fsub=d.fs;unfAsk=null;if(d.fs!=="profile")fView=null;if(d.fs==="feed")loadFriends()}else if(d.fview){fView=d.fview;fsub="profile";unfAsk=null;delete FD.prof[d.fview]}else if(d.trade){trSel={to:d.trade,give:[],get:[]};trMsg="";fsub="trade"}else if(d.tg){const i=+d.tg,a=trSel.give;trSel.give=a.includes(i)?a.filter(x=>x!==i):a.length<5?[...a,i]:a;trMsg=""}else if(d.tw){const i=+d.tw,a=trSel.get;trSel.get=a.includes(i)?a.filter(x=>x!==i):a.length<5?[...a,i]:a;trMsg=""}else if(d.tsend!==undefined){sendTrade();return}else if(d.tacc){answerTrade(d.tacc,true);return}else if(d.tdec){answerTrade(d.tdec,false);return}else if(d.tcan){cancelTrade(d.tcan);return}else if(d.newg!==undefined){NEWG={name:"",sel:[],msg:""}}else if(d.gpick){NEWG.name=($("#gname")||{}).value||NEWG.name;NEWG.sel=NEWG.sel.includes(d.gpick)?NEWG.sel.filter(x=>x!==d.gpick):[...NEWG.sel,d.gpick];NEWG.msg=""}else if(d.gcreate!==undefined){createGroup();return}else if(d.gcancel!==undefined){NEWG=null}else if(d.leaveg){LEAVEASK=LEAVEASK===+d.leaveg?null:+d.leaveg}else if(d.leavegyes){leaveGroup(+d.leavegyes);return}else if(d.fmlg){fmLg=d.fmlg}else if(d.gadev){gaDev=d.gadev}else if(d.lbk){LBK=d.lbk;lbRender();return}else if(d.tk){TK=d.tk;TOUR=null;TOURERR="";loadTour(true)}
 else if(d.fun){const[a1,a2]=d.fun.split(":");funDo(a1,a2);return}else if(d.trpick!==undefined){t.classList.toggle("on");return}
 else if(d.shorts!==undefined){openShorts();return}
