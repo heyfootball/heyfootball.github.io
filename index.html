@@ -980,11 +980,13 @@ const fzItNext=x=>({h:x.h,a:x.a,lg:LGN(x.c)||x.c||"",when:day(x.t)+" "+hm(x.t)})
 function fzOpen(k,it){FZ.sub="post";FZ.kind=k;FZ.item=it;FZ.sel=null;FZ.cap="";FZ.msg="";FZ.style=FZ.style||"classic";tab="fanzone";open=null;try{closeSearch()}catch(e){}scrollTo(0,0)}
 function fzKeep(){const c=document.getElementById("fz-cap");if(c)FZ.cap=c.value}
 async function fzLoad(more){if(!(SB&&me)||FZ.loading)return;FZ.loading=true;if(more)render();const{data,error}=await SB.rpc("fz_feed",{p_offset:more&&FZ.list?FZ.list.length:0});FZ.loading=false;
-  if(error){FZ.list=FZ.list||[];FZ.more=false;FZ.msg="⚠️ "+socErr(error)}else{const got=data||[],have=new Set(more&&FZ.list?FZ.list.map(p=>p.id):[]);FZ.list=(more&&FZ.list?FZ.list:[]).concat(got.filter(p=>!have.has(p.id)));FZ.more=got.length===20}if(tab==="fanzone")render()}
+  if(error){FZ.list=FZ.list||[];FZ.more=false;FZ.msg="⚠️ "+socErr(error)}else{const got=data||[],have=new Set(more&&FZ.list?FZ.list.map(p=>p.id):[]);FZ.list=(more&&FZ.list?FZ.list:[]).concat(got.filter(p=>!have.has(p.id)));FZ.more=got.length===20;fzSort()}if(tab==="fanzone")render()}
 async function fzStat(force){if(!(SB&&me)||(!force&&Date.now()-FZ.statAt<60000))return;FZ.statAt=Date.now();const{data,error}=await SB.rpc("fz_my_stats");if(!error&&data){const ch=JSON.stringify(data)!==JSON.stringify(FZ.stat);FZ.stat=data;if(ch&&(tab==="fanzone"||tab==="account"))render()}}
 const fzStatHtml=()=>{setTimeout(fzStat,0);return FZ.stat?`<p class="fzstat">📣 ${L("Fanzone")}: <b>${FZ.stat.posts}</b> ${L(FZ.stat.posts===1?"post":"posts")} · ❤️ <b>${FZ.stat.likes}</b> ${L(FZ.stat.likes===1?"like":"likes")}</p>`:""};
-async function fzLike(id){const p=(FZ.list||[]).find(x=>x.id===id);if(!p)return;p.liked=!p.liked;p.likes+=p.liked?1:-1;render();
-  try{const{data,error}=await SB.rpc("fz_like",{p_id:id});if(error)throw error;p.liked=data.liked;p.likes=data.likes}catch(e){p.liked=!p.liked;p.likes+=p.liked?1:-1;toast("⚠️ "+socErr(e))}render()}
+// best first: likes ÷ minutes since posting (same as Supabase), re-sorted whenever likes change
+function fzSort(){if(!FZ.list)return;const now=Date.now(),sc=p=>(p.likes||0)/Math.max(1,(now-new Date(p.created_at))/6e4);FZ.list.sort((a,b)=>sc(b)-sc(a)||b.id-a.id)}
+async function fzLike(id){const p=(FZ.list||[]).find(x=>x.id===id);if(!p)return;p.liked=!p.liked;p.likes+=p.liked?1:-1;fzSort();render();
+  try{const{data,error}=await SB.rpc("fz_like",{p_id:id});if(error)throw error;p.liked=data.liked;p.likes=data.likes}catch(e){p.liked=!p.liked;p.likes+=p.liked?1:-1;toast("⚠️ "+socErr(e))}fzSort();render()}
 async function fzDel(id){try{const{error}=await SB.rpc("admin_fz_delete",{p_id:id});if(error)throw error;FZ.list=(FZ.list||[]).filter(p=>p.id!==id);toast(L("Post removed"))}catch(e){toast("⚠️ "+socErr(e))}render()}
 async function fzPost(){fzKeep();if(!FZ.item||FZ.busy)return;FZ.busy=true;render();try{const{data,error}=await SB.rpc("fz_post",{p_kind:FZ.kind,p_style:FZ.style,p_caption:FZ.cap,p_item:FZ.item});if(error)throw error;if(!data||!data.ok)throw new Error((data&&data.error)||L("Couldn't post. Try again."));
   FZ.kind=null;FZ.item=null;FZ.sel=null;FZ.cap="";FZ.msg="";FZ.sub="view";FZ.list=null;toast("📣 "+L("Posted!"));fzStat(true)}catch(e){FZ.msg="⚠️ "+socErr(e)}FZ.busy=false;render()}
