@@ -441,7 +441,18 @@ header{transition:box-shadow .3s}body.scrolled header{box-shadow:0 8px 24px #000
 @keyframes lbounce{from{transform:translateY(0) rotate(0)}to{transform:translateY(-28px) rotate(200deg)}}
 #loadscr .lbar{width:170px;height:6px;border-radius:9px;background:#ffffff22;overflow:hidden}#loadscr .lbar i{display:block;height:100%;width:40%;background:#ffd23f;border-radius:9px;animation:lslide 1s linear infinite}
 @keyframes lslide{from{transform:translateX(-100%)}to{transform:translateX(260%)}}
-@media(prefers-reduced-motion:reduce){#loadscr .lb,#loadscr .lbar i{animation:none}}/* Social bar, match room, card battles, leagues, club war, fanzone */
+@media(prefers-reduced-motion:reduce){#loadscr .lb,#loadscr .lbar i{animation:none}}.ibbtn{position:relative;border:1.5px solid var(--line);background:var(--card);color:var(--ink);border-radius:99px;width:36px;height:34px;font-size:16px;cursor:pointer;flex:none}.ibbtn:hover{border-color:var(--turf)}.ibbtn.has{border-color:#e5383b}
+.guest .ibbtn{display:none}
+.ibcount{position:absolute;top:-6px;right:-7px;min-width:18px;height:18px;padding:0 5px;border-radius:99px;background:#e5383b;color:#fff;font:800 11px/18px Outfit,sans-serif;box-shadow:0 0 0 2px var(--bg)}
+#ibpanel{position:fixed;top:62px;right:12px;z-index:9990;width:min(380px,calc(100vw - 24px));max-height:min(72vh,560px);overflow:auto;background:var(--bg,#0b1430);color:var(--ink,#fff);border:1px solid var(--line,#ffffff22);border-radius:18px;box-shadow:0 20px 50px #0009;padding:10px;animation:ibin .18s ease-out}
+@keyframes ibin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+.ibhead{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 8px;font-size:17px}
+.ibsec{margin:8px 6px 4px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--mute)}
+.ibrow{display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;width:100%;text-align:left;padding:10px 8px;border:0;border-radius:12px;background:none;color:inherit;font:inherit;cursor:pointer}
+.ibrow:hover{background:#ffffff12}.ibrow.new{background:#ffd23f17}.ibrow b{font-size:20px}.ibrow small{display:block;color:var(--mute);font-size:12px}.ibrow em{font-style:normal;font-weight:800;color:var(--turf,#39d98a);font-size:13px;white-space:nowrap}
+.ibempty{padding:10px 8px}
+/* no more red dots on the menu: the inbox shows what's new */
+.bar nav .hasdot::after,.tabbar .hasdot::after,#more .hasdot::after{display:none!important}/* Social bar, match room, card battles, leagues, club war, fanzone */
 .fzmini{font-size:13px;margin:4px 8px 0 0}.fzpostbtn{white-space:nowrap}.fzdtbar{display:flex;justify-content:flex-end;margin:0 0 10px}
 .tlink{background:none;border:0;padding:0;color:inherit;font:inherit;cursor:pointer;text-align:left}.tlink:hover{text-decoration:underline}
 .bar nav [data-t=friends]{display:none!important}
@@ -635,7 +646,7 @@ header{transition:box-shadow .3s}body.scrolled header{box-shadow:0 8px 24px #000
   .moregrid button span,.moregrid a span{font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 }</style></head><body>
 <header><div class="bar"><div class="logo"><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ad1ff"/><stop offset="1" stop-color="#1b4fd8"/></linearGradient></defs><path d="M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8z" fill="url(#lg)"/><circle cx="20" cy="20" r="9" fill="#fff"/><path d="M20 14.5l4.5 3.3-1.7 5.3h-5.6l-1.7-5.3z" fill="#0a1020"/><path d="M20 11v3.5M24.5 17.8l3.3-1.2M22.8 23.1l2 2.8M17.2 23.1l-2 2.8M15.5 17.8l-3.3-1.2" stroke="#0a1020" stroke-width="1.4" stroke-linecap="round"/></svg><span>HEY<b>FOOTBALL</b></span></div>
-<button class="musicbtn" data-music="1" aria-label="Music on or off">🎵</button><button class="searchbtn" data-search="1" aria-label="Search teams, players and news">🔍 <span>Search</span></button><nav role="tablist"><button role="tab" data-t="home" aria-selected="false">🏠 Home</button><button role="tab" data-t="news" aria-selected="true">&#x1F4F0; News</button><button role="tab" data-t="matches" aria-selected="false">&#x26BD; Matches</button><button role="tab" data-t="tables" aria-selected="false">&#x1F4CA; Tables</button><button role="tab" data-t="form" aria-selected="false">&#x1F525; Form</button><button role="tab" data-t="chat" aria-selected="false">&#x1F4AC; Social</button><button role="tab" data-t="friends" aria-selected="false" hidden>&#x1F465; Friends</button><button role="tab" data-t="clubs" aria-selected="false">🏟️ Club war</button><button role="tab" data-t="fanzone" aria-selected="false">📣 Fanzone</button><button role="tab" data-t="learn" aria-selected="false">&#x1F393; Tutorials</button><button role="tab" data-t="arcade" aria-selected="false">&#x1F3AE; Arcade</button><button role="tab" data-t="tournament" aria-selected="false">&#x1F3C6; Tournament</button><button role="tab" data-t="gallery" aria-selected="false">&#x1F0CF; Cards</button><button role="tab" data-t="getapp" aria-selected="false">&#x1F4F2; Get the app</button><a class="navblog" href="blog/">📝 Blog</a><button role="tab" data-t="account" aria-selected="false">Sign in</button><button role="tab" data-t="admin" aria-selected="false" class="adminnav" hidden>🛡️ Admin</button></nav></div></header>
+<button class="musicbtn" data-music="1" aria-label="Music on or off">🎵</button><button class="searchbtn" data-search="1" aria-label="Search teams, players and news">🔍 <span>Search</span></button><button class="ibbtn" data-ibopen="1" aria-label="Inbox">🔔<span class="ibcount" hidden>0</span></button><nav role="tablist"><button role="tab" data-t="home" aria-selected="false">🏠 Home</button><button role="tab" data-t="news" aria-selected="true">&#x1F4F0; News</button><button role="tab" data-t="matches" aria-selected="false">&#x26BD; Matches</button><button role="tab" data-t="tables" aria-selected="false">&#x1F4CA; Tables</button><button role="tab" data-t="form" aria-selected="false">&#x1F525; Form</button><button role="tab" data-t="chat" aria-selected="false">&#x1F4AC; Social</button><button role="tab" data-t="friends" aria-selected="false" hidden>&#x1F465; Friends</button><button role="tab" data-t="clubs" aria-selected="false">🏟️ Club war</button><button role="tab" data-t="fanzone" aria-selected="false">📣 Fanzone</button><button role="tab" data-t="learn" aria-selected="false">&#x1F393; Tutorials</button><button role="tab" data-t="arcade" aria-selected="false">&#x1F3AE; Arcade</button><button role="tab" data-t="tournament" aria-selected="false">&#x1F3C6; Tournament</button><button role="tab" data-t="gallery" aria-selected="false">&#x1F0CF; Cards</button><button role="tab" data-t="getapp" aria-selected="false">&#x1F4F2; Get the app</button><a class="navblog" href="blog/">📝 Blog</a><button role="tab" data-t="account" aria-selected="false">Sign in</button><button role="tab" data-t="admin" aria-selected="false" class="adminnav" hidden>🛡️ Admin</button></nav></div></header>
 <div id="announce" class="announce" role="status" hidden></div>
 <main id="app"></main>
 <div id="warnbox" class="warnbox" hidden></div>
@@ -894,13 +905,40 @@ function btPts(sel){return sel.map(p=>{const k=perkOf(p),o=sel.filter(q=>q!==p);
 const btVal=p=>btPts([p])[0],btEst=sel=>btPts(sel).reduce((a,b)=>a+b,0);
 async function btLoad(){if(!(SB&&me)||BT.loading)return;BT.loading=true;const{data,error}=await SB.rpc("battle_list");BT.loading=false;if(error){BT.list=BT.list||[];BT.msg="⚠️ "+socErr(error)}else{BT.list=data||[];btNotice(BT.list)}btDot();if(tab==="gallery")render()}
 // every ~30 seconds: red dot on Cards when a friend challenges you, and a popup when someone challenges you or answers your challenge
-var BTSEEN=null,BTSEENU=null;
+/* ---- INBOX (🔔 next to Search): what happened, with a link straight to where it happened. It replaces the red dots on the menu.
+   "Waiting for you" = things to answer now (messages, friend requests, trade offers, battle challenges).
+   "What happened" = a short history kept on this device (battle results, likes on your Fanzone posts...). ---- */
+var IB={open:false,log:[],u:null,items:[]};
+const ibKey=()=>"rf_inbox_"+(me?(me.id||me.email):"");
+function ibLoad(){if(!me)return[];if(IB.u!==ibKey()){IB.u=ibKey();try{IB.log=JSON.parse(localStorage.getItem(IB.u)||"[]")}catch(e){IB.log=[]}}return IB.log}
+function ibSave(){try{localStorage.setItem(IB.u,JSON.stringify(IB.log.slice(0,40)))}catch(e){}}
+function ibPush(icon,text,go,id){if(!me)return;const log=ibLoad();if(id&&log.some(x=>x.id===id))return;log.unshift({id:id||String(Date.now())+Math.random(),icon,text,go,at:Date.now(),read:false});IB.log=log.slice(0,40);ibSave();ibUpdate()}
+function ibLive(){const out=[];if(!me)return out;
+  try{UNREAD.forEach(r=>{const c=((allChats().find(x=>x[0]===r)||[])[1]||L("a chat")).replace(/^\S+\s/,"");out.push({icon:"💬",text:L("New messages in")+" "+c,go:{t:"chat",room:r}})})}catch(e){}
+  try{if(REQ_NEW>0)out.push({icon:"👥",text:REQ_NEW===1?L("You have a new friend request"):REQ_NEW+" "+L("new friend requests"),go:{t:"friends",fs:"list"}})}catch(e){}
+  try{incomingTrades().forEach(t=>out.push({icon:"🔄",text:fname(t.from_user)+" "+L("sent you a trade offer"),go:{t:"friends",fs:"trades"},at:new Date(t.created_at).getTime()}))}catch(e){}
+  try{btIn().forEach(b=>out.push({icon:"⚔️",text:b.other+" "+L("challenged you to a card battle"),go:{t:"gallery",gs:"battle"},at:new Date(b.created_at).getTime()}))}catch(e){}
+  return out}
+function ibUpdate(){const b=$(".ibbtn");if(!b)return;const n=ibLive().length+ibLoad().filter(x=>!x.read).length,c=b.querySelector(".ibcount");if(c){c.textContent=n>9?"9+":n;c.hidden=!n}b.classList.toggle("has",n>0);b.setAttribute("aria-label",n?L("Inbox")+", "+n+" "+L("new"):L("Inbox"));if(IB.open)ibDraw()}
+function ibDraw(){let p=document.getElementById("ibpanel");if(!IB.open||!me){if(p)p.remove();return}
+  if(!p){p=document.createElement("div");p.id="ibpanel";p.setAttribute("role","dialog");p.setAttribute("aria-label",L("Inbox"));document.body.appendChild(p)}
+  const live=ibLive(),log=ibLoad(),row=(x,k)=>`<button class="ibrow${x.read===false?" new":""}" data-ibgo="${k}"><b>${x.icon}</b><span>${esc(x.text)}${x.at?`<small>${ago(x.at)}</small>`:""}</span><em>${L("Go")} →</em></button>`;
+  IB.items=[...live,...log];
+  p.innerHTML=`<div class="ibhead"><b>🔔 ${L("Inbox")}</b><button class="back" data-ibclose="1" aria-label="${L("Close")}">✕</button></div>${live.length?`<p class="ibsec">${L("Waiting for you")}</p>${live.map((x,i)=>row(x,i)).join("")}`:""}${log.length?`<p class="ibsec">${L("What happened")}</p>${log.map((x,i)=>row(x,live.length+i)).join("")}`:""}${!live.length&&!log.length?`<p class="sl ibempty">${L("Nothing new. When something happens, it shows up here.")}</p>`:""}`}
+function ibToggle(){IB.open=!IB.open;ibDraw();if(IB.open)setTimeout(()=>{if(!me)return;ibLoad().forEach(x=>x.read=true);ibSave();const b=$(".ibbtn"),n=ibLive().length,c=b&&b.querySelector(".ibcount");if(c){c.textContent=n>9?"9+":n;c.hidden=!n}if(b)b.classList.toggle("has",n>0)},1500)}
+function ibGo(k){const x=(IB.items||[])[k];IB.open=false;ibDraw();if(!x||!x.go)return;const g=x.go;open=null;
+  if(g.gs)gsub=g.gs;if(g.show!=null){BT.show=g.show;BT.step=null}if(g.room)room=g.room;if(g.fs){fsub=g.fs;if(tab!=="friends")FD.loaded=false}if(g.t==="fanzone"){FZ.sub="view";FZ.list=null}if(g.t==="gallery"&&g.gs==="battle")btCheck();
+  if(g.t!==tab)LOADNEXT=true;tab=g.t;render();scrollTo(0,0)}
+document.addEventListener("click",e=>{if(IB.open&&!e.target.closest("#ibpanel,.ibbtn")){IB.open=false;ibDraw()}},true);
+// likes on your Fanzone posts go into the inbox
+async function fzLikeCheck(){if(!(SB&&me))return;const{data,error}=await SB.rpc("fz_my_stats");if(error||!data)return;FZ.stat=data;const k="rf_fzlk_"+me.id;let old=null;try{old=localStorage.getItem(k)}catch(e){}
+  if(old!=null&&data.likes>+old){const d=data.likes-+old;ibPush("❤️",d===1?L("Someone liked your Fanzone post"):d+" "+L("new likes on your Fanzone posts"),{t:"fanzone"})}try{localStorage.setItem(k,String(data.likes))}catch(e){}}var BTSEEN=null,BTSEENU=null;
 function btDot(){const n=btIn().length,b=$(".bar nav [data-t=gallery]");if(b){b.classList.toggle("hasdot",n>0);b.setAttribute("aria-label",n?L("Cards, new battle challenge"):L("Cards"))}const ch=$('[data-gs="battle"]');if(ch)ch.classList.toggle("hasdot",n>0);try{syncBar()}catch(e){}}
 function btNotice(list){if(!me)return;const key="rf_btseen_"+me.id;if(BTSEENU!==me.id){BTSEENU=me.id;try{BTSEEN=JSON.parse(localStorage.getItem(key)||"null")}catch(e){BTSEEN=null}}const first=BTSEEN==null;BTSEEN=BTSEEN||{};
   list.forEach(b=>{const k=b.id+":"+b.status;if(BTSEEN[k])return;BTSEEN[k]=1;if(first)return;
     if(b.status==="pending"&&!b.mine){toast("⚔️ "+b.other+" "+L("challenged you to a card battle!"));sfx("goal")}
-    else if(b.status==="done"&&b.mine)toast("⚔️ "+b.other+" "+L("fought back:")+" "+(b.won===true?L("you won!"):b.won===false?L("you lost."):L("it's a draw.")));
-    else if(b.status==="declined"&&b.mine)toast("🚫 "+b.other+" "+L("said no to your battle. Your stake is back."))});
+    else if(b.status==="done"&&b.mine){const r=b.won===true?L("you won!"):b.won===false?L("you lost."):L("it's a draw.");toast("⚔️ "+b.other+" "+L("fought back:")+" "+r);ibPush(b.won===true?"🏆":b.won===false?"😞":"🤝",b.other+" "+L("fought back in your card battle:")+" "+r,{t:"gallery",gs:"battle",show:b.id},"bt"+b.id)}
+    else if(b.status==="declined"&&b.mine){toast("🚫 "+b.other+" "+L("said no to your battle. Your stake is back."));ibPush("🚫",b.other+" "+L("said no to your card battle. Your stake is back."),{t:"gallery",gs:"battle"},"bt"+b.id)}});
   try{localStorage.setItem(key,JSON.stringify(BTSEEN))}catch(e){}}
 async function btCheck(){if(!(SB&&me))return;const{data,error}=await SB.rpc("battle_list");if(error||!Array.isArray(data))return;btNotice(data);const ch=JSON.stringify(data)!==JSON.stringify(BT.list);BT.list=data;btDot();if(ch&&tab==="gallery"&&gsub==="battle"&&!BT.step&&BT.show==null)render()}
 async function btCancel(id){if(BT.busy)return;BT.busy=true;try{const{data,error}=await SB.rpc("battle_cancel",{p_id:id});if(error)throw error;if(data&&data.coins!=null){WAL=data.coins;showCoins()}BT.msg=""}catch(e){BT.msg="⚠️ "+socErr(e)}BT.busy=false;await btLoad();render()}
@@ -1125,7 +1163,7 @@ function markSeen(r,ts){if(!r||r==="bot")return;const old=seenAt(r),t=ts||new Da
 const validRoom=r=>!!r&&(r.startsWith("g:")||r.startsWith("af:")||chatFriends().some(f=>dmId(f.id)===r));
 const newerThanSeen=(r,t)=>{const s=seenAt(r);return!!s&&new Date(t)>new Date(s)};
 // Phone menu: copy red dots from the top menu to the bottom bar and the More panel; More gets a dot if anything inside it has one
-function syncBar(){const top=k=>{const b=$(".bar nav [data-t="+k+"]");return!!(b&&b.classList.contains("hasdot"))};document.querySelectorAll(".tabbar [data-t], #more [data-t]").forEach(b=>{b.classList.toggle("hasdot",top(b.dataset.t));b.setAttribute("aria-current",navIs(b.dataset.t)?"page":"false")});
+function syncBar(){try{ibUpdate()}catch(e){}const top=k=>{const b=$(".bar nav [data-t="+k+"]");return!!(b&&b.classList.contains("hasdot"))};document.querySelectorAll(".tabbar [data-t], #more [data-t]").forEach(b=>{b.classList.toggle("hasdot",top(b.dataset.t));b.setAttribute("aria-current",navIs(b.dataset.t)?"page":"false")});
 const mb=$(".tabbar [data-more]");if(mb){mb.classList.toggle("hasdot",!!document.querySelector("#more .hasdot"));mb.classList.toggle("on",!!document.querySelector("#more [aria-current=page]"))}}
 function updateChatDot(){const b=$(".bar nav [data-t=chat]");if(b){b.classList.toggle("hasdot",UNREAD.size>0||socFrDot());b.setAttribute("aria-label",UNREAD.size?"Chat, new messages from friends":"Chat")}document.querySelectorAll("[data-room]").forEach(e=>e.classList.toggle("hasdot",UNREAD.has(e.dataset.room)));syncBar()}
 // Someone who messages you privately is added to your Friends, so their messages are never missed
@@ -3485,6 +3523,18 @@ likes|gostos|me gusta
 post|publicação|publicación
 posts|publicações|publicaciones
 Hottest first: the most likes per minute since posting.|Os mais quentes primeiro: mais gostos por minuto desde que foram publicados.|Lo más caliente primero: más me gusta por minuto desde que se publicó.
+Inbox|Caixa de entrada|Bandeja de entrada
+Waiting for you|À sua espera|Esperándote
+What happened|O que aconteceu|Lo que pasó
+Go|Ir|Ir
+New messages in|Novas mensagens em|Nuevos mensajes en
+You have a new friend request|Tem um novo pedido de amizade|Tienes una nueva solicitud de amistad
+new friend requests|novos pedidos de amizade|nuevas solicitudes de amistad
+sent you a trade offer|enviou-lhe uma proposta de troca|te envió una oferta de intercambio
+challenged you to a card battle|desafiou-o para uma batalha de cartas|te desafió a una batalla de cartas
+Nothing new. When something happens, it shows up here.|Nada de novo. Quando algo acontecer, aparece aqui.|Nada nuevo. Cuando pase algo, aparecerá aquí.
+Someone liked your Fanzone post|Alguém gostou da sua publicação na Fanzone|A alguien le gustó tu publicación en la Fanzone
+new likes on your Fanzone posts|novos gostos nas suas publicações da Fanzone|nuevos me gusta en tus publicaciones de la Fanzone
 Admins|Admins|Admins`;
 TRX.split("\n").forEach(l=>{const p=l.split("|");if(p.length===3)DICT[p[0]]=[p[1],p[2]]});
 // Phrases with numbers or times in them
@@ -3742,7 +3792,7 @@ const safeRerender=()=>{const a=document.activeElement;if(a&&/INPUT|TEXTAREA|SEL
 async function liveSync(){if(!me||!SB||document.hidden)return;
 try{const{data}=await SB.from("site_config").select("features,announcement,hidden_news,events,training").eq("id",1).maybeSingle();
 if(data){const k=JSON.stringify(data);if(k!==SYNCK){const first=!SYNCK;SYNCK=k;Object.assign(SITE,data);applySite();applyEvents();if(!first&&safeRerender())render()}}}catch(e){}
-loadWallet();loadNotices();if(SYNCN%3===0)btCheck();loadSafety();dreamCoins();setTimeout(checkAch,1500);if(++SYNCN%6===0&&UNREAD.size)checkUnread();if(SYNCN%6===3&&(tab==="arcade"||tab==="tournament"))loadWeek(true);
+loadWallet();loadNotices();if(SYNCN%3===0)btCheck();if(SYNCN%6===1)fzLikeCheck();loadSafety();dreamCoins();setTimeout(checkAch,1500);if(++SYNCN%6===0&&UNREAD.size)checkUnread();if(SYNCN%6===3&&(tab==="arcade"||tab==="tournament"))loadWeek(true);
 try{const{data,error}=await SB.from("pack_credits").select("pack,n");if(!error){const k=JSON.stringify(data||[]);if(k!==CREDK){const first=!CREDK;CREDK=k;PCRED={};(data||[]).forEach(x=>{if(x.n>0)PCRED[x.pack]=x.n});if(!first&&tab==="gallery"&&safeRerender())render()}}}catch(e){}}
 setInterval(liveSync,10000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)liveSync()});
 function showWarning(){const box=$("#warnbox");if(!box)return;const n=NOTICES[0],w=WARN[0];box.hidden=!(n||w);if(!n&&!w)return;
@@ -3896,6 +3946,7 @@ else if(d.fzmore){fzLoad(true);return}
 else if(d.fzdel){if(confirm("Remove this post for everyone?"))fzDel(+d.fzdel);return}
 else if(d.fzshare){let o;try{o=JSON.parse(d.fzshare)}catch(e){return}fzOpen(o.k,o.i)}
 else if(d.fzscore){const g=GAMES.find(x=>x[0]===curGame),b=HSget(curGame)[0];if(!g||typeof b!=="number"||b<=0){toast(L("Play a game first, then post your best score!"));return}fzOpen("score",{game:g[1],score:b})}
+else if(d.ibopen){ibToggle();return}else if(d.ibclose){IB.open=false;ibDraw();return}else if(d.ibgo!==undefined){ibGo(+d.ibgo);return}
 else if(d.chatadd){chatAdd(d.chatadd,d.name);return}
 else if(d.mact){MACT=MACT===+d.mact?null:+d.mact;REPFOR=null;drawThread(true);return}else if(d.repopen){REPFOR=+d.repopen;drawThread(true);return}else if(d.rep){const[i,k]=d.rep.split("|");reportMsg(i,k);return}else if(d.mute){toggleMute(d.mute);return}else if(d.block){toggleBlock(d.block);return}
 else if(d.ackw){SB.rpc("ack_warning",{p_id:+d.ackw}).then(()=>{},()=>{});WARN.shift();showWarning();return}
