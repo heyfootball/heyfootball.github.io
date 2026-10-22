@@ -1,0 +1,44 @@
+# HeyFootball: publishes the site, and builds a page for every team and match (scripts/build_pages.py).
+# Runs every time you change a file, and by itself every 3 hours so scores, stats and predictions stay fresh.
+# One-time setting: Settings > Pages > Build and deployment > Source: GitHub Actions.
+name: Build and publish HeyFootball
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "17 */3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build team and match pages
+        run: python scripts/build_pages.py .
+        continue-on-error: true   # if the scores are down, still publish the rest of the site
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
