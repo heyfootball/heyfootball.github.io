@@ -3668,6 +3668,7 @@ None of your doubles are new for|Nenhuma das tuas repetidas é nova para|Ninguna
 Open more packs to get doubles they don't have.|Abre mais pacotes para teres repetidas que eles não têm.|Abre más sobres para conseguir repetidas que no tengan.
 has no doubles that are new for you right now.|não tem repetidas novas para ti neste momento.|no tiene repetidas nuevas para ti ahora mismo.
 New in your inbox|Novidades na tua caixa|Novedades en tu bandeja
+Shirt colour|Cor da camisola|Color de la camiseta
 Admins|Admins|Admins`;
 TRX.split("\n").forEach(l=>{const p=l.split("|");if(p.length===3)DICT[p[0]]=[p[1],p[2]]});
 // Phrases with numbers or times in them
@@ -4094,6 +4095,7 @@ const AV_SKIN=["#f9d7c0","#f1c27d","#e0ac69","#c68642","#a0663b","#8d5524","#6b3
 const AV_HAIRC=["#111111","#3b2416","#6a4e2e","#a0522d","#d8b56a","#f0e2b6","#b55239","#9aa0a6","#ffffff","#2d6cdf"];
 const AV_HAIRS=["Short","Buzz","Curly","Afro","Long","Mohawk","Bun","Bald"];
 const AV_EYES=["#3b2416","#5a3a1a","#1f6fb2","#2e8b57","#7a8a99","#6b4fbb"];
+const AV_SHIRT=["#2d6cdf","#e5383b","#1f9d55","#ffd23f","#111111","#ffffff","#ff7a00","#7b2cbf","#6cabdd","#8b1e3f","#0b2a6b","#ff3cac"];
 const AV_ACC={head:[["none","None",0],["cap","Cap",0],["beanie","Beanie",500],["headband","Headband",800],["viking","Viking helmet",2500],["halo","Halo",4000],["crown","Crown",5000]],
   eyes_acc:[["none","None",0],["shades","Sunglasses",0],["round","Round glasses",400],["star","Star glasses",600],["3d","3D glasses",1200],["monocle","Monocle",1500],["visor","Visor",2000]],
   neck:[["none","None",0],["scarf","Scarf",0],["bowtie","Bow tie",600],["medal","Gold medal",1500],["chain","Gold chain",2500],["cape","Cape",4000]],
@@ -4123,7 +4125,7 @@ function avSvg(c){c=c||{};const sk=AV_SKIN[c.skin|0]||AV_SKIN[1],hc=AV_HAIRC[c.h
     chain:`<path d="M22 45 Q32 56 42 45" stroke="#ffd23f" stroke-width="2.5" fill="none" stroke-dasharray="3 1.5"/>`,cape:`<path d="M20 44 L32 48 L44 44" stroke="#c1121f" stroke-width="3" fill="none"/>`}[c.neck]||"";
   const item={ball:"⚽",flag:"🚩",megaphone:"📣",boot:"👟",trophy:"🏆"}[c.item];
   acc=item?`<text x="50" y="60" font-size="15" text-anchor="middle">${item}</text>`:c.item==="whistle"?`<g transform="translate(44 50)"><rect width="12" height="7" rx="3" fill="#cfd8dc" stroke="#555"/><circle cx="3" cy="3.5" r="2" fill="#555"/></g>`:"";
-  return`<svg class="avsvg" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="32" fill="#22305e"/>${back}<path d="M12 64 Q14 46 32 45 Q50 46 52 64 Z" fill="#2d6cdf"/><rect x="27" y="38" width="10" height="9" fill="${sk}"/><circle cx="32" cy="28" r="15" fill="${sk}"/>${hair}
+  return`<svg class="avsvg" viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="32" r="32" fill="#22305e"/>${back}<path d="M12 64 Q14 46 32 45 Q50 46 52 64 Z" fill="${AV_SHIRT[c.shirt|0]||AV_SHIRT[0]}"/><rect x="27" y="38" width="10" height="9" fill="${sk}"/><circle cx="32" cy="28" r="15" fill="${sk}"/>${hair}
     <ellipse cx="25" cy="29" rx="3" ry="3.4" fill="#fff"/><ellipse cx="39" cy="29" rx="3" ry="3.4" fill="#fff"/><circle cx="25" cy="29.5" r="1.8" fill="${ey}"/><circle cx="39" cy="29.5" r="1.8" fill="${ey}"/><path d="M26 36 Q32 40 38 36" stroke="#5a2a1a" stroke-width="1.6" fill="none" stroke-linecap="round"/>${neck}${eyesA}${head}${acc}</svg>`}
 // small round avatar next to a name: the picture once it has loaded, the first letter until then
 function avSm(uid,name,cls){if(!uid)return`<div class="avatar ${cls||"sm"}">${esc(String(name||"?")[0].toUpperCase())}</div>`;
@@ -4141,7 +4143,7 @@ function avEditorHtml(){if(AVMINE==null){avMine();return`<p class="sl">${L("Load
   return`<div class="panel aved"><div class="avprev">${avSvg(c)}</div><div class="avopts">
   <p class="avlab">${L("Skin")}</p>${sw("skin",AV_SKIN)}<p class="avlab">${L("Hair colour")}</p>${sw("hairc",AV_HAIRC)}
   <p class="avlab">${L("Hairstyle")}</p><div class="chips">${AV_HAIRS.map((h,i)=>`<button class="chip" data-avset="hair:${i}" aria-pressed="${(c.hair|0)===i}">${L(h)}</button>`).join("")}</div>
-  <p class="avlab">${L("Eyes")}</p>${sw("eyes",AV_EYES)}
+  <p class="avlab">${L("Eyes")}</p>${sw("eyes",AV_EYES)}<p class="avlab">${L("Shirt colour")}</p>${sw("shirt",AV_SHIRT)}
   ${AV_TYPES.map(([k,lab])=>`<p class="avlab">${L(lab)}</p><div class="avaccs">${AV_ACC[k].map(([id,n,price])=>{const own=price===0||(AVMINE&&AVMINE.has(id)),on=(c[k]||"none")===id;
     return`<button class="avacc${on?" on":""}${own?"":" locked"}" ${own?`data-avset="${k}:${id}"`:`data-avbuy="${id}" data-name="${esc(n)}" data-price="${price}"`}><span class="avaccp">${avSvg(Object.assign({},c,{[k]:id}))}</span><b>${L(n)}</b><small>${own?(price===0?L("Free"):"✓ "+L("Yours")):"🪙 "+price.toLocaleString()}</small></button>`}).join("")}</div>`).join("")}
   ${AVMSG?`<p class="sl" role="status">${esc(AVMSG)}</p>`:""}<button class="btn" data-avsave="1">💾 ${L("Save my avatar")}</button></div></div>`}
