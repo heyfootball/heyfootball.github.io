@@ -1272,7 +1272,7 @@ const afId=id=>"af:"+id;
 async function loadGroups(force){if(!(SB&&me))return;if(!force&&GROUPS&&Date.now()-GROUPAT<60000)return;GROUPAT=Date.now();const{data,error}=await SB.rpc("my_groups");if(error)return;const before=JSON.stringify(GROUPS);GROUPS=data||[];if(tab==="chat"&&before!==JSON.stringify(GROUPS)&&!(($("#msgin")||{}).value))render()}
 const groupOf=r=>r&&r.startsWith("g:")&&GROUPS?GROUPS.find(g=>"g:"+g.id===r):null;
 // every chat you're in: groups first, then friends one to one
-function allChats(){if(!me)return[];const fr=chatFriends(),out=[];if(SB){if(fr.length)out.push([afId(me.id),"👥 All my friends","grp"]);fr.filter(f=>AFACT.has(afId(f.id))).forEach(f=>out.push([afId(f.id),"👥 "+f.name+"'s friends","grp"]));(GROUPS||[]).forEach(g=>out.push(["g:"+g.id,"💬 "+g.name,"grp"]))}fr.forEach(f=>out.push([dmId(f.id),"👤 "+f.name,"dm"]));return out}
+function allChats(){if(!me)return[];const fr=chatFriends(),out=[];if(SB){if(fr.length)out.push([afId(me.id),"👥 All my friends","grp"]);fr.filter(f=>AFACT.has(afId(f.id))).forEach(f=>out.push([afId(f.id),"👥 "+f.name+"'s friends","grp"]));(GROUPS||[]).forEach(g=>out.push(["g:"+g.id,"💬 "+g.name,"grp"]))}[...fr].sort((a,b)=>ONLINE.has(b.id)-ONLINE.has(a.id)).forEach(f=>out.push([dmId(f.id),"👤 "+f.name,"dm"]));return out}/* private chats: friends who are online first */
 async function createGroup(){if(!NEWG)return;const n=(($("#gname")||{}).value||"").trim();NEWG.name=n;if(!n){NEWG.msg="Give the group a name.";render();return}if(NEWG.sel.length<2){NEWG.msg="Pick at least 2 friends.";render();return}
 NEWG.msg="Creating…";render();const{data,error}=await SB.rpc("create_group",{p_name:n,p_members:NEWG.sel});
 if(error){NEWG.msg=/does not exist|schema cache/i.test(error.message)?"Group chats aren't set up in Supabase yet.":error.message;render();return}NEWG=null;room="g:"+data;await loadGroups(true);render()}
@@ -4038,7 +4038,7 @@ const dmOther=r=>{const ids=String(r).slice(3).split("|");return ids[0]===(me&&m
 async function onlineLoad(){if(!(SB&&me))return;const{data,error}=await SB.rpc("friends_online");if(error||!Array.isArray(data))return;ONLINEAT=Date.now();const was=[...ONLINE].sort().join();ONLINE=new Set(data);
   document.querySelectorAll("[data-ondot]").forEach(e=>{const on=ONLINE.has(e.dataset.ondot);e.classList.toggle("on",on);e.title=on?L("Online now"):L("Offline")});
   // re-sort the friends list (online first), unless you're typing
-  if(was!==[...ONLINE].sort().join()&&tab==="friends"&&!(document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName)))render();
+  if(was!==[...ONLINE].sort().join()&&(tab==="friends"||(tab==="chat"&&!(($("#msgin")||{}).value)))&&!(document.activeElement&&/INPUT|TEXTAREA/.test(document.activeElement.tagName)))render();
   const lp=document.getElementById("lbonline");if(lp)lp.innerHTML=lbOnlineHtml()}
 
 /* ---- LIVE BATTLE: invite an online friend, both pick 5 cards in 30 seconds, then 5 rounds of 10 seconds.
