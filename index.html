@@ -276,7 +276,10 @@ html{-webkit-tap-highlight-color:transparent;overscroll-behavior:none}body{-webk
 .hint{font:400 13px Outfit,sans-serif;color:var(--mute);letter-spacing:0}
 .pr{padding:8px 0;border-top:1px solid var(--line)}.pr small{color:var(--mute);font-size:12px}.prr{display:grid;grid-template-columns:1fr 48px 48px 1fr;gap:6px;align-items:center;margin-top:4px}.prr span:first-child{text-align:right}
 .guest nav{display:none}
-.adminnav[hidden],[data-t][hidden]{display:none!important}
+.adminnav[hidden],.mobnav[hidden],[data-t][hidden]{display:none!important}
+#mobwrap{position:fixed;inset:0;z-index:2147483000;background:radial-gradient(circle at 50% 0%,#1b2a5c,#05070f 70%);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:10px}
+#mobwrap iframe{width:390px;height:min(844px,calc(100vh - 70px));border:10px solid #111;border-radius:42px;background:#0b1020;box-shadow:0 30px 80px #000c,0 0 0 2px #ffffff22}
+#mobwrap .mobbar{display:flex;gap:8px;align-items:center;color:#fff;font:700 14px Outfit,sans-serif}
 .adminbadge{display:inline-block;background:linear-gradient(135deg,#ffe27a,#d4a017);color:#2a1d00;font:800 10px Outfit,sans-serif;letter-spacing:1px;padding:1px 6px;border-radius:5px;vertical-align:middle;box-shadow:0 0 8px #d4a01766}
 .mact{margin-left:6px;border:0;background:#0003;color:inherit;border-radius:8px;padding:0 7px;font-weight:800;line-height:18px}.mmenu{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}.mmenu .chip{font-size:12px;padding:3px 10px}.mmenu small{width:100%}
 .bub .removed,.bub.hid i{opacity:.7}.bub.hid{opacity:.75}
@@ -695,7 +698,7 @@ header{transition:box-shadow .3s}body.scrolled header{box-shadow:0 8px 24px #000
   .moregrid button span,.moregrid a span{font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 }</style></head><body>
 <header><div class="bar"><div class="logo"><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ad1ff"/><stop offset="1" stop-color="#1b4fd8"/></linearGradient></defs><path d="M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8z" fill="url(#lg)"/><circle cx="20" cy="20" r="9" fill="#fff"/><path d="M20 14.5l4.5 3.3-1.7 5.3h-5.6l-1.7-5.3z" fill="#0a1020"/><path d="M20 11v3.5M24.5 17.8l3.3-1.2M22.8 23.1l2 2.8M17.2 23.1l-2 2.8M15.5 17.8l-3.3-1.2" stroke="#0a1020" stroke-width="1.4" stroke-linecap="round"/></svg><span>HEY<b>FOOTBALL</b></span></div>
-<button class="musicbtn" data-music="1" aria-label="Music on or off">🎵</button><button class="searchbtn" data-search="1" aria-label="Search teams, players and news">🔍 <span>Search</span></button><button class="ibbtn" data-ibopen="1" aria-label="Inbox"><span class="ibbell" aria-hidden="true">🔔</span><span class="ibcount" hidden>0</span></button><button class="hdrbtn adminnav" data-t="admin" aria-label="Admin" title="Admin" hidden>🛡️</button><nav role="tablist"><button role="tab" data-t="home" aria-selected="false">🏠 Home</button><button role="tab" data-t="news" aria-selected="true">&#x1F4F0; News</button><button role="tab" data-t="matches" aria-selected="false">&#x26BD; Matches</button><button role="tab" data-t="tables" aria-selected="false">&#x1F4CA; Tables</button><button role="tab" data-t="form" aria-selected="false">&#x1F525; Form</button><button role="tab" data-t="chat" aria-selected="false">&#x1F4AC; Social</button><button role="tab" data-t="friends" aria-selected="false" hidden>&#x1F465; Friends</button><button role="tab" data-t="clubs" aria-selected="false">🚩 Club war</button><button role="tab" data-t="fanzone" aria-selected="false">📣 Fanzone</button><button role="tab" data-t="learn" aria-selected="false">&#x1F393; Tutorials</button><button role="tab" data-t="arcade" aria-selected="false">&#x1F3AE; Arcade</button><button role="tab" data-t="tournament" aria-selected="false">&#x1F3C6; Tournament</button><button role="tab" data-t="gallery" aria-selected="false">&#x1F0CF; Cards</button><button role="tab" data-t="stadium" aria-selected="false">🏟️ Stadium</button><button role="tab" data-t="getapp" aria-selected="false">&#x1F4F2; Get the app</button><a class="navblog" href="blog/">📝 Blog</a><button role="tab" data-t="account" aria-selected="false">Sign in</button></nav></div></header>
+<button class="musicbtn" data-music="1" aria-label="Music on or off">🎵</button><button class="searchbtn" data-search="1" aria-label="Search teams, players and news">🔍 <span>Search</span></button><button class="ibbtn" data-ibopen="1" aria-label="Inbox"><span class="ibbell" aria-hidden="true">🔔</span><span class="ibcount" hidden>0</span></button><button class="hdrbtn adminnav" data-t="admin" aria-label="Admin" title="Admin" hidden>🛡️</button><button class="hdrbtn mobnav" data-mobview="1" aria-label="Phone layout" title="Phone layout" hidden>📱</button><nav role="tablist"><button role="tab" data-t="home" aria-selected="false">🏠 Home</button><button role="tab" data-t="news" aria-selected="true">&#x1F4F0; News</button><button role="tab" data-t="matches" aria-selected="false">&#x26BD; Matches</button><button role="tab" data-t="tables" aria-selected="false">&#x1F4CA; Tables</button><button role="tab" data-t="form" aria-selected="false">&#x1F525; Form</button><button role="tab" data-t="chat" aria-selected="false">&#x1F4AC; Social</button><button role="tab" data-t="friends" aria-selected="false" hidden>&#x1F465; Friends</button><button role="tab" data-t="clubs" aria-selected="false">🚩 Club war</button><button role="tab" data-t="fanzone" aria-selected="false">📣 Fanzone</button><button role="tab" data-t="learn" aria-selected="false">&#x1F393; Tutorials</button><button role="tab" data-t="arcade" aria-selected="false">&#x1F3AE; Arcade</button><button role="tab" data-t="tournament" aria-selected="false">&#x1F3C6; Tournament</button><button role="tab" data-t="gallery" aria-selected="false">&#x1F0CF; Cards</button><button role="tab" data-t="stadium" aria-selected="false">🏟️ Stadium</button><button role="tab" data-t="getapp" aria-selected="false">&#x1F4F2; Get the app</button><a class="navblog" href="blog/">📝 Blog</a><button role="tab" data-t="account" aria-selected="false">Sign in</button></nav></div></header>
 <div id="announce" class="announce" role="status" hidden></div>
 <main id="app"></main>
 <div id="warnbox" class="warnbox" hidden></div>
@@ -1260,7 +1263,7 @@ const initK="rf_seeninit_"+PK(),firstRun=(()=>{try{return!localStorage.getItem(i
 r.data.forEach(m=>{if(!validRoom(m.room))return;if(m.room.startsWith("af:"))AFACT.add(m.room);if(done.has(m.room))return;done.add(m.room);if(m.room.startsWith("g:")&&GROUPS&&!groupOf(m.room))loadGroups(true);
 if(!seenAt(m.room)&&firstRun){markSeen(m.room,m.created_at);return}/* the very first time, older messages count as read */
 if((!seenAt(m.room)||newerThanSeen(m.room,m.created_at))&&!(tab==="chat"&&room===m.room))UNREAD.add(m.room);else UNREAD.delete(m.room)});try{localStorage.setItem(initK,"1")}catch(e){}updateChatDot();if(tab==="chat"&&AFACT.size!==af0&&!(($("#msgin")||{}).value))render()}
-function startInbox(){if(!(SB&&me)||inboxCh)return;setTimeout(claimInvite,2500);setTimeout(ibSync,3000);setTimeout(()=>SB.rpc("weekly_tick").then(()=>{},()=>{}),4000);checkAdmin();loadSafety();loadNotices();seasonTick();LOGIN_NOTE="";inboxCh=SB.channel("rf-inbox").on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},p=>{const m=p.new;if(!me||!m.room||m.user_id===me.id)return;if(!validRoom(m.room))return;if(m.room.startsWith("af:")&&!AFACT.has(m.room)){AFACT.add(m.room);if(tab==="chat"&&!(($("#msgin")||{}).value))render()}if(m.room.startsWith("g:")&&!groupOf(m.room))loadGroups(true);if(tab==="chat"&&room===m.room){markSeen(m.room,m.created_at)}else{UNREAD.add(m.room);updateChatDot()}}).on("postgres_changes",{event:"INSERT",schema:"public",table:"friendships"},p=>{if(me&&p.new.friend_id===me.id)checkRequests()}).on("postgres_changes",{event:"*",schema:"public",table:"trades"},()=>loadTrades()).subscribe();loadTrades();checkRequests().then(()=>loadGroups(true)).then(checkUnread);clearInterval(reqT);reqT=setInterval(checkRequests,120000)}
+function startInbox(){if(!(SB&&me)||inboxCh)return;setTimeout(()=>{document.querySelectorAll(".mobnav").forEach(x=>x.hidden=!mobOwner());mobInit()},0);setTimeout(claimInvite,2500);setTimeout(ibSync,3000);setTimeout(()=>SB.rpc("weekly_tick").then(()=>{},()=>{}),4000);checkAdmin();loadSafety();loadNotices();seasonTick();LOGIN_NOTE="";inboxCh=SB.channel("rf-inbox").on("postgres_changes",{event:"INSERT",schema:"public",table:"messages"},p=>{const m=p.new;if(!me||!m.room||m.user_id===me.id)return;if(!validRoom(m.room))return;if(m.room.startsWith("af:")&&!AFACT.has(m.room)){AFACT.add(m.room);if(tab==="chat"&&!(($("#msgin")||{}).value))render()}if(m.room.startsWith("g:")&&!groupOf(m.room))loadGroups(true);if(tab==="chat"&&room===m.room){markSeen(m.room,m.created_at)}else{UNREAD.add(m.room);updateChatDot()}}).on("postgres_changes",{event:"INSERT",schema:"public",table:"friendships"},p=>{if(me&&p.new.friend_id===me.id)checkRequests()}).on("postgres_changes",{event:"*",schema:"public",table:"trades"},()=>loadTrades()).subscribe();loadTrades();checkRequests().then(()=>loadGroups(true)).then(checkUnread);clearInterval(reqT);reqT=setInterval(checkRequests,120000)}
 /* ---- FRIEND REQUESTS: red dot on the Friends tab when someone adds you and you haven't looked yet ---- */
 let REQ_IDS=[],REQ_NEW=0,reqT=0,MUT=null,MINE=[];
 // "Add friend" next to someone's name in chat: Add friend / Request sent / Accept (they already added you) / nothing if already friends
@@ -2081,11 +2084,11 @@ async function claimDerby(id){const{error}=await SB.rpc("claim_derby_card",{p_id
 // the Derby Fever special event tab: Admin Abuse info, coin rain and the Derby cards
 function derbyTab(){const h=`<h2 style="font-size:40px;margin-bottom:6px">🔥 ${L("Derby Fever")}</h2>`;
 if(!me)return h+`<p class="sl">${L("Sign in to join the Derby Fever event.")}</p>`;
-if(!gTried){loadGallery();return h+`<p class="sl">${L("Loading the Derby challenges…")}</p>`}
+
 const live=abuseNow()||evOn("theme");
 return h+`<div class="panel derbyhero"><h3>${live?`<span class="abuse">🔥 ${L("ADMIN ABUSE!")}</span> ${L("Live now")}`:`🔥 ${L("Season 2 special event")}`}</h3>
 <p class="sl" style="margin:0 0 8px">${L("Admin Abuse every Tuesday, Thursday and Saturday, 17:00–18:00 Portugal time.")}</p>
-<ul class="derbylist"><li>🪙 ${L("Double coins")}</li><li>🏆 ${L("Double points")}</li><li>🎁 ${L("Half price packs")}</li><li>🌧️ ${L("Coin rain at :00, :20 and :40 — catch the coins with your basket")}</li><li>🔥 ${L("Derby Fever style")}</li></ul></div>`+derbyPage()}
+<ul class="derbylist"><li>🪙 ${L("Double coins")}</li><li>🏆 ${L("Double points")}</li><li>🎁 ${L("Half price packs")}</li><li>🌧️ ${L("Coin rain at :00, :20 and :40 — catch the coins with your basket")}</li><li>🔥 ${L("Derby Fever style")}</li></ul></div>`}
 function derbyPage(){if(!thuOpen())return`<div class="panel"><h3>🔥 ${L("Derby cards")}</h3><p class="sl">🔒 ${L("Coming with Season 2.")}</p></div>`;
 if(!DERBY){loadDerby();return`<p class="sl">${DERBYMSG?esc(L(DERBYMSG)):L("Loading the Derby challenges…")}</p>`}
 const got=DERBY.filter(c=>c.claimed).length;
@@ -2266,7 +2269,7 @@ function openSearch(){closeSearch();SVIEW=null;const o=document.createElement("d
   o.innerHTML=`<div class="searchcard"><div class="searchtop"><span aria-hidden="true">🔍</span><input id="sq" type="search" autocomplete="off" placeholder="${L("Search teams, players and news…")}" aria-label="Search" value="${esc(SQ)}"><button class="btn ghost" data-sclose="1" aria-label="Close">✕</button></div><div id="searchres"></div></div>`;
   document.body.appendChild(o);const i=o.querySelector("#sq");i.addEventListener("input",()=>{SQ=i.value;SVIEW=null;searchRender()});setTimeout(()=>i.focus(),30);
   o.addEventListener("click",e=>{if(e.target===o)closeSearch()});
-  if(!GP.length&&SB&&me)SB.from("gallery_players").select("*").order("id").then(({data})=>{if(data){GP=data;searchRender()}},()=>{});
+  if(!GP.length&&SB&&me)SB.from("gallery_players").select("*").order("id").then(({data})=>{if(data){GP=data.filter(p=>p.special!=="derby");searchRender()}},()=>{});
   searchRender()}
 function closeSearch(){const o=$("#searchbox");if(o)o.remove()}
 function searchRender(){const box=$("#searchres");if(!box)return;
@@ -3690,6 +3693,8 @@ Total Points|Pontos Totais|Puntos Totales
 Final result coming…|Resultado final a seguir…|Resultado final en breve…
 tap to remove|toca para tirar|toca para quitar
 If time runs out, the cards you picked are used and your best cards fill any gaps.|Se o tempo acabar, usamos as cartas que escolheste e as tuas melhores completam o resto.|Si se acaba el tiempo, usamos las cartas que elegiste y tus mejores completan el resto.
+Phone layout|Vista de telemóvel|Vista de móvil
+Back to computer layout|Voltar à vista de computador|Volver a la vista de ordenador
 Admins|Admins|Admins`;
 TRX.split("\n").forEach(l=>{const p=l.split("|");if(p.length===3)DICT[p[0]]=[p[1],p[2]]});
 // Phrases with numbers or times in them
@@ -3778,7 +3783,7 @@ async function loadWallet(){if(!SB||!me)return;const{data,error}=await SB.rpc("m
 // free packs given by admins (supabase-free-packs.sql)
 let PCRED={};async function loadCredits(){if(!SB||!me)return;const{data,error}=await SB.from("pack_credits").select("pack,n");if(!error){PCRED={};(data||[]).forEach(x=>{if(x.n>0)PCRED[x.pack]=x.n});if(tab==="gallery")render()}}
 async function loadGallery(){if(!SB||!me)return;gTried=true;loadPools();loadCredits();seasonTick();try{const[pl,w,c]=await Promise.all([GP.length?{data:GP}:SB.from("gallery_players").select("*").order("id"),SB.rpc("my_wallet"),SB.from("collection").select("player_id,copies")]);const er=pl.error||w.error||c.error;
-if(er)gMsg=/relation|does not exist|schema cache|function/i.test(er.message)?"Cards aren't set up in Supabase yet.":"Couldn't load your cards. Check your connection.";else{GP=pl.data||[];WAL=w.data;COL={};(c.data||[]).forEach(r=>COL[r.player_id]=r.copies);if(!/coins/.test(gMsg))gMsg=""}}catch(e){gMsg="Couldn't load your cards. Check your connection."}if(tab==="gallery"||tab==="derby"||tab==="home")render()}
+if(er)gMsg=/relation|does not exist|schema cache|function/i.test(er.message)?"Cards aren't set up in Supabase yet.":"Couldn't load your cards. Check your connection.";else{GP=(pl.data||[]).filter(p=>p.special!=="derby")/* Derby Fever cards were removed */;WAL=w.data;COL={};(c.data||[]).forEach(r=>COL[r.player_id]=r.copies);if(!/coins/.test(gMsg))gMsg=""}}catch(e){gMsg="Couldn't load your cards. Check your connection."}if(tab==="gallery"||tab==="derby"||tab==="home")render()}
 const initials=n=>n.split(/\s+/).filter(Boolean).map(w=>w[0]).slice(0,2).join("").toUpperCase();
 /* ---- DREAM TEAM POWER-UPS: every card has one (worked out the same way as in Supabase), plus a captain who scores double ---- */
 const PERKS=[["🔥","Hot streak","(no longer used)"],["🤝","Club link","+5 for each teammate from the same club (max +25)"],["🌍","Nation link","+5 for each teammate from the same country (max +25)"],["👑","Leader","Doubles the power-up bonus of the players right next to him (not other Leaders)"],["🎲","Wildcard","Scores −7 to +15 around his rating instead of −5 to +5"],["🧱","Rock","+4 for each defender or goalkeeper in your team from his club or country (max +10)"],["🎯","Finisher","+5 for each attacker in your team from his club or country (max +8)"],["🌟","Wonderkid","+4 for every day you've used him in your dream team (max +40)"]];
@@ -3930,7 +3935,7 @@ const feat=k=>!SITE.features||SITE.features[k]!==false;
 const FEAT_OF={form:"matches",tournament:"arcade",news:"news",matches:"matches",tables:"matches",chat:"chat",arcade:"arcade",gallery:"gallery",friends:"friends",leagues:"friends"};
 async function loadSite(){if(!SB)return;try{const{data}=await SB.from("site_config").select("features,announcement,hidden_news").eq("id",1).maybeSingle();if(data){SITE=data;try{const ex=await SB.from("site_config").select("events,training").eq("id",1).maybeSingle();if(ex.data)Object.assign(SITE,ex.data)}catch(e){}applySite();applyEvents();if(tab==="news"&&!open)render()}}catch(e){}}
 function applySite(){document.querySelectorAll("[data-t]").forEach(b=>{if(b.closest("#app"))return;const f=FEAT_OF[b.dataset.t];if(f)b.hidden=!feat(f)});
-document.querySelectorAll(".adminnav").forEach(b=>b.hidden=!ADMIN);const a=$("#announce");if(a){a.textContent=SITE.announcement?"📣 "+SITE.announcement:"";a.hidden=!SITE.announcement||!me}}
+document.querySelectorAll(".adminnav").forEach(b=>b.hidden=!ADMIN);document.querySelectorAll(".mobnav").forEach(b=>b.hidden=!mobOwner());mobInit();const a=$("#announce");if(a){a.textContent=SITE.announcement?"📣 "+SITE.announcement:"";a.hidden=!SITE.announcement||!me}}
 async function checkAdmin(){ADMIN=false;ADMIN_IDS=new Set();if(SB&&me){try{const[a,ids]=await Promise.all([SB.rpc("is_admin"),SB.rpc("admin_ids")]);ADMIN=a.data===true;(ids.data||[]).forEach(x=>ADMIN_IDS.add(typeof x==="string"?x:Object.values(x)[0]))}catch(e){}}
 applySite();if(tab==="chat")drawThread(true);if(tab==="admin"||tab==="account")render()}
 const restrictText=r=>r.status==="banned"?"You are banned from chat.":r.status==="banned_all"?"Your account is banned.":r.status==="suspended"?`Your account is suspended until ${new Date(r.until).toLocaleString("en-GB",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}.`:`You are muted in chat until ${hm(r.until)}.`;
@@ -4111,7 +4116,7 @@ function lbDraw(){const s=LB.s;let o=document.getElementById("lbov");if(!s){if(o
   else h=`${head}<div class="lbmid"><div class="lbbig">${s.status==="declined"?"🚫":"⌛"}</div><h2>${s.status==="declined"?(s.inviter?esc(s.other)+" "+L("said no"):L("You said no")):s.status==="cancelled"?L("The invite was cancelled"):L("The invite ran out")}</h2><button class="btn ghost" data-lbclose="1">${L("Close")}</button></div>`;
   o.innerHTML=`<div class="lbbox">${h}</div>`;lbTickFn()}
 // check for invites every 4 seconds while the site is open
-setInterval(()=>{if(!(SB&&me)||document.hidden||LB.id)return;SB.rpc("lb_state",{p_id:null}).then(({data})=>{if(data&&data.status&&!LB.id){if(data.status==="invited"&&!data.inviter){sfx("goal");toast("⚡ "+data.other+" "+L("wants a live card battle!"))}lbSet(data)}},()=>{})},4000);
+setInterval(()=>{if(!(SB&&me)||document.hidden||LB.id)return;SB.rpc("lb_state",{p_id:null}).then(({data})=>{if(data&&data.status&&!LB.id){if(data.status==="invited"&&!data.inviter){sfx("goal");toast("⚡ "+data.other+" "+L("wants a live card battle!"));ibPush("⚡",data.other+" "+L("wants a live card battle!"),{t:"gallery",gs:"battle"},"lbi"+data.id)}lbSet(data)}},()=>{})},4000);
 
 /* ---- AVATARS: skin, hair colour, hairstyle and eyes are free; one accessory of each type (head, eyes, neck, item).
    Cap, sunglasses, scarf and football are free, the rest are bought with coins (supabase-stadium-avatars.sql) ---- */
@@ -4280,7 +4285,7 @@ function stWatchStart(){const id=STD.watch;if(!id)return;const m=stMatch();if(!m
 // Admin page: is the ESPN match stats feed working?
 function espnLine(){const o=ESPNOK;return`<div class="panel" style="padding:10px 14px">📊 ${L("Match stats (ESPN)")}: ${o==null?"⏳ "+L("not checked yet (open a match in a stadium)"):o.ok?"✅ "+L("working"):"❌ "+L("not working")}${o?` <small class="sl">· ${ago(o.at)}</small>`:""}</div>`}
 // the profile button in the menu shows your avatar
-function accBtn(){const b=$(".bar nav [data-t=account]");if(!b)return;if(!me){b.textContent=L("Sign in");return}const av=typeof AVS!=="undefined"&&AVS?AVS[me.id]:null;
+function accBtn(){document.querySelectorAll(".mobnav").forEach(x=>x.hidden=!mobOwner());const b=$(".bar nav [data-t=account]");if(!b)return;if(!me){b.textContent=L("Sign in");return}const av=typeof AVS!=="undefined"&&AVS?AVS[me.id]:null;
   b.innerHTML=(av?`<span class="navav">${avSvg(av)}</span>`:"👤 ")+esc(me.name.split(" ")[0]);if(typeof AVS!=="undefined"&&AVS&&me.id&&!(me.id in AVS)){AVQ.add(me.id);clearTimeout(AVT);AVT=setTimeout(avLoad,150)}}
 /* ---- VISITOR STATS: counts page views with an anonymous code that changes every day (no cookies). Admin → 📈 Visitors ---- */
 var HITREF=document.referrer||null;
@@ -4307,6 +4312,13 @@ function mergeX(){const L=XDATA.list,keep=a=>(a||[]).filter(m=>!String(m.id).sta
   DATA.fx=[...keep(DATA.fx),...L.filter(m=>m.st==="up")].sort((a,b)=>new Date(a.t)-new Date(b.t));
   DATA.res=[...keep(DATA.res),...L.filter(m=>m.st==="ft")].sort((a,b)=>new Date(b.t)-new Date(a.t));
   DATA.live=[...keep(DATA.live),...L.filter(m=>m.st==="live")]}
+/* ---- PHONE LAYOUT SWITCH: only for the site owner's account. Shows the site in a phone-sized frame so the real phone layout is used. ---- */
+const mobOwner=()=>!!(me&&String(me.email||"").toLowerCase()==="lucasrafael.dossantos2014@gmail.com");
+const mobInFrame=()=>{try{return window.self!==window.top}catch(e){return true}};
+function mobSet(on){try{localStorage.setItem("rf_mobview",on?"1":"")}catch(e){}if(on)mobInit();else{const w=document.getElementById("mobwrap");if(w)w.remove();document.documentElement.style.overflow=""}}
+function mobInit(){if(mobInFrame()||!mobOwner()||document.getElementById("mobwrap"))return;let on="";try{on=localStorage.getItem("rf_mobview")}catch(e){}if(on!=="1")return;
+  const w=document.createElement("div");w.id="mobwrap";w.innerHTML=`<div class="mobbar">📱 ${L("Phone layout")} <button class="btn ghost" data-mobview="0">🖥️ ${L("Back to computer layout")}</button></div><iframe title="${L("Phone layout")}" src="${location.pathname}${location.search}${location.hash}"></iframe>`;
+  document.body.appendChild(w);document.documentElement.style.overflow="hidden"}
 function stopAll(){Object.keys(T).forEach(stop);gameStop();liveStop()}
 function play(id){const l=LEARN.find(x=>x.id===id);if(!VIEWED.has("tut:"+id)){VIEWED.add("tut:"+id);logAct("tutorial",{t:l.t})}if(T[id]&&T[id].h){stop(id);return}
 LEARN.forEach(x=>x.id!==id&&stop(x.id));if(T[id].i>=l.f.length-1)show(id,0);
@@ -4376,7 +4388,7 @@ else if(d.stvisit!==undefined){STD.view=d.stvisit||null;STD.data=null;STD.msg=""
 else if(d.stwatch!==undefined){if(d.stwatch){if(tab!=="stadium")LOADNEXT=true;STD.watch=d.stwatch;STD.view=null;STD.stats=null;STD.statsAt=0;STD.react=0;STD.game=null;if(!STD.data||STD.data.mine===false){STD.data=null;stLoad()}tab="stadium"}else{STD.watch=null;gameStop()}scrollTo(0,0)}
 else if(d.stgame){STD.game=d.stgame;curGame=d.stgame;gameStop();const box=$("#stgamebox");if(box){box.innerHTML=`<div class="arc"><canvas id="cv" width="320" height="420"></canvas><div style="flex:1;min-width:180px"><h3>${L("Your best scores")}</h3><div id="hs"></div></div></div>`;document.querySelectorAll("[data-stgame]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.stgame===d.stgame));startGame(d.stgame)}return}
 else if(d.streact){stFloat(d.streact,true);SB.rpc("react_send",{p_match:STD.watch,p_emoji:d.streact}).then(()=>{},()=>{});return}
-else if(d.chatadd){chatAdd(d.chatadd,d.name);return}
+else if(d.mobview){if(mobInFrame()){try{window.top.mobSet(false)}catch(e){}}else mobSet(d.mobview==="1");return}else if(d.chatadd){chatAdd(d.chatadd,d.name);return}
 else if(d.mact){MACT=MACT===+d.mact?null:+d.mact;REPFOR=null;drawThread(true);return}else if(d.repopen){REPFOR=+d.repopen;drawThread(true);return}else if(d.rep){const[i,k]=d.rep.split("|");reportMsg(i,k);return}else if(d.mute){toggleMute(d.mute);return}else if(d.block){toggleBlock(d.block);return}
 else if(d.ackw){SB.rpc("ack_warning",{p_id:+d.ackw}).then(()=>{},()=>{});WARN.shift();showWarning();return}
 else if(d.as){asub=d.as;ACONF=null;aMsg="";AD[asub]=undefined}else if(d.aref!==undefined){AD[asub]=undefined;aMsg=""}else if(d.arf){repFilter=d.arf;AD.reports=undefined}else if(d.aroom){aRoom=d.aroom;AD.chat=undefined}
