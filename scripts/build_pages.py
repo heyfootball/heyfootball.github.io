@@ -49,10 +49,46 @@ def when(t):
     return d.strftime("%a %d %b %Y, %H:%M"), d.date().isoformat()
 
 # ---------- the data ----------
+def espn_data():
+    """Same shape as the worker's answer, built from ESPN's free data: used when the worker can't answer GitHub."""
+    out = {"leagues": {}, "live": [], "res": [], "fx": []}
+    ids = {715: "PPL", 700: "PL", 740: "PD", 730: "SA", 720: "BL1", 710: "FL1", 775: "CL", 725: "DED", 3914: "ELC"}   # ESPN's league numbers
+    for off in range(-45, 22):              # ESPN answers one day at a time
+        try: evs = get_json(f"{ESPN}all/scoreboard?dates={(NOW + timedelta(days=off)).strftime('%Y%m%d')}&limit=500").get("events") or []
+        except Exception: continue
+        for e in evs:
+            lid = re.search(r"l:(\d+)", e.get("uid", ""))
+            if not lid or int(lid.group(1)) not in ids: continue
+            c = (e.get("competitions") or [{}])[0]; comp = c.get("competitors") or []
+            H = next((x for x in comp if x.get("homeAway") == "home"), None); A = next((x for x in comp if x.get("homeAway") == "away"), None)
+            if not H or not A: continue
+            state = ((c.get("status") or {}).get("type") or {}).get("state")
+            m = {"id": "e" + str(e["id"]), "c": ids[int(lid.group(1))], "t": e["date"], "h": H["team"].get("shortDisplayName") or H["team"]["displayName"],
+                 "a": A["team"].get("shortDisplayName") or A["team"]["displayName"], "v": (c.get("venue") or {}).get("fullName", "")}
+            if state == "pre": out["fx"].append(m)
+            else:
+                m["hs"], m["as"] = int(H.get("score") or 0), int(A.get("score") or 0)
+                out["live" if state == "in" else "res"].append(m)
+    for code, (name, lg) in LEAGUES.items():
+        try:
+            st = get_json(f"https://site.api.espn.com/apis/v2/sports/soccer/{lg}/standings")
+            ent = next((ch["standings"]["entries"] for ch in st.get("children") or [] if ch.get("standings", {}).get("entries")), [])
+            num = lambda s, k: int(next((x.get("value") or 0 for x in s if x.get("name") == k), 0))
+            rows = [(num(x["stats"], "rank") or 99, [x["team"].get("shortDisplayName") or x["team"]["displayName"], num(x["stats"], "wins"), num(x["stats"], "ties"),
+                     num(x["stats"], "losses"), num(x["stats"], "points"), num(x["stats"], "pointDifferential")]) for x in ent]
+            if rows: out["leagues"][name] = [r for _, r in sorted(rows, key=lambda r: r[0])]
+        except Exception:
+            pass
+    if not (out["res"] or out["fx"]): raise RuntimeError("ESPN had no matches either")
+    return out
 try:
     data = get_json(WORKER)
-except Exception:          # the worker had a hiccup: ask the Supabase backup route instead
-    data = get_json("https://botczxlxmzxgpbxgflin.supabase.co/functions/v1/scores", {"apikey": "sb_publishable_z7tZBtDopjaRRVP1bXPppg_MEQQ0HDe"})
+except Exception:          # the worker had a hiccup: ask the Supabase backup route, then ESPN
+    try:
+        data = get_json("https://botczxlxmzxgpbxgflin.supabase.co/functions/v1/scores", {"apikey": "sb_publishable_z7tZBtDopjaRRVP1bXPppg_MEQQ0HDe"})
+    except Exception:
+        data = espn_data()
+        print("scores worker unavailable: used ESPN instead")
 # the names people actually type into Google
 FULL = {"Barça": "Barcelona", "Man City": "Manchester City", "Man United": "Manchester United", "Atleti": "Atlético Madrid", "Inter": "Inter Milan",
         "Bayern": "Bayern Munich", "Spurs": "Tottenham", "Nottingham": "Nottingham Forest", "Newcastle": "Newcastle United", "Brighton Hove": "Brighton",
