@@ -72,6 +72,36 @@ for key, st in (("live", "live"), ("res", "ft"), ("hist", "ft"), ("fx", "up")):
         if st == "ft" and t < NOW - timedelta(days=150):
             continue
         matches.append(m)
+# Europa League, Conference League and cups aren't in the free scores feed: add them from ESPN (one request per day)
+XLG = {776: ("EL", "Europa League", "uefa.europa"), 20296: ("UECL", "Conference League", "uefa.europa.conf"), 3918: ("FAC", "FA Cup", "eng.fa"),
+       3920: ("EFL", "Carabao Cup", "eng.league_cup"), 3951: ("CDR", "Copa del Rey", "esp.copa_del_rey"), 3956: ("CI", "Coppa Italia", "ita.coppa_italia"),
+       3954: ("DFB", "DFB-Pokal", "ger.dfb_pokal"), 3952: ("CDF", "Coupe de France", "fra.coupe_de_france"), 20922: ("TP", "Taça de Portugal", "por.taca.portugal")}
+for code, name, slug_ in XLG.values():
+    LEAGUES[code] = (name, slug_)
+def _wordset(n):
+    s = unicodedata.normalize("NFKD", str(n)).encode("ascii", "ignore").decode().lower()
+    return " ".join(sorted(w for w in re.sub(r"[^a-z0-9 ]", " ", s).split() if len(w) > 2 and w not in {"fc", "cf", "sc", "ac", "afc", "club", "de", "cd", "sl", "sad", "ssc", "as", "us", "calcio"}))
+known = {_wordset(x): x for m in matches for x in (m["h"], m["a"])}
+for r in [r for rows in tables.values() for r in rows]:
+    known.setdefault(_wordset(r[0]), r[0])
+fixname = lambda n: known.get(_wordset(fix(n)), fix(n))
+for off in range(-14, 15):
+    day = (NOW + timedelta(days=off)).strftime("%Y%m%d")
+    try:
+        evs = get_json(f"{ESPN}all/scoreboard?dates={day}&limit=500").get("events") or []
+    except Exception:
+        continue
+    for e in evs:
+        lid = re.search(r"l:(\d+)", e.get("uid", ""))
+        if not lid or int(lid.group(1)) not in XLG: continue
+        c = (e.get("competitions") or [{}])[0]; comp = c.get("competitors") or []
+        H = next((x for x in comp if x.get("homeAway") == "home"), None); A = next((x for x in comp if x.get("homeAway") == "away"), None)
+        if not H or not A or ("e" + str(e["id"])) in seen: continue
+        state = ((c.get("status") or {}).get("type") or {}).get("state"); st = "live" if state == "in" else "ft" if state == "post" else "up"
+        m = {"id": "e" + str(e["id"]), "c": XLG[int(lid.group(1))][0], "t": e["date"], "st": st,
+             "h": fixname(H["team"].get("shortDisplayName") or H["team"]["displayName"]), "a": fixname(A["team"].get("shortDisplayName") or A["team"]["displayName"]),
+             "hs": None if st == "up" else int(H.get("score") or 0), "as": None if st == "up" else int(A.get("score") or 0), "v": (c.get("venue") or {}).get("fullName", "")}
+        seen.add(m["id"]); matches.append(m)
 matches.sort(key=lambda m: m["t"])
 for m in matches:
     m["slug"] = f'{when(m["t"])[1]}-{slug(m["h"])}-vs-{slug(m["a"])}'
