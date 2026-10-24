@@ -7,6 +7,13 @@ import sys, os, re, json, html, unicodedata, urllib.request, urllib.parse
 from datetime import datetime, timedelta, timezone
 
 OUT = os.path.abspath(sys.argv[1] if len(sys.argv) > 1 else ".")
+# if anything goes wrong, the error is saved to heyfootball.github.io/build-log.txt so it can be read without signing in
+def _crash(kind, err, tb):
+    import traceback
+    with open(os.path.join(OUT, "build-log.txt"), "w", encoding="utf-8") as f:
+        f.write("Page build failed (Python " + sys.version.split()[0] + ")\n" + "".join(traceback.format_exception(kind, err, tb)))
+    sys.__excepthook__(kind, err, tb)
+sys.excepthook = _crash
 SITE = "https://heyfootball.github.io"
 WORKER = "https://rf-data.scratchgamesstudio15.workers.dev/"
 ESPN = "https://site.api.espn.com/apis/site/v2/sports/soccer/"
