@@ -90,7 +90,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;color:var(--mute);font-s
 .rimg{height:110px;background:#eee;display:grid;place-items:center;font-size:42px;border-radius:6px;margin-bottom:8px}
 .rmost{padding:4px 18px 10px}.rmost a{display:flex;gap:12px;align-items:center;padding:8px 0;border-top:1px solid #eee;color:#111;text-decoration:none;font-weight:600}.rmost em{font:800 26px Outfit,sans-serif;color:#d4001a;font-style:normal}
 .fx{grid-template-columns:1fr auto 1fr 76px}
-.chat{display:grid;grid-template-columns:250px 1fr;gap:16px}.mobonly{display:none!important}.fzopt[hidden]{display:none!important}.fzq{width:100%;box-sizing:border-box;margin:0 0 8px;padding:9px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit}.hsmini{align-items:center;gap:8px;margin:0 0 10px}.fadd{margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}@media(max-width:700px){.chat{grid-template-columns:1fr}.chat>.rooms{order:2}.mobonly{display:inline-flex!important}}
+.chat{display:grid;grid-template-columns:250px 1fr;gap:16px}.mobonly{display:none!important}#a2hs{position:fixed;left:10px;right:10px;bottom:calc(74px + env(safe-area-inset-bottom));z-index:9000;display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:18px;background:#101a3c;color:#fff;border:1.5px solid #ffd23f88;box-shadow:0 18px 50px #000b;animation:a2hsin .35s ease-out}@keyframes a2hsin{from{transform:translateY(30px);opacity:0}}.a2hsicon{flex:none;width:46px;height:46px;border-radius:12px;display:grid;place-items:center;font-size:26px;background:linear-gradient(135deg,#1f9d55,#2d6cdf)}.a2hstxt{display:flex;flex-direction:column;gap:4px;font-size:14px;min-width:0}.a2hstxt span{color:#c9d6ff}.a2hsbtns{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}.retpanel{border-color:#1f9d5566!important}.stile.big b{color:#39d98a}.vbar i{position:relative;overflow:hidden}.vbar i em{position:absolute;left:0;right:0;bottom:0;display:block;background:#0b5f33}.retkey{display:inline-block;width:10px;height:10px;border-radius:2px;background:#0b5f33;vertical-align:middle}.fzopt[hidden]{display:none!important}.fzq{width:100%;box-sizing:border-box;margin:0 0 8px;padding:9px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit}.hsmini{align-items:center;gap:8px;margin:0 0 10px}.fadd{margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}@media(max-width:700px){.chat{grid-template-columns:1fr}.chat>.rooms{order:2}.mobonly{display:inline-flex!important}}
 .rooms button{display:block;width:100%;text-align:left;padding:10px 14px;border-radius:14px;border:0;background:none;font-weight:600;color:var(--mute)}.rooms button[aria-pressed=true]{background:#fff;color:#0a1020}
 .thread{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}.bub{max-width:80%;padding:8px 14px;border-radius:18px;background:#ffffff14;overflow-wrap:anywhere}.bub.me{align-self:flex-end;background:#1b4fd8}.bub small{display:block;color:var(--mute);font-size:11px}
 .sendrow{display:flex;gap:8px;margin-top:10px}.sendrow input{flex:1;padding:10px 16px;border-radius:99px;border:1.5px solid var(--line);background:#0003;color:var(--ink);font:inherit}
@@ -2214,11 +2214,28 @@ const gg=x.createLinearGradient(200,0,880,0);gg.addColorStop(0,"#3dffa2");gg.add
 x.fillStyle="#fff";x.font="700 54px "+F;x.fillText(o.sub,540,980,980);
 x.fillStyle="#ffd23f";x.font="800 60px "+F;x.fillText(o.cta,540,1140,980);
 x.fillStyle="#a9a4d6";x.font="600 36px "+F;x.fillText(location.host,540,1260);
-const blob=await new Promise(r=>c.toBlob(r,"image/png"));if(!blob)return;const file=new File([blob],"heyfootball.png",{type:"image/png"}),text=o.text+" "+o.url;
+return sharePic(c,o.text+" "+o.url)}
+async function sharePic(c,text){const blob=await new Promise(r=>c.toBlob(r,"image/png"));if(!blob)return;const file=new File([blob],"heyfootball.png",{type:"image/png"});
 try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],text,title:"HeyFootball"});return}}catch(e){if(e&&e.name==="AbortError")return}
 // on a computer: copy the link and save the picture
 try{await navigator.clipboard.writeText(text)}catch(e){}const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="heyfootball.png";document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),5000);
 toast("📋 "+L("Link copied and picture saved. Send them to your friends!"))}
+// Total Points: this week's top 3 (or last week's winners) as a picture to post in a group chat
+async function weekShare(kind){const W=WEEK&&!WEEK.err?WEEK:null;if(!W){toast(L("Loading…"));return}
+  const last=kind==="last",rows=(last?(W.last||[]).map(x=>({name:x.name,pts:x.pts})):(W.top||[]).slice(0,3)).slice(0,3);if(!rows.length){toast(L("No points yet this week. Be the first!"));return}
+  await loadMyCode();const c=document.createElement("canvas");c.width=1080;c.height=1350;const x=c.getContext("2d"),F="Outfit,system-ui,sans-serif";
+  const g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#0b1a4a");g.addColorStop(.6,"#0a0f24");g.addColorStop(1,"#0b3b2a");x.fillStyle=g;x.fillRect(0,0,1080,1350);
+  const glow=(cx,cy,r,col)=>{const q=x.createRadialGradient(cx,cy,0,cx,cy,r);q.addColorStop(0,col);q.addColorStop(1,"rgba(0,0,0,0)");x.fillStyle=q;x.fillRect(0,0,1080,1350)};glow(540,420,560,"rgba(255,210,63,.22)");glow(980,1300,560,"rgba(61,255,162,.22)");
+  x.textAlign="center";x.fillStyle="#fff";x.font="800 54px "+F;x.fillText("⚽ HEYFOOTBALL",540,120);
+  x.fillStyle="#ffd23f";x.font="900 84px "+F;x.fillText("🏆 "+L("Total Points"),540,250,980);
+  x.fillStyle="#c9d6ff";x.font="700 44px "+F;x.fillText(last?L("Last week's winners"):L("This week so far")+" · "+weekLeft(),540,330,980);
+  const medal=["🥇","🥈","🥉"],col=["#ffd23f","#e3e8f2","#e8a36b"];
+  rows.forEach((r,i)=>{const y=420+i*230;x.fillStyle="rgba(255,255,255,.08)";x.beginPath();x.roundRect(90,y,900,190,36);x.fill();x.lineWidth=4;x.strokeStyle=col[i];x.stroke();
+    x.textAlign="left";x.fillStyle="#fff";x.font="110px serif";x.fillText(medal[i],130,y+135);x.fillStyle="#fff";x.font="800 64px "+F;x.fillText(String(r.name).slice(0,22),290,y+90,660);
+    x.fillStyle=col[i];x.font="900 54px "+F;x.fillText(Number(r.pts).toLocaleString()+" "+L("pts"),290,y+158,660);x.textAlign="center"});
+  x.fillStyle="#3dffa2";x.font="800 58px "+F;x.fillText(L("Can you beat them? Play free 👇"),540,1190,980);
+  x.fillStyle="#a9b4d6";x.font="600 38px "+F;x.fillText(location.host,540,1270);
+  return sharePic(c,L("This week on HeyFootball 🏆 Can you beat them?")+" "+inviteLink())}
 const gTitle=k=>(GAMES.find(g=>g[0]===k)||["","Arcade"])[1].replace(/^\S+\s/,"");
 async function shareScore(){const k=curGame;let s=LASTSC&&LASTSC.k===k?LASTSC.s:0;if(!s){try{s=(JSON.parse(localStorage.getItem("rf_hs_"+k)||"[]")[0])||0}catch(e){}}
 if(!s){toast(L("Play a game first, then share your score!"));return}await loadMyCode();const unit=k==="deadly"?"s":"";
@@ -2253,7 +2270,7 @@ function weeklyHtml(inArcade){if(!me)return"";if(!WEEK)setTimeout(()=>loadWeek()
 <div class="wprizes"><span>🥇 ${L("Icons pack")}</span><span>🥈 ${L("Legendary pack")}</span><span>🥉 ${L("Epic pack")}</span></div>
 ${W?`${W.admin?`<div class="wadmin">🛡️ <b>${L("You're an admin")}</b>: ${L("admins run the competition, so you don't appear in the list and can't win prizes. Your points still count for the normal leaderboards and the tournament.")} ${L("Your points this week")}: <b>${Number(W.mine||0).toLocaleString()}</b></div>`:`<p class="wme">${L("You")}: <b>${Number(W.mine||0).toLocaleString()}</b> ${L("pts")}${W.mine>0?` · <b>#${W.rank}</b>`:""}</p>`}${(W.top||[]).length?`<ol class="wtop">${W.top.map((t,i)=>`<li class="${t.me?"me":""}"><span>${i<3?["🥇","🥈","🥉"][i]+" ":""}${avSm(t.uid,t.name,"xs")}${esc(t.name)}</span><b>${Number(t.pts).toLocaleString()}</b></li>`).join("")}</ol>`:`<p class="sl">${L("No points yet this week. Be the first!")}</p>`}
 ${(W.last||[]).length?`<p class="sl">${L("Last week")}: ${W.last.map(x=>["🥇","🥈","🥉"][x.place-1]+" "+esc(x.name)).join(" · ")}</p>`:""}`:`<p class="sl">${L("Loading…")}</p>`}
-${inArcade?"":`<button class="btn" data-t="arcade" data-g="lb" data-lbk="total">🎮 ${L("Play to climb")}</button>`}</div>`}
+<div class="row" style="justify-content:flex-start;gap:8px;flex-wrap:wrap;margin-top:10px">${W&&(W.top||[]).length?`<button class="btn sharebtn" data-weekshare="now">📤 ${L("Share this week's top 3")}</button>`:""}${W&&(W.last||[]).length?`<button class="btn ghost" data-weekshare="last">📤 ${L("Share last week's winners")}</button>`:""}${inArcade?"":`<button class="btn" data-t="arcade" data-g="lb" data-lbk="total">🎮 ${L("Play to climb")}</button>`}</div></div>`}
 function weekMini(){if(!me)return"";if(!WEEK){setTimeout(()=>loadWeek(),0);return""}if(WEEK.err)return"";
   return`<button class="weekmini" data-t="arcade" data-g="lb" data-lbk="total">🏆 ${L("Total Points")}: <b>${WEEK.admin?"🛡️ "+L("admin, no prizes"):WEEK.mine>0?"#"+WEEK.rank:"–"}</b> · ${Number(WEEK.mine||0).toLocaleString()} ${L("pts")} · ${weekLeft()} · 🥇 ${L("Icons pack")} →</button>`}
 /* ---- SEARCH: one box for teams, players and news. Tap a result for all its stats (tables, form, results, fixtures, cards). ---- */
@@ -3705,6 +3722,19 @@ All my best scores|Todos os meus recordes|Todos mis récords
 days in a row|dias seguidos|días seguidos
 All matches|Todos os jogos|Todos los partidos
 Search a team…|Procurar uma equipa…|Buscar un equipo…
+Share this week's top 3|Partilhar o top 3 desta semana|Compartir el top 3 de esta semana
+Share last week's winners|Partilhar os vencedores da semana passada|Compartir los ganadores de la semana pasada
+Last week's winners|Vencedores da semana passada|Ganadores de la semana pasada
+This week so far|Esta semana até agora|Esta semana hasta ahora
+Can you beat them? Play free 👇|Consegues vencê-los? Joga grátis 👇|¿Puedes ganarles? Juega gratis 👇
+This week on HeyFootball 🏆 Can you beat them?|Esta semana no HeyFootball 🏆 Consegues vencê-los?|Esta semana en HeyFootball 🏆 ¿Puedes ganarles?
+Add HeyFootball to your home screen|Adiciona o HeyFootball ao ecrã principal|Añade HeyFootball a tu pantalla de inicio
+So it's always one tap away.|Assim está sempre a um toque.|Así siempre está a un toque.
+In Safari, tap Share ⬆️ then “Add to Home Screen”.|No Safari, toca em Partilhar ⬆️ e depois “Adicionar ao ecrã principal”.|En Safari, toca Compartir ⬆️ y luego “Añadir a pantalla de inicio”.
+In Chrome, tap ⋮ then “Add to Home screen” or “Install app”.|No Chrome, toca em ⋮ e depois “Adicionar ao ecrã principal” ou “Instalar app”.|En Chrome, toca ⋮ y luego “Añadir a pantalla de inicio” o “Instalar app”.
+Install|Instalar|Instalar
+Show me how|Mostra-me como|Muéstrame cómo
+Not now|Agora não|Ahora no
 Admins|Admins|Admins`;
 TRX.split("\n").forEach(l=>{const p=l.split("|");if(p.length===3)DICT[p[0]]=[p[1],p[2]]});
 // Phrases with numbers or times in them
@@ -3991,7 +4021,7 @@ const AV=(id,d)=>AINPUT[id]!=null?AINPUT[id]:d;
 async function arpc(fn,args){const{data,error}=await SB.rpc(fn,args||{});if(error)throw new Error(/not authori[sz]ed/i.test(error.message)||error.code==="42501"?"You're not authorised to do that.":/does not exist|schema cache/i.test(error.message)?"Moderation isn't set up in Supabase yet (run supabase-moderation.sql).":error.message);return data}
 async function aLoad(sec){AD[sec]=null;try{let d;if(sec==="overview")d=await arpc("admin_overview");else if(sec==="reports")d=await arpc("admin_reports",{p_status:repFilter});else if(sec==="chat")d=await arpc("admin_recent_all",{p_limit:120});
 else if(sec==="users")d=await arpc("admin_search_users",{p_query:aQ});else if(sec==="safety")d=await arpc("admin_get_settings");else if(sec==="site"){const r=await SB.from("site_config").select("*").eq("id",1).maybeSingle();if(r.error)throw new Error(r.error.message);d=r.data||SITE}
-else if(sec==="audit")d=await arpc("admin_audit",{p_limit:150});else if(sec==="admins")d=await arpc("admin_list_admins");else if(sec==="fun")d=await funLoad();else if(sec==="blog")d=await blogLoad();else if(sec==="visits")d=await arpc("admin_site_stats",{p_days:30});AD[sec]=d}catch(e){AD[sec]={err:e.message}}if(tab==="admin")render()}
+else if(sec==="audit")d=await arpc("admin_audit",{p_limit:150});else if(sec==="admins")d=await arpc("admin_list_admins");else if(sec==="fun")d=await funLoad();else if(sec==="blog")d=await blogLoad();else if(sec==="visits"){d=await arpc("admin_site_stats",{p_days:30});try{d.ret=await arpc("admin_returning",{p_days:30})}catch(e){d.ret={err:/does not exist|schema cache|function/i.test(e.message)?"setup":e.message}}}AD[sec]=d}catch(e){AD[sec]={err:e.message}}if(tab==="admin")render()}
 const ab=(key,label,cls)=>ACONF===key?`<span class="aconf">${esc(label)}? <button class="btn danger" data-ado="${esc(key)}">Yes, do it</button> <button class="btn ghost" data-aask="">Cancel</button></span>`:`<button class="btn ${cls||"ghost"}" data-aask="${esc(key)}">${esc(label)}</button>`;
 const roomName=r=>r&&r.startsWith("dm:")?"Private chat":r&&r.startsWith("g:")?"Group chat":r&&r.startsWith("af:")?"Friends chat":(OLD_ROOMS.find(x=>x[0]===r)||[,r||"?"])[1];
 const AACT={remove_message:"Deleted a message",resolve_report:"Resolved a report",dismiss_report:"Dismissed a report",user_timeout:"Muted a user",user_chat_ban:"Banned from chat",user_suspend:"Suspended an account",user_ban_all:"Banned an account",user_clear:"Cleared restrictions",user_warning:"Warned a user",adjust_coins:"Changed coins",reset_scores:"Reset Arcade scores",update_settings:"Changed safety settings",update_site:"Changed site settings",auto_timeout:"Automatic mute"};
@@ -4300,8 +4330,16 @@ function accBtn(){document.querySelectorAll(".mobnav").forEach(x=>x.hidden=!mobO
 /* ---- VISITOR STATS: counts page views with an anonymous code that changes every day (no cookies). Admin → 📈 Visitors ---- */
 var HITREF=document.referrer||null;
 function pageHit(path){if(!SB)return;const ref=HITREF;HITREF=null;SB.rpc("hit",{p_path:path,p_ref:ref}).then(()=>{},()=>{})}
+// returning players: signed-in players who come back on another day (the number to watch)
+function retHtml(R){if(!R)return"";if(R.err)return`<div class="panel"><h3>🔁 Returning players</h3><p class="sl">${R.err==="setup"?"Run supabase-returning-players.sql in Supabase to see this.":esc(R.err)}</p></div>`;
+  const pct=(a,b)=>b?Math.round(a/b*100)+"%":"–",tile=(v,l,big)=>`<div class="stile${big?" big":""}"><b>${v}</b><span>${l}</span></div>`,days=R.days||[],max=Math.max(1,...days.map(x=>x.players));
+  return`<div class="panel retpanel"><h3>🔁 Returning players <small class="hint">the number to watch</small></h3>
+  <div class="stiles">${tile(pct(R.back_week,R.new),"came back within a week",1)}${tile(pct(R.back_next,R.new),"came back the next day")}${tile(Number(R.today_returning||0).toLocaleString(),"returning players today")}${tile(Number(R.week||0).toLocaleString(),"players this week")}</div>
+  <p class="sl" style="margin:10px 0 4px">Of the <b>${R.new||0}</b> players who started in the last 30 days, <b>${R.back_any||0}</b> came back on another day (${pct(R.back_any,R.new)}).${R.today_new?` Today: <b>${R.today_new}</b> new.`:""}</p>
+  <h3 style="margin-top:14px">Players per day (last 14 days)</h3><div class="vchart">${days.map(x=>`<div class="vbar" title="${x.day}: ${x.players} players, ${x.returning} returning"><i style="height:${Math.round(x.players/max*100)}%"><em style="height:${x.players?Math.round(x.returning/x.players*100):0}%"></em></i><small>${new Date(x.day).getDate()}</small></div>`).join("")}</div>
+  <p class="sl" style="font-size:12px">Bar = signed-in players that day · <span class="retkey"></span> darker part = players who had been on the site before. Only totals are shown, never who.</p></div>`}
 function visitsHtml(D){const tile=(v,l)=>`<div class="stile"><b>${v==null?"–":Number(v).toLocaleString()}</b><span>${l}</span></div>`,days=D.days||[],max=Math.max(1,...days.map(x=>x.visitors));
-  return`<div class="panel"><div class="stiles">${tile(D.today,"Visitors today")}${tile(D.today_views,"Page views today")}${tile(D.week,"Visitors (7 days)")}${tile(D.month,"Visitors (30 days)")}</div>
+  return retHtml(D.ret)+`<div class="panel"><div class="stiles">${tile(D.today,"Visitors today")}${tile(D.today_views,"Page views today")}${tile(D.week,"Visitors (7 days)")}${tile(D.month,"Visitors (30 days)")}</div>
   <h3 style="margin-top:14px">Visitors per day (last 30 days)</h3><div class="vchart">${days.map(x=>`<div class="vbar" title="${x.day}: ${x.visitors} visitors, ${x.views} views"><i style="height:${Math.round(x.visitors/max*100)}%"></i><small>${new Date(x.day).getDate()}</small></div>`).join("")}</div>
   <p class="sl" style="font-size:12px">No cookies: each visitor gets an anonymous code that changes every day, so one person visiting on 3 days counts 3 times in "30 days".</p><button class="btn ghost" data-aref>Refresh</button></div>
   <div class="two"><div class="panel"><h3>Top pages (7 days)</h3>${(D.pages||[]).length?`<table class="lqt"><tr><th>Page</th><th>Visitors</th><th>Views</th></tr>${D.pages.map(x=>`<tr><td>${esc(x.path)}</td><td>${x.visitors}</td><td>${x.views}</td></tr>`).join("")}</table>`:`<p class="sl">No visits yet.</p>`}</div>
@@ -4329,6 +4367,19 @@ function mobSet(on){try{localStorage.setItem("rf_mobview",on?"1":"")}catch(e){}i
 function mobInit(){if(mobInFrame()||!mobOwner()||document.getElementById("mobwrap"))return;let on="";try{on=localStorage.getItem("rf_mobview")}catch(e){}if(on!=="1")return;
   const w=document.createElement("div");w.id="mobwrap";w.innerHTML=`<div class="mobbar">📱 ${L("Phone layout")} <button class="btn ghost" data-mobview="0">🖥️ ${L("Back to computer layout")}</button></div><iframe title="${L("Phone layout")}" src="${location.pathname}${location.search}${location.hash}"></iframe>`;
   document.body.appendChild(w);document.documentElement.style.overflow="hidden"}
+/* ---- "ADD TO HOME SCREEN" PROMPT: from the second day someone visits on a phone, so HeyFootball isn't forgotten.
+   Not shown when it's already opened from the home screen; "Not now" hides it for 7 days, and it stops after 3 times. ---- */
+var A2HS={ev:null};window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();A2HS.ev=e});
+const a2hsGet=()=>{try{return JSON.parse(localStorage.getItem("rf_a2hs")||"{}")}catch(e){return{}}},a2hsSet=o=>{try{localStorage.setItem("rf_a2hs",JSON.stringify(o))}catch(e){}};
+function a2hsClose(how){const o=a2hsGet();o.until=Date.now()+7*864e5;o.n=(o.n||0)+1;a2hsSet(o);const b=document.getElementById("a2hs");if(b)b.remove()}
+function a2hsCheck(){const dev=myDevice(),o=a2hsGet(),today=drDay(0);if(o.last!==today){o.days=(o.days||0)+1;o.last=today;a2hsSet(o)}
+  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+  if(standalone||!["ios","android"].includes(dev)||(o.days||0)<2||(o.n||0)>=3||(o.until&&Date.now()<o.until)||document.getElementById("a2hs"))return;
+  const tip=dev==="ios"?L("In Safari, tap Share ⬆️ then “Add to Home Screen”."):L("In Chrome, tap ⋮ then “Add to Home screen” or “Install app”.");
+  const b=document.createElement("div");b.id="a2hs";b.setAttribute("role","dialog");b.setAttribute("aria-label",L("Add HeyFootball to your home screen"));
+  b.innerHTML=`<div class="a2hsicon">⚽</div><div class="a2hstxt"><b>📲 ${L("Add HeyFootball to your home screen")}</b><span>${L("So it's always one tap away.")} ${tip}</span><div class="a2hsbtns">${A2HS.ev?`<button class="btn" data-a2hs="install">${L("Install")}</button>`:`<button class="btn" data-a2hs="how">${L("Show me how")}</button>`}<button class="btn ghost" data-a2hs="later">${L("Not now")}</button></div></div>`;
+  document.body.appendChild(b)}
+setTimeout(a2hsCheck,6000);
 function stopAll(){Object.keys(T).forEach(stop);gameStop();liveStop()}
 function play(id){const l=LEARN.find(x=>x.id===id);if(!VIEWED.has("tut:"+id)){VIEWED.add("tut:"+id);logAct("tutorial",{t:l.t})}if(T[id]&&T[id].h){stop(id);return}
 LEARN.forEach(x=>x.id!==id&&stop(x.id));if(T[id].i>=l.f.length-1)show(id,0);
@@ -4401,7 +4452,7 @@ else if(d.stvisit!==undefined){STD.view=d.stvisit||null;STD.data=null;STD.msg=""
 else if(d.stwatch!==undefined){if(d.stwatch){if(tab!=="stadium")LOADNEXT=true;STD.watch=d.stwatch;STD.view=null;STD.stats=null;STD.statsAt=0;STD.react=0;STD.game=null;if(!STD.data||STD.data.mine===false){STD.data=null;stLoad()}tab="stadium"}else{STD.watch=null;gameStop()}scrollTo(0,0)}
 else if(d.stgame){STD.game=d.stgame;curGame=d.stgame;gameStop();const box=$("#stgamebox");if(box){box.innerHTML=`<div class="arc"><canvas id="cv" width="320" height="420"></canvas><div style="flex:1;min-width:180px"><h3>${L("Your best scores")}</h3><div id="hs"></div></div></div>`;document.querySelectorAll("[data-stgame]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.stgame===d.stgame));startGame(d.stgame)}return}
 else if(d.streact){stFloat(d.streact,true);SB.rpc("react_send",{p_match:STD.watch,p_emoji:d.streact}).then(()=>{},()=>{});return}
-else if(d.jump){const e=document.getElementById(d.jump);if(e)e.scrollIntoView({block:"start"});return}else if(d.mobview){if(mobInFrame()){try{window.top.mobSet(false)}catch(e){}}else mobSet(d.mobview==="1");return}else if(d.chatadd){chatAdd(d.chatadd,d.name);return}
+else if(d.weekshare){weekShare(d.weekshare);return}else if(d.a2hs){const ev=A2HS.ev;a2hsClose(d.a2hs);if(d.a2hs==="install"&&ev){ev.prompt();A2HS.ev=null}else if(d.a2hs==="how"){tab="getapp";LOADNEXT=true;render();scrollTo(0,0)}return}else if(d.jump){const e=document.getElementById(d.jump);if(e)e.scrollIntoView({block:"start"});return}else if(d.mobview){if(mobInFrame()){try{window.top.mobSet(false)}catch(e){}}else mobSet(d.mobview==="1");return}else if(d.chatadd){chatAdd(d.chatadd,d.name);return}
 else if(d.mact){MACT=MACT===+d.mact?null:+d.mact;REPFOR=null;drawThread(true);return}else if(d.repopen){REPFOR=+d.repopen;drawThread(true);return}else if(d.rep){const[i,k]=d.rep.split("|");reportMsg(i,k);return}else if(d.mute){toggleMute(d.mute);return}else if(d.block){toggleBlock(d.block);return}
 else if(d.ackw){SB.rpc("ack_warning",{p_id:+d.ackw}).then(()=>{},()=>{});WARN.shift();showWarning();return}
 else if(d.as){asub=d.as;ACONF=null;aMsg="";AD[asub]=undefined}else if(d.aref!==undefined){AD[asub]=undefined;aMsg=""}else if(d.arf){repFilter=d.arf;AD.reports=undefined}else if(d.aroom){aRoom=d.aroom;AD.chat=undefined}
