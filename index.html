@@ -90,7 +90,7 @@ footer{max-width:1040px;margin:auto;padding:0 16px 30px;color:var(--mute);font-s
 .rimg{height:110px;background:#eee;display:grid;place-items:center;font-size:42px;border-radius:6px;margin-bottom:8px}
 .rmost{padding:4px 18px 10px}.rmost a{display:flex;gap:12px;align-items:center;padding:8px 0;border-top:1px solid #eee;color:#111;text-decoration:none;font-weight:600}.rmost em{font:800 26px Outfit,sans-serif;color:#d4001a;font-style:normal}
 .fx{grid-template-columns:1fr auto 1fr 76px}
-.chat{display:grid;grid-template-columns:250px 1fr;gap:16px}.mobonly{display:none!important}.hsmini{align-items:center;gap:8px;margin:0 0 10px}.fadd{margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}@media(max-width:700px){.chat{grid-template-columns:1fr}.chat>.rooms{order:2}.mobonly{display:inline-flex!important}}
+.chat{display:grid;grid-template-columns:250px 1fr;gap:16px}.mobonly{display:none!important}.fzopt[hidden]{display:none!important}.fzq{width:100%;box-sizing:border-box;margin:0 0 8px;padding:9px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit}.hsmini{align-items:center;gap:8px;margin:0 0 10px}.fadd{margin:0 0 14px;padding-bottom:12px;border-bottom:1px solid var(--line)}@media(max-width:700px){.chat{grid-template-columns:1fr}.chat>.rooms{order:2}.mobonly{display:inline-flex!important}}
 .rooms button{display:block;width:100%;text-align:left;padding:10px 14px;border-radius:14px;border:0;background:none;font-weight:600;color:var(--mute)}.rooms button[aria-pressed=true]{background:#fff;color:#0a1020}
 .thread{height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}.bub{max-width:80%;padding:8px 14px;border-radius:18px;background:#ffffff14;overflow-wrap:anywhere}.bub.me{align-self:flex-end;background:#1b4fd8}.bub small{display:block;color:var(--mute);font-size:11px}
 .sendrow{display:flex;gap:8px;margin-top:10px}.sendrow input{flex:1;padding:10px 16px;border-radius:99px;border:1.5px solid var(--line);background:#0003;color:var(--ink);font:inherit}
@@ -1094,7 +1094,7 @@ function clubsPage(){const h=`<h2 style="font-size:40px;margin-bottom:6px">🚩 
 
 /* ---- FANZONE: post a story, match, score, form, table position, card... for everyone. Best first: likes ÷ minutes ---- */
 const FZ_STYLES=[["classic","🖤 Classic"],["pitch","🟩 Pitch"],["neon","💜 Neon"],["gold","🥇 Gold"],["fire","🔥 Fire"],["ice","❄️ Ice"]];
-const FZ_KINDS=[["news","📰","News story"],["match","⚽","Match"],["score","🎮","Arcade score"],["form","🔥","Team form"],["pos","📊","Table position"],["next","📅","Next match"],["card","🃏","Card"],["dream","⭐","Dream team"]];
+const FZ_KINDS=[["news","📰","News story"],["match","⚽","All matches"],["score","🎮","Arcade score"],["form","🔥","Team form"],["pos","📊","Table position"],["card","🃏","Card"],["dream","⭐","Dream team"]];
 const fzOrd=n=>{n=+n;const v=n%100;return v>=11&&v<=13?"th":["th","st","nd","rd"][n%10]||"th"};
 const fzBtn=(k,it,cls)=>me?`<button class="${cls||"btn ghost"} fzpostbtn" data-fzshare="${esc(JSON.stringify({k,i:it}))}">📣 ${L("Post on Fanzone")}</button>`:"";
 const fzItNews=n=>({id:String(n.id).slice(0,300),t:String(n.t).slice(0,200),cat:String(n.cat||"").slice(0,40),img:String(n.img||"").slice(0,400)});
@@ -1127,10 +1127,14 @@ function fzCard(k,it,st){it=it||{};const s=FZ_STYLES.some(x=>x[0]===st)?st:"clas
   return`<div class="fzc fz-${s}">${inner}</div>`}
 // what you can post, for each kind
 var FZSC=null,FZSCU=null;
+// Fanzone: typing in the search box hides the options that don't match (no redraw, so nothing jumps)
+document.addEventListener("input",e=>{if(e.target.id!=="fzq")return;const q=e.target.value.trim().toLowerCase();document.querySelectorAll(".fzopts .fzopt").forEach(b=>{b.hidden=!!q&&!b.textContent.toLowerCase().includes(q)})});
 function fzOpts(k){const mine=x=>isMyClub(x)?0:1,lgs=Object.keys(DATA.leagues||{}).filter(n=>n!=="Champions League"),when=t=>day(t)+" "+hm(t);
   if(k==="news")return ALL().slice(0,25).map(n=>({label:n.t,item:{id:String(n.id).slice(0,300),t:String(n.t).slice(0,200),cat:String(n.cat||"").slice(0,40),img:String(n.img||"").slice(0,400)}}));
-  if(k==="match"){const all=[...(DATA.live||[]).map(x=>({...x,st:"live"})),...(DATA.res||[]).slice(0,20).map(x=>({...x,st:"ft"})),...(DATA.fx||[]).filter(x=>new Date(x.t)>Date.now()).slice(0,15).map(x=>({...x,st:"up"}))];
-    return all.sort((a,b)=>Math.min(mine(a.h),mine(a.a))-Math.min(mine(b.h),mine(b.a))).map(x=>({label:`${x.st==="live"?"🔴 ":""}${x.h} ${x.st==="up"?"vs":x.hs+"-"+x.as} ${x.a}${x.st==="up"?" · "+when(x.t):x.st==="ft"?" (FT)":""}`,item:{h:x.h,a:x.a,hs:x.hs,as:x.as,st:x.st,lg:LGN(x.c)||x.c,when:when(x.t)}}))}
+  // every match: live now, then coming up (soonest first), then results (newest first); your clubs first in each group
+  if(k==="match"){const seen=new Set(),uniq=x=>!seen.has(x.id)&&seen.add(x.id),my=x=>Math.min(mine(x.h),mine(x.a)),grp=(a,f)=>a.filter(uniq).sort((x,y)=>my(x)-my(y)||f(x,y));
+    const all=[...grp((DATA.live||[]).map(x=>({...x,st:"live"})),()=>0),...grp((DATA.fx||[]).filter(x=>new Date(x.t)>Date.now()).map(x=>({...x,st:"up"})),(x,y)=>new Date(x.t)-new Date(y.t)),...grp([...(DATA.res||[]),...(DATA.hist||[])].filter(x=>x.hs!=null).map(x=>({...x,st:"ft"})),(x,y)=>new Date(y.t)-new Date(x.t))];
+    return all.map(x=>({label:`${x.st==="live"?"🔴 ":""}${x.h} ${x.st==="up"?"vs":x.hs+"-"+x.as} ${x.a}${x.st==="up"?" · "+when(x.t):x.st==="ft"?" (FT)":""}`,item:{h:x.h,a:x.a,hs:x.hs,as:x.as,st:x.st,lg:LGN(x.c)||x.c,when:when(x.t)}}))}
   // your best score in every game: the best of this device and your account (Supabase), so scores from your other devices show too
   if(k==="score"){if((FZSC==null||FZSCU!==me.id)&&SB&&me){FZSC={};FZSCU=me.id;SB.from("scores").select("game,best").eq("user_id",me.id).then(({data})=>{FZSC={};(data||[]).forEach(r=>FZSC[r.game]=r.best);if(tab==="fanzone")render()},()=>{})}
     return GAMES.filter(g=>g[0]!=="lb"&&g[0]!=="pred").map(g=>{let b=0;try{b=JSON.parse(localStorage.getItem("rf_hs_"+g[0])||"[]")[0]||0}catch(e){}b=Math.max(typeof b==="number"?b:0,(FZSC&&FZSC[g[0]])||0);return b>0?{label:`${g[1]}: ${b}`,item:{game:g[1],score:b}}:null}).filter(Boolean)}
@@ -1149,7 +1153,7 @@ function fzPostHtml(){const st=n=>`<span class="fzstep">${n}</span>`;let o=[];if
     else if(FZ.item&&FZ.sel!=null&&o[FZ.sel]&&JSON.stringify(o[FZ.sel].item)!==JSON.stringify(FZ.item)){o=[{label:fzLabel(FZ.kind,FZ.item),item:FZ.item},...o];FZ.sel=0}
     FZ.opts=o}
   let html=`<div class="panel"><h3>${st(1)} ${L("What do you want to post?")}</h3><div class="fzkinds">${FZ_KINDS.map(([k,e,l])=>`<button class="fzkind" data-fzkind="${k}" aria-pressed="${FZ.kind===k}"><b>${e}</b><span>${L(l)}</span></button>`).join("")}</div>
-  ${FZ.kind?(o.length?`<p class="sl" style="margin:12px 0 6px">${L("Pick one:")}</p><div class="fzopts">${o.map((x,i)=>`<button class="fzopt" data-fzitem="${i}" aria-pressed="${FZ.sel===i}">${esc(x.label)}</button>`).join("")}</div>`:`<p class="sl" style="margin:12px 0 0">${fzEmpty(FZ.kind)}</p>`):""}</div>`;
+  ${FZ.kind?(o.length?`<p class="sl" style="margin:12px 0 6px">${L("Pick one:")}</p>${o.length>15?`<input id="fzq" class="fzq" type="search" placeholder="🔎 ${L("Search a team…")}" aria-label="${L("Search a team…")}" autocomplete="off">`:""}<div class="fzopts">${o.map((x,i)=>`<button class="fzopt" data-fzitem="${i}" aria-pressed="${FZ.sel===i}">${esc(x.label)}</button>`).join("")}</div>`:`<p class="sl" style="margin:12px 0 0">${fzEmpty(FZ.kind)}</p>`):""}</div>`;
   if(FZ.item)html+=`<div class="panel"><h3>${st(2)} ${L("Pick a style")}</h3><div class="chips">${FZ_STYLES.map(([k,l])=>`<button class="chip" data-fzstyle="${k}" aria-pressed="${FZ.style===k}">${l}</button>`).join("")}</div><div class="fzprev">${fzCard(FZ.kind,FZ.item,FZ.style)}</div></div>
   <div class="panel"><h3>${st(3)} ${L("Add a caption")}</h3><textarea id="fz-cap" maxlength="200" rows="2" placeholder="${L("Say something… (optional)")}">${esc(FZ.cap)}</textarea></div>
   <div class="panel"><h3>${st(4)} ${L("Post it")}</h3><p class="sl" style="margin:0 0 10px">${L("Everyone on HeyFootball can see and like your post. Be kind: posts go through the same safety checks as chat.")}</p><button class="btn" data-fzpost="1" ${FZ.busy?"disabled":""}>${FZ.busy?L("Posting…"):"📣 "+L("Post to the Fanzone")}</button></div>`;
@@ -3699,6 +3703,8 @@ All my chats|Todas as minhas conversas|Todos mis chats
 Your best|O teu recorde|Tu récord
 All my best scores|Todos os meus recordes|Todos mis récords
 days in a row|dias seguidos|días seguidos
+All matches|Todos os jogos|Todos los partidos
+Search a team…|Procurar uma equipa…|Buscar un equipo…
 Admins|Admins|Admins`;
 TRX.split("\n").forEach(l=>{const p=l.split("|");if(p.length===3)DICT[p[0]]=[p[1],p[2]]});
 // Phrases with numbers or times in them
