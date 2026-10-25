@@ -326,7 +326,7 @@ nav button,.rooms button,.sub .chip{position:relative}.hasdot::after{content:"";
 .gtop{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}.gprog{flex:1;min-width:200px;max-width:360px}.gprog span{font-size:14px;color:var(--mute)}.gprog i{display:block;height:8px;border-radius:4px;background:var(--line);margin-top:4px;position:relative;overflow:hidden}.gprog i::after{content:"";position:absolute;inset:0;width:var(--w);background:var(--turf);border-radius:4px}
 .rtally{display:flex;flex-wrap:wrap;gap:6px 14px;margin:-6px 0 14px;font-size:13px;color:var(--mute)}.rtally b{color:var(--ink)}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px}
-.pc{container-type:inline-size;position:relative;aspect-ratio:5/8;overflow:hidden;box-sizing:border-box;border-radius:8%/5%;padding:0;text-align:center;color:#fff;background:linear-gradient(165deg,color-mix(in srgb,var(--rc) 40%,#0b1226),#0b1226 72%);border:2px solid var(--rc);box-shadow:0 0 16px color-mix(in srgb,var(--rc) 35%,transparent);display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0}.pc-in{width:100%;height:100%;box-sizing:border-box;padding:5cqw 5cqw 4.5cqw;display:flex;flex-direction:column;align-items:center;gap:.8cqw}.pc-in>*{flex:none;max-width:100%}
+.pc{container-type:inline-size;position:relative;aspect-ratio:5/8;box-sizing:border-box;border-radius:8%/5%;padding:0;text-align:center;color:#fff;background:linear-gradient(165deg,color-mix(in srgb,var(--rc) 40%,#0b1226),#0b1226 72%);border:2px solid var(--rc);box-shadow:0 0 16px color-mix(in srgb,var(--rc) 35%,transparent);display:flex;flex-direction:column;align-items:center;justify-content:center;min-width:0}.pc-in{width:100%;height:100%;overflow:hidden;border-radius:inherit;box-sizing:border-box;padding:5cqw 5cqw 4.5cqw;display:flex;flex-direction:column;align-items:center;gap:.8cqw}.pc-in>*{flex:none;max-width:100%}
 .pc-top{width:100%;display:flex;justify-content:space-between;align-items:baseline;font-weight:800}.pc-top b{font-size:15cqw;line-height:1}.pc-top span{font-size:8cqw;opacity:.85}
 .pc-av{width:32cqw;height:32cqw;flex:none;border-radius:50%;display:grid;place-items:center;font:800 12.5cqw Outfit,sans-serif;background:color-mix(in srgb,var(--rc) 45%,#0007);border:2px solid #fff3;margin:1.5cqw 0}
 .pc-name{font-weight:800;font-size:10.5cqw;line-height:1.15;max-width:100%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.pc-club,.pc-meta{font-size:7.8cqw;opacity:.8;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.pc-r{margin-top:auto;padding-top:2cqw;font-size:7cqw;font-weight:800;text-transform:uppercase;letter-spacing:.3cqw;white-space:nowrap}
@@ -2053,16 +2053,16 @@ b.innerHTML=thuOpen()?`🎉 <b>${L("Season 2 is here!")}</b> <span>${L("367 play
 setInterval(()=>{seasonPill();updBar()},30000);setTimeout(()=>{seasonPill();updBar()},0);
 // Season 2 starts the first time anyone opens the site after Thursday 17:00 (Supabase only does it once)
 let SEASON_TICKED=false;async function seasonTick(){if(!SB||!me||!thuOpen()||SEASON_TICKED)return;SEASON_TICKED=true;try{const{data}=await SB.rpc("season_tick");if(data===2){COL={};gTried=false;if(tab==="gallery")loadGallery()}}catch(e){}}
-// daily rewards: coins every day, more for every day in a row (resets if you miss a day)
+// daily rewards: coins every day, more for every day in a row (resets if you miss a day); a 7-day cycle that starts again after day 7
 const DR_COINS=[50,75,100,150,200,300,500];let DR=null;
 const drDay=off=>new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Lisbon"}).format(new Date(Date.now()-(off||0)*864e5));
 async function loadDaily(){if(!SB||!me)return;const{data}=await SB.from("daily_rewards").select("last_day,streak").maybeSingle();DR=data||{streak:0,last_day:null};drawDaily()}
 function dailyHtml(){if(!me||!SB)return"";if(!thuOpen())return`<div class="dailybox locked" id="dailybox">🔥 <b>${L("Daily rewards")}</b> <span>🔒 ${L("Thursday 17:00")}</span></div>`;
 if(!DR){setTimeout(loadDaily,0);return`<div class="dailybox" id="dailybox">🔥 ${L("Daily rewards")}…</div>`}
-const claimed=DR.last_day===drDay(0),streak=claimed?DR.streak:(DR.last_day===drDay(1)?DR.streak+1:1),slot=Math.min(streak,7)-1,next=DR_COINS[slot];
-return`<div class="dailybox" id="dailybox"><span>🔥 <b>${L("Daily rewards")}</b> · ${L("Day")} ${streak}</span><span class="drdays">${DR_COINS.map((c,i)=>`<i class="${i<slot||(claimed&&i===slot)?"done":""}${i===slot&&!claimed?" now":""}">${c}</i>`).join("")}</span>${claimed?`<span class="drok">✅ ${L("Come back tomorrow!")}</span>`:`<button class="btn packbtn can" data-drclaim>🪙 ${L("Claim")} ${next}</button>`}</div>`}
+const claimed=DR.last_day===drDay(0),streak=claimed?DR.streak:(DR.last_day===drDay(1)?DR.streak+1:1),slot=(streak-1)%7,next=DR_COINS[slot];
+return`<div class="dailybox" id="dailybox"><span>🔥 <b>${L("Daily rewards")}</b> · ${L("Day")} ${slot+1}${streak>7?` · ${streak} ${L("days in a row")}`:""}</span><span class="drdays">${DR_COINS.map((c,i)=>`<i class="${i<slot||(claimed&&i===slot)?"done":""}${i===slot&&!claimed?" now":""}">${c}</i>`).join("")}</span>${claimed?`<span class="drok">✅ ${L("Come back tomorrow!")}</span>`:`<button class="btn packbtn can" data-drclaim>🪙 ${L("Claim")} ${next}</button>`}</div>`}
 function drawDaily(){const e=$("#dailybox");if(e)e.outerHTML=dailyHtml()}
-async function claimDaily(){const{data,error}=await SB.rpc("claim_daily_reward");if(error){toast(error.message);return}if(data.claimed){toast(`+${data.reward} 🪙 · 🔥 ${L("Day")} ${data.streak}`);sfx("win")}WAL=data.coins;showCoins();DR={last_day:drDay(0),streak:data.streak};drawDaily()}
+async function claimDaily(){const{data,error}=await SB.rpc("claim_daily_reward");if(error){toast(error.message);return}if(data.claimed){toast(`+${data.reward} 🪙 · 🔥 ${L("Day")} ${(data.streak-1)%7+1}`);sfx("win")}WAL=data.coins;showCoins();DR={last_day:drDay(0),streak:data.streak};drawDaily()}
 // card exchange: 5 doubles -> a random card one rarity above the lowest one you give
 let EXSEL=[],EXRES=null,EXMSG="";const RAR_ORDER=["common","uncommon","rare","super_rare","epic","legendary","ultimate"];
 function exchangeHtml(){if(!thuOpen())return`<div class="panel"><h3>♻️ ${L("Card exchange")}</h3><p class="sl">🔒 ${L("Opens on Thursday at 17:00.")}</p></div>`;
@@ -3698,6 +3698,7 @@ Go to Friends to trade|Ir aos Amigos para trocar|Ir a Amigos para intercambiar
 All my chats|Todas as minhas conversas|Todos mis chats
 Your best|O teu recorde|Tu récord
 All my best scores|Todos os meus recordes|Todos mis récords
+days in a row|dias seguidos|días seguidos
 Admins|Admins|Admins`;
 TRX.split("\n").forEach(l=>{const p=l.split("|");if(p.length===3)DICT[p[0]]=[p[1],p[2]]});
 // Phrases with numbers or times in them
