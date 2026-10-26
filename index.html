@@ -3735,6 +3735,8 @@ In Chrome, tap ⋮ then “Add to Home screen” or “Install app”.|No Chrome
 Install|Instalar|Instalar
 Show me how|Mostra-me como|Muéstrame cómo
 Not now|Agora não|Ahora no
+OK|OK|OK
+Later|Mais tarde|Más tarde
 Admins|Admins|Admins`;
 TRX.split("\n").forEach(l=>{const p=l.split("|");if(p.length===3)DICT[p[0]]=[p[1],p[2]]});
 // Phrases with numbers or times in them
@@ -4083,7 +4085,7 @@ function render(){setTimeout(translateDom,0);const tabChanged=render.last!==tab;
 const app=$("#app");stopAll();if(tab==="settings")tab="account";
 // Sign-in required: visitors who are not signed in only ever see the sign-in page
 document.documentElement.classList.toggle("guest",!me);
-if(!me){if(!authReady){app.innerHTML='<p class="empty" style="text-align:center">Loading…</p>';return}if(tab!=="account"){wantTab=wantTab||tab;tab="account"}}
+if(!me){if(!authReady){app.innerHTML='<p class="empty" style="text-align:center">Loading…</p>';return}if(tab!=="account"&&tab!=="getapp"){wantTab=wantTab||tab;tab="account"}}/* "Get the app" works without an account */
 applySite();if(me&&FEAT_OF[tab]&&!feat(FEAT_OF[tab])){app.innerHTML=`<div class="plan" style="max-width:none;margin-top:10px"><h3>🛠️ This section is switched off right now</h3><p class="sl">The admins have paused it for a while. Check back soon!</p><button class="btn" data-t="news">Go to News</button></div>`;return}
 if(tab==="news"&&open){const n=ANY().find(x=>x.id===open)||savedList().find(x=>x.id===open);if(n){app.innerHTML=articlePage(n);return}open=null}
 if(tab==="news"){app.innerHTML=newsPage()}
@@ -4367,19 +4369,21 @@ function mobSet(on){try{localStorage.setItem("rf_mobview",on?"1":"")}catch(e){}i
 function mobInit(){if(mobInFrame()||!mobOwner()||document.getElementById("mobwrap"))return;let on="";try{on=localStorage.getItem("rf_mobview")}catch(e){}if(on!=="1")return;
   const w=document.createElement("div");w.id="mobwrap";w.innerHTML=`<div class="mobbar">📱 ${L("Phone layout")} <button class="btn ghost" data-mobview="0">🖥️ ${L("Back to computer layout")}</button></div><iframe title="${L("Phone layout")}" src="${location.pathname}${location.search}${location.hash}"></iframe>`;
   document.body.appendChild(w);document.documentElement.style.overflow="hidden"}
-/* ---- "ADD TO HOME SCREEN" PROMPT: from the second day someone visits on a phone, so HeyFootball isn't forgotten.
-   Not shown when it's already opened from the home screen; "Not now" hides it for 7 days, and it stops after 3 times. ---- */
-var A2HS={ev:null};window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();A2HS.ev=e});
-const a2hsGet=()=>{try{return JSON.parse(localStorage.getItem("rf_a2hs")||"{}")}catch(e){return{}}},a2hsSet=o=>{try{localStorage.setItem("rf_a2hs",JSON.stringify(o))}catch(e){}};
-function a2hsClose(how){const o=a2hsGet();o.until=Date.now()+7*864e5;o.n=(o.n||0)+1;a2hsSet(o);const b=document.getElementById("a2hs");if(b)b.remove()}
-function a2hsCheck(){const dev=myDevice(),o=a2hsGet(),today=drDay(0);if(o.last!==today){o.days=(o.days||0)+1;o.last=today;a2hsSet(o)}
-  const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
-  if(standalone||!["ios","android"].includes(dev)||(o.days||0)<2||(o.n||0)>=3||(o.until&&Date.now()<o.until)||document.getElementById("a2hs"))return;
-  const tip=dev==="ios"?L("In Safari, tap Share ⬆️ then “Add to Home Screen”."):L("In Chrome, tap ⋮ then “Add to Home screen” or “Install app”.");
+/* ---- "ADD TO HOME SCREEN" PROMPT (phones): shown every time someone opens HeyFootball until it's on their home screen.
+   "OK" opens the Get the app page and it never asks again. "Later" asks again in 20 minutes if they're still playing,
+   otherwise the next time they open HeyFootball. Never shown when it's already opened from the home screen. ---- */
+var A2HS={t:0};
+const a2hsDone=()=>{try{return localStorage.getItem("rf_a2hs_done")==="1"}catch(e){return false}};
+function a2hsClose(how){const b=document.getElementById("a2hs");if(b)b.remove();clearTimeout(A2HS.t);
+  if(how==="ok"){try{localStorage.setItem("rf_a2hs_done","1")}catch(e){}}
+  else A2HS.t=setTimeout(a2hsShow,20*60*1000)}
+function a2hsShow(){const dev=myDevice(),standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
+  if(a2hsDone()||standalone||!["ios","android"].includes(dev)||document.getElementById("a2hs"))return;
+  if(document.hidden){document.addEventListener("visibilitychange",function v(){if(!document.hidden){document.removeEventListener("visibilitychange",v);a2hsShow()}});return}/* not playing right now: ask when they're back */
   const b=document.createElement("div");b.id="a2hs";b.setAttribute("role","dialog");b.setAttribute("aria-label",L("Add HeyFootball to your home screen"));
-  b.innerHTML=`<div class="a2hsicon">⚽</div><div class="a2hstxt"><b>📲 ${L("Add HeyFootball to your home screen")}</b><span>${L("So it's always one tap away.")} ${tip}</span><div class="a2hsbtns">${A2HS.ev?`<button class="btn" data-a2hs="install">${L("Install")}</button>`:`<button class="btn" data-a2hs="how">${L("Show me how")}</button>`}<button class="btn ghost" data-a2hs="later">${L("Not now")}</button></div></div>`;
+  b.innerHTML=`<div class="a2hsicon">⚽</div><div class="a2hstxt"><b>📲 ${L("Add HeyFootball to your home screen")}</b><span>${L("So it's always one tap away.")}</span><div class="a2hsbtns"><button class="btn" data-a2hs="ok">${L("OK")}</button><button class="btn ghost" data-a2hs="later">${L("Later")}</button></div></div>`;
   document.body.appendChild(b)}
-setTimeout(a2hsCheck,6000);
+setTimeout(a2hsShow,6000);
 function stopAll(){Object.keys(T).forEach(stop);gameStop();liveStop()}
 function play(id){const l=LEARN.find(x=>x.id===id);if(!VIEWED.has("tut:"+id)){VIEWED.add("tut:"+id);logAct("tutorial",{t:l.t})}if(T[id]&&T[id].h){stop(id);return}
 LEARN.forEach(x=>x.id!==id&&stop(x.id));if(T[id].i>=l.f.length-1)show(id,0);
@@ -4452,7 +4456,7 @@ else if(d.stvisit!==undefined){STD.view=d.stvisit||null;STD.data=null;STD.msg=""
 else if(d.stwatch!==undefined){if(d.stwatch){if(tab!=="stadium")LOADNEXT=true;STD.watch=d.stwatch;STD.view=null;STD.stats=null;STD.statsAt=0;STD.react=0;STD.game=null;if(!STD.data||STD.data.mine===false){STD.data=null;stLoad()}tab="stadium"}else{STD.watch=null;gameStop()}scrollTo(0,0)}
 else if(d.stgame){STD.game=d.stgame;curGame=d.stgame;gameStop();const box=$("#stgamebox");if(box){box.innerHTML=`<div class="arc"><canvas id="cv" width="320" height="420"></canvas><div style="flex:1;min-width:180px"><h3>${L("Your best scores")}</h3><div id="hs"></div></div></div>`;document.querySelectorAll("[data-stgame]").forEach(b=>b.setAttribute("aria-pressed",b.dataset.stgame===d.stgame));startGame(d.stgame)}return}
 else if(d.streact){stFloat(d.streact,true);SB.rpc("react_send",{p_match:STD.watch,p_emoji:d.streact}).then(()=>{},()=>{});return}
-else if(d.weekshare){weekShare(d.weekshare);return}else if(d.a2hs){const ev=A2HS.ev;a2hsClose(d.a2hs);if(d.a2hs==="install"&&ev){ev.prompt();A2HS.ev=null}else if(d.a2hs==="how"){tab="getapp";LOADNEXT=true;render();scrollTo(0,0)}return}else if(d.jump){const e=document.getElementById(d.jump);if(e)e.scrollIntoView({block:"start"});return}else if(d.mobview){if(mobInFrame()){try{window.top.mobSet(false)}catch(e){}}else mobSet(d.mobview==="1");return}else if(d.chatadd){chatAdd(d.chatadd,d.name);return}
+else if(d.weekshare){weekShare(d.weekshare);return}else if(d.a2hs){a2hsClose(d.a2hs);if(d.a2hs==="ok"){tab="getapp";LOADNEXT=true;render();scrollTo(0,0)}return}else if(d.jump){const e=document.getElementById(d.jump);if(e)e.scrollIntoView({block:"start"});return}else if(d.mobview){if(mobInFrame()){try{window.top.mobSet(false)}catch(e){}}else mobSet(d.mobview==="1");return}else if(d.chatadd){chatAdd(d.chatadd,d.name);return}
 else if(d.mact){MACT=MACT===+d.mact?null:+d.mact;REPFOR=null;drawThread(true);return}else if(d.repopen){REPFOR=+d.repopen;drawThread(true);return}else if(d.rep){const[i,k]=d.rep.split("|");reportMsg(i,k);return}else if(d.mute){toggleMute(d.mute);return}else if(d.block){toggleBlock(d.block);return}
 else if(d.ackw){SB.rpc("ack_warning",{p_id:+d.ackw}).then(()=>{},()=>{});WARN.shift();showWarning();return}
 else if(d.as){asub=d.as;ACONF=null;aMsg="";AD[asub]=undefined}else if(d.aref!==undefined){AD[asub]=undefined;aMsg=""}else if(d.arf){repFilter=d.arf;AD.reports=undefined}else if(d.aroom){aRoom=d.aroom;AD.chat=undefined}
