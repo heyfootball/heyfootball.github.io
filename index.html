@@ -2391,14 +2391,15 @@ ${homeBlog()}
    The 🎵 button turns it on/off (remembered). Browsers only allow sound after a tap, so it starts on the first one. ---- */
 let MUS=null;
 const mFreq=m=>440*Math.pow(2,(m-69)/12),PROG=[[57,60,64,45],[53,57,60,41],[52,55,60,48],[50,55,59,43]];// Am F C G (last number = bass)
-function musicStart(){if(MUS||!ST.music||document.hidden)return;try{const ac=new (window.AudioContext||window.webkitAudioContext)(),master=ac.createGain();
+function musicStart(){if(MUS||!ST.music||document.hidden||document.getElementById("mobwrap"))return;try{const ac=new (window.AudioContext||window.webkitAudioContext)(),master=ac.createGain();
   master.gain.setValueAtTime(0,ac.currentTime);master.gain.linearRampToValueAtTime(.32,ac.currentTime+2.5);master.connect(ac.destination);
   const nb=ac.createBuffer(1,Math.floor(ac.sampleRate*.2),ac.sampleRate),nd=nb.getChannelData(0);for(let i=0;i<nd.length;i++)nd[i]=Math.random()*2-1;
   const echo=ac.createDelay(),fb=ac.createGain(),ef=ac.createBiquadFilter();echo.delayTime.value=.47;fb.gain.value=.28;ef.type="lowpass";ef.frequency.value=2200;echo.connect(fb).connect(echo);echo.connect(ef).connect(master);
-  MUS={ac,master,nb,echo,next:ac.currentTime+.15,step:0,timer:0};MUS.timer=setInterval(musicTick,120);musicTick()}catch(e){MUS=null}musicBtn()}
+  MUS={ac,master,nb,echo,next:ac.currentTime+.15,step:0,timer:0};MUS.timer=setInterval(musicTick,100);musicTick()}catch(e){MUS=null}musicBtn()}
 function musicStop(){const m=MUS;MUS=null;if(m){clearInterval(m.timer);try{m.master.gain.cancelScheduledValues(m.ac.currentTime);m.master.gain.setValueAtTime(m.master.gain.value,m.ac.currentTime);m.master.gain.linearRampToValueAtTime(0,m.ac.currentTime+.5);setTimeout(()=>m.ac.close(),700)}catch(e){}}musicBtn()}
 function musicTick(){const m=MUS;if(!m)return;const ac=m.ac,e=60/96/2;// one step = an eighth note at 96 bpm
-  while(m.next<ac.currentTime+.4){const t=m.next,s=m.step,ch=PROG[Math.floor(s/8)%4],e8=s%8;
+  if(m.next<ac.currentTime)m.next=ac.currentTime+.05;/* fell behind (phone was busy): carry on from now instead of rushing the missed notes */
+  while(m.next<ac.currentTime+1.2){const t=m.next,s=m.step,ch=PROG[Math.floor(s/8)%4],e8=s%8;
     const note=(midi,dur,vol,type,dest,cut)=>{const o=ac.createOscillator(),g=ac.createGain(),f=ac.createBiquadFilter();o.type=type;o.frequency.value=mFreq(midi);f.type="lowpass";f.frequency.value=cut||1800;
       g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+Math.min(.04,dur/4));g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(f).connect(g).connect(dest||m.master);o.start(t);o.stop(t+dur+.05)};
     const noise=(vol,hp,dur)=>{const b=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();b.buffer=m.nb;f.type="highpass";f.frequency.value=hp;g.gain.setValueAtTime(vol,t);g.gain.exponentialRampToValueAtTime(.001,t+dur);b.connect(f).connect(g).connect(m.master);b.start(t);b.stop(t+dur+.02)};
@@ -2410,6 +2411,7 @@ function musicTick(){const m=MUS;if(!m)return;const ac=m.ac,e=60/96/2;// one ste
     m.next+=e;m.step++}}
 function musicBtn(){document.querySelectorAll(".musicbtn").forEach(b=>{b.textContent=ST.music?"🎵":"🔇";b.classList.toggle("off",!ST.music);b.setAttribute("aria-pressed",String(!!ST.music));b.title=ST.music?L("Music on (tap to turn off)"):L("Music off (tap to turn on)")})}
 ["pointerdown","keydown"].forEach(ev=>document.addEventListener(ev,()=>{if(ST.music&&!MUS)musicStart()},{passive:true}));
+document.addEventListener("visibilitychange",()=>{if(document.hidden){if(MUS)musicStop()}else if(ST.music)musicStart()});
 document.addEventListener("visibilitychange",()=>{if(!MUS)return;try{document.hidden?MUS.ac.suspend():MUS.ac.resume()}catch(e){}});
 setTimeout(musicBtn,0);
 // Blog text formatting (shared by the admin editor and blog/post.html). Everything is escaped first, then only these are allowed:
@@ -4393,10 +4395,10 @@ function mergeX(){const L=XDATA.list,keep=a=>(a||[]).filter(m=>!String(m.id).sta
 /* ---- PHONE LAYOUT SWITCH: only for the site owner's account. Shows the site in a phone-sized frame so the real phone layout is used. ---- */
 const mobOwner=()=>!!(me&&String(me.email||"").toLowerCase()==="lucasrafael.dossantos2014@gmail.com");
 const mobInFrame=()=>{try{return window.self!==window.top}catch(e){return true}};
-function mobSet(on){try{localStorage.setItem("rf_mobview",on?"1":"")}catch(e){}if(on)mobInit();else{const w=document.getElementById("mobwrap");if(w)w.remove();document.documentElement.style.overflow=""}}
+function mobSet(on){try{localStorage.setItem("rf_mobview",on?"1":"")}catch(e){}if(on)mobInit();else{const w=document.getElementById("mobwrap");if(w)w.remove();document.documentElement.style.overflow="";try{ST.music=!!JSON.parse(localStorage.getItem("rf_settings")||"{}").music}catch(e){}musicBtn();if(ST.music)musicStart()}}
 function mobInit(){if(mobInFrame()||!mobOwner()||document.getElementById("mobwrap"))return;let on="";try{on=localStorage.getItem("rf_mobview")}catch(e){}if(on!=="1")return;
   const w=document.createElement("div");w.id="mobwrap";w.innerHTML=`<div class="mobbar">📱 ${L("Phone layout")} <button class="btn ghost" data-mobview="0">🖥️ ${L("Back to computer layout")}</button></div><iframe title="${L("Phone layout")}" src="${location.pathname}${location.search}${location.hash}"></iframe>`;
-  document.body.appendChild(w);document.documentElement.style.overflow="hidden"}
+  document.body.appendChild(w);document.documentElement.style.overflow="hidden";musicStop()}
 /* ---- "ADD TO HOME SCREEN" PROMPT (phones): shown every time someone opens HeyFootball until it's on their home screen.
    "OK" opens the Get the app page and it never asks again. "Later" asks again in 20 minutes if they're still playing,
    otherwise the next time they open HeyFootball. Never shown when it's already opened from the home screen. ---- */
