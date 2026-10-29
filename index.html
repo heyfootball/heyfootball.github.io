@@ -2494,7 +2494,10 @@ function musicTick(){const m=MUS;if(!m)return;const ac=m.ac,e=60/96/2;// one ste
     noise(e8%2?.035:.02,7000,.05);if(e8===2||e8===6)noise(.07,1500,.12);                  // hi-hats + clap
     m.next+=e;m.step++}}
 function musicBtn(){document.querySelectorAll(".musicbtn").forEach(b=>{b.textContent=ST.music?"🎵":"🔇";b.classList.toggle("off",!ST.music);b.setAttribute("aria-pressed",String(!!ST.music));b.title=ST.music?L("Music on (tap to turn off)"):L("Music off (tap to turn on)")})}
-["pointerdown","keydown"].forEach(ev=>document.addEventListener(ev,()=>{if(ST.music&&!MUS)musicStart()},{passive:true}));
+["pointerdown","keydown"].forEach(ev=>document.addEventListener(ev,()=>{if(ST.music&&!MUS)musicStart();else if(MUS&&MUS.ac.state==="suspended")MUS.ac.resume().catch(()=>{})},{passive:true}));
+// only the HeyFootball window you're using plays music (another browser, window or the app open at the same time made it sound like 2 songs)
+window.addEventListener("blur",()=>{if(MUS&&!document.getElementById("mobwrap"))musicStop()});
+window.addEventListener("focus",()=>{if(ST.music&&!MUS&&!document.hidden)musicStart()});
 document.addEventListener("visibilitychange",()=>{if(document.hidden){if(MUS)musicStop()}else if(ST.music)musicStart()});
 document.addEventListener("visibilitychange",()=>{if(!MUS)return;try{document.hidden?MUS.ac.suspend():MUS.ac.resume()}catch(e){}});
 setTimeout(musicBtn,0);
