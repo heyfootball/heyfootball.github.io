@@ -13,8 +13,10 @@
 <style>
 :root{--bg:#070b17;--card:rgba(255,255,255,.07);--ink:#f2f6ff;--mute:#9fb0d0;--line:rgba(255,255,255,.13);--turf:#4db3ff;--card-y:#5ad1ff;--pitch:#0e4a33;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
-body{margin:0;min-height:100%;color:var(--ink);font:400 16px/1.55 Outfit,system-ui,sans-serif;background:radial-gradient(900px 500px at 15% -5%,#ffffff0d,transparent),var(--bg)}
-h1,h2,h3{font-family:Outfit,system-ui,sans-serif;font-weight:800;letter-spacing:-.4px;line-height:1.1;margin:0}
+body{margin:0;min-height:100%;color:var(--ink);font:400 16px/1.55 Outfit,system-ui,sans-serif;background:radial-gradient(1300px 760px at 12% 0%,color-mix(in srgb,var(--acc2,#1b4fd8) 70%,transparent),transparent 72%),radial-gradient(1000px 700px at 100% 100%,color-mix(in srgb,var(--turf,#4db3ff) 30%,transparent),transparent 65%),var(--bg) fixed}
+/* the chosen colour shows around the site: top bar edge, panel borders, headings */
+header{border-bottom:2px solid var(--turf)!important;box-shadow:0 6px 26px color-mix(in srgb,var(--turf) 22%,transparent)}
+.panel{border-color:color-mix(in srgb,var(--turf) 35%,var(--line))!important}h1,h2,h3{font-family:Outfit,system-ui,sans-serif;font-weight:800;letter-spacing:-.4px;line-height:1.1;margin:0}
 header{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:rgba(7,11,23,.78);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
 .bar{max-width:1040px;margin:auto;display:flex;align-items:center;gap:10px 16px;padding:10px 16px;flex-wrap:wrap}
 .logo{font:800 22px Outfit,sans-serif;letter-spacing:3px}.logo b{color:var(--turf);margin-left:6px;background:none;padding:0}
@@ -2108,13 +2110,15 @@ let SEASON_TICKED=false;async function seasonTick(){if(!SB||!me||!thuOpen()||SEA
 // daily rewards: coins every day, more for every day in a row (resets if you miss a day); a 7-day cycle that starts again after day 7
 const DR_COINS=[50,75,100,150,200,300,500];let DR=null;
 const drDay=off=>new Intl.DateTimeFormat("en-CA",{timeZone:"Europe/Lisbon"}).format(new Date(Date.now()-(off||0)*864e5));
-async function loadDaily(){if(!SB||!me)return;const{data}=await SB.from("daily_rewards").select("last_day,streak").maybeSingle();DR=data||{streak:0,last_day:null};drawDaily()}
+async function loadDaily(){if(!SB||!me)return;const who=me.id;DR={loading:true,day:drDay(0),uid:who};const{data}=await SB.from("daily_rewards").select("last_day,streak").maybeSingle();if(!me||me.id!==who)return;DR={...(data||{streak:0,last_day:null}),day:drDay(0),uid:who};drawDaily()}
 function dailyHtml(){if(!me||!SB)return"";if(!thuOpen())return`<div class="dailybox locked" id="dailybox">🔥 <b>${L("Daily rewards")}</b> <span>🔒 ${L("Thursday 17:00")}</span></div>`;
-if(!DR){setTimeout(loadDaily,0);return`<div class="dailybox" id="dailybox">🔥 ${L("Daily rewards")}…</div>`}
+// always this player's streak, and fresh every day (an old copy showed last time's green days)
+if(DR&&(DR.uid!==me.id||DR.day!==drDay(0))&&!DR.loading)DR=null;
+if(!DR||DR.loading){if(!DR)setTimeout(loadDaily,0);return`<div class="dailybox" id="dailybox">🔥 ${L("Daily rewards")}…</div>`}
 const claimed=DR.last_day===drDay(0),streak=claimed?DR.streak:(DR.last_day===drDay(1)?DR.streak+1:1),slot=(streak-1)%7,next=DR_COINS[slot];
 return`<div class="dailybox" id="dailybox"><span>🔥 <b>${L("Daily rewards")}</b> · ${L("Day")} ${slot+1}${streak>7?` · ${streak} ${L("days in a row")}`:""}</span><span class="drdays">${DR_COINS.map((c,i)=>`<i class="${i<slot||(claimed&&i===slot)?"done":""}${i===slot&&!claimed?" now":""}">${c}</i>`).join("")}</span>${claimed?`<span class="drok">✅ ${L("Come back tomorrow!")}</span>`:`<button class="btn packbtn can" data-drclaim>🪙 ${L("Claim")} ${next}</button>`}</div>`}
 function drawDaily(){const e=$("#dailybox");if(e)e.outerHTML=dailyHtml()}
-async function claimDaily(){const{data,error}=await SB.rpc("claim_daily_reward");if(error){toast(error.message);return}if(data.claimed){toast(`+${data.reward} 🪙 · 🔥 ${L("Day")} ${(data.streak-1)%7+1}`);sfx("win")}WAL=data.coins;showCoins();DR={last_day:drDay(0),streak:data.streak};drawDaily()}
+async function claimDaily(){const{data,error}=await SB.rpc("claim_daily_reward");if(error){toast(error.message);return}if(data.claimed){toast(`+${data.reward} 🪙 · 🔥 ${L("Day")} ${(data.streak-1)%7+1}`);sfx("win")}WAL=data.coins;showCoins();DR={last_day:drDay(0),streak:data.streak,day:drDay(0),uid:me.id};drawDaily()}
 // card exchange: 5 doubles -> a random card one rarity above the lowest one you give
 let EXSEL=[],EXRES=null,EXMSG="";const RAR_ORDER=["common","uncommon","rare","super_rare","epic","legendary","ultimate"];
 function exchangeHtml(){if(!thuOpen())return`<div class="panel"><h3>♻️ ${L("Card exchange")}</h3><p class="sl">🔒 ${L("Opens on Thursday at 17:00.")}</p></div>`;
