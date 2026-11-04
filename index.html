@@ -124,6 +124,23 @@ nav button[aria-selected=true]{box-shadow:0 0 18px color-mix(in srgb,var(--turf)
 :root[data-theme=light] .tabbar{background:#fffffff2!important;border-top:2px solid var(--turf)!important}
 :root[data-theme=light] .tabbar button[aria-current=page] span,:root[data-theme=light] .tabbar button.on span{color:var(--acc2,#1b4fd8)}
 :root[data-theme=light] .dbig{color:var(--acc2,#1b4fd8)}
+/* pop-ups are white too (they were dark with dark text) */
+:root[data-theme=light] .chestcard{background:linear-gradient(160deg,#fff8e6,#fff 60%);color:var(--ink);box-shadow:0 20px 60px rgba(16,24,39,.25),0 0 40px #ffb70355}
+:root[data-theme=light] .chestit{background:#fff3d1}
+:root[data-theme=light] .searchcard{background:#fff;color:var(--ink);box-shadow:0 20px 60px rgba(16,24,39,.25)}
+:root[data-theme=light] #searchbox,:root[data-theme=light] #chestbox,:root[data-theme=light] #warnbox{background:rgba(16,24,39,.35)}
+:root[data-theme=light] .rsc{background:color-mix(in srgb,var(--turf) 12%,#fff)!important;color:var(--ink)!important}:root[data-theme=light] .rsc b{color:var(--acc2,#1b4fd8)}
+:root[data-theme=light] .nlk{background:#ffffffee;color:var(--ink);box-shadow:0 2px 8px rgba(16,24,39,.15)}:root[data-theme=light] .srow>.nlk{background:none;box-shadow:none;color:var(--mute)}:root[data-theme=light] .nlk.on b{color:#e5383b}
+:root[data-theme=light] .flip-back{background:repeating-linear-gradient(45deg,var(--acc2,#1b4fd8) 0 10px,color-mix(in srgb,var(--turf) 80%,#fff) 10px 20px);border-color:#fff}
+:root[data-theme=light] .bub{background:#eef1f6;color:var(--ink)}:root[data-theme=light] .bub.me{background:var(--acc2,#1b4fd8);color:#fff}:root[data-theme=light] .bub.me small{color:#ffffffcc}
+:root[data-theme=light] .dtest b{color:#a86f00}
+:root[data-theme=light] .pc-hid{background:repeating-linear-gradient(45deg,#ffffff1f 0 12px,transparent 12px 24px),var(--acc2,#1b4fd8)!important;border-color:#fff!important;color:#fff}:root[data-theme=light] .pc-hid *{color:#fff!important;opacity:1!important;text-shadow:0 1px 3px #0006}
+/* admin event styles: keep every label readable on their coloured boxes and menu bars */
+:root[data-ev=derby] .back,:root[data-ev=derby] .dlive b{color:#fff!important}
+:root:is([data-ev=derby],[data-ev=retro]) .tabbar button:is([aria-current=page],.on) span{color:#fff!important}
+:root[data-ev=neon] .tabbar button{color:#cfefff!important}:root[data-ev=football] .tabbar button{color:#fff!important}
+:root:is([data-ev=gold],[data-ev=winter],[data-ev=football],[data-ev=neon]) .tabbar button:is([aria-selected=true],[aria-current=page],.on),:root:is([data-ev=gold],[data-ev=winter],[data-ev=football],[data-ev=neon]) .tabbar button:is([aria-selected=true],[aria-current=page],.on) span{color:#141414!important}/* the current page's button is bright in these styles */
+:root[data-theme=light] .noticecard{background:#fff;color:var(--ink);border-color:color-mix(in srgb,var(--turf) 35%,#e7eaf0);box-shadow:0 20px 60px rgba(16,24,39,.25)}
 :root[data-theme=light] .ghost{background:transparent;color:var(--ink)}
 :root[data-theme=light] .opt,:root[data-theme=light] input{background:#0000000a}
 :root[data-theme=light] .rsc{background:#101827}:root[data-theme=light] .rnav button[aria-pressed=true]{background:#fff;color:#101827}
@@ -243,7 +260,7 @@ tr.z1 td:first-child{box-shadow:inset 4px 0 0 #1f9d55}tr.z2 td:first-child{box-s
 .clbhint{margin:0 0 8px;padding:8px 12px;border-radius:12px;background:#ffe06622;border:1px solid #ffe06666}.clbrow.swapped{animation:clbflash .9s ease-out}@keyframes clbflash{0%{background:#1f9d55aa}100%{background:none}}.clbrow .n{color:var(--mute);font-weight:700}.clbrow.z1{box-shadow:inset 4px 0 0 #1f9d55}.clbrow.z2{box-shadow:inset 4px 0 0 #e0a526}.clbrow.z3{box-shadow:inset 4px 0 0 #d64545}
 .clbrow.sel{background:#ffe06640;outline:2px solid #ffe066;outline-offset:-2px;font-weight:800}.clbteam{text-align:left;background:none;border:0;color:inherit;font:inherit;padding:6px 4px;cursor:pointer}.clbties{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
 .clbtie{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:12px;padding:6px}.clbtie small{color:var(--mute)}.clbpick{flex:1;padding:8px;border-radius:10px;border:1.5px solid var(--line);background:none;color:inherit;font:inherit;cursor:pointer}.clbpick.on{background:#1f9d55;border-color:#1f9d55;color:#fff;font-weight:800}.clbchamp{font-size:20px;text-align:center;margin-bottom:2px}.clbworth{text-align:center;margin:0 0 10px;color:var(--mute)}.clbtop{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px}.clbbar{display:grid;grid-template-columns:130px 1fr 48px;gap:8px;align-items:center;margin-top:6px;font-size:14px}.clbbar i{height:8px;border-radius:99px;background:linear-gradient(90deg,#1f9d55 var(--w),#ffffff18 var(--w))}.clbbar b{text-align:right}
-.hltop{text-align:center;margin:0 0 8px}.hlrow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}.hlvs{font-size:22px;color:var(--mute)}.sfxbtn{font-size:22px;vertical-align:middle}
+.hltop{text-align:center;margin:0 0 8px}.hlrow{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}.hlcard{width:min(200px,40vw);flex:none}/* cards were tiny */.hlvs{font-size:22px;color:var(--mute)}.sfxbtn{font-size:22px;vertical-align:middle}
 .livebox{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:12px 16px;border-radius:16px;background:linear-gradient(90deg,#d64545,#7a1f1f);color:#fff;font-size:18px;margin-bottom:10px}.livebox.off{background:var(--card);color:inherit;border:1px solid var(--line);font-size:15px}
 .livedot{font-weight:900;animation:evpulse 1.4s infinite}.livet{margin-left:auto;font-size:26px;font-weight:900;font-variant-numeric:tabular-nums}.drill.now{border-color:#d64545;box-shadow:0 0 0 2px #d6454555}.drill.next{opacity:.75}.dhead{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-bottom:4px}.dhead small{color:var(--mute)}
 /* pack buttons: green when you can afford it, grey with a lock when you can't (the same in every style) */
@@ -1866,7 +1883,7 @@ const sym={football:["⚽","⚽","🥅","🏆","📣","⚽"],gold:["✨","🪙",
 fx.innerHTML=Array.from({length:22},(_,i)=>`<span class="evp" style="left:${(Math.random()*100).toFixed(1)}%;--s:${(10+Math.random()*16).toFixed(0)}px;--t:${(7+Math.random()*9).toFixed(1)}s;--dl:-${(Math.random()*12).toFixed(1)}s">${sym[i%sym.length]}</span>`).join("");document.body.appendChild(fx);
 if(th==="retro"&&!$("#retrofont")){const l=document.createElement("link");l.id="retrofont";l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap";document.head.appendChild(l)}}
 const STYLE_NAMES={gold:"🥇 Gold style",neon:"💜 Neon style",football:"⚽ Football Madness style",winter:"❄️ Winter style"};
-function applyEvents(){const R=document.documentElement;const manual=((SITE&&SITE.events)||{});R.dataset.ev=evOn("theme")?abuseTheme():"";
+function applyEvents(){const R=document.documentElement;const manual=((SITE&&SITE.events)||{});R.dataset.ev=evOn("theme")?abuseTheme():"";applyST();
 evFx(R.dataset.ev);let bar=$("#evbar");if(!bar){bar=document.createElement("div");bar.id="evbar";bar.setAttribute("role","status");const a=$("#announce");(a||$("main")).before(bar)}
 const on=[["double_coins","🪙","Double coins"],["double_points","⭐","Double points"],["half_packs","🏷️","Half-price packs"]].filter(e=>evOn(e[0]));
 bar.innerHTML=(on.length||R.dataset.ev?`<span class="abuse">🔥 ${L("ADMIN ABUSE!")}</span>`:"")+on.map(e=>`<span>${e[1]} <b>${L(e[2])}</b> ${L("until")} ${evUntil(e[0])}</span>`).join("")+(R.dataset.ev?`<span><b>${L(STYLE_NAMES[R.dataset.ev]||"")}</b></span>`:"")+(ADMIN&&(on.length||R.dataset.ev)?`<button class="evstopbtn" data-stopabuse="1">⛔ ${L("Stop")}</button>`:"");bar.hidden=(!on.length&&!R.dataset.ev)||!me}
@@ -4029,7 +4046,7 @@ function translateDom(root){if(lgBusy)return;lgBusy=true;try{root=root||document
 // Anything new that appears (toasts, game messages, loaded lists) is translated straight away
 new MutationObserver(()=>{if(lgBusy||lgQueued||ST.lang==="en")return;lgQueued=true;requestAnimationFrame(()=>{lgQueued=false;translateDom()})}).observe(document.documentElement,{childList:true,subtree:true,characterData:true});
 function applyST(){const R=document.documentElement,p=PRE[ST.accent]||PRE[0];R.style.setProperty("--turf",p[1]);R.style.setProperty("--card-y",p[1]);R.style.setProperty("--acc2",p[2]);R.style.setProperty("--glow",p[2]+"66");
-const dark=ST.mode==="auto"?matchMedia("(prefers-color-scheme: dark)").matches:ST.mode==="dark";R.dataset.theme=dark?"dark":"light";document.body.style.fontSize=16*ST.size/100+"px";R.classList.toggle("nomo",!ST.motion);R.classList.toggle("noticker",!ST.ticker);R.lang=ST.lang;}
+const dark=ST.mode==="auto"?matchMedia("(prefers-color-scheme: dark)").matches:ST.mode==="dark";R.dataset.theme=dark||R.dataset.ev?"dark":"light";/* event styles are dark: keep the text light */document.body.style.fontSize=16*ST.size/100+"px";R.classList.toggle("nomo",!ST.motion);R.classList.toggle("noticker",!ST.ticker);R.lang=ST.lang;}
 try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{if(ST.mode==="auto")applyST()})}catch(e){}
 
 applyST();tab=ST.start||tab;
@@ -4208,7 +4225,7 @@ const P=FD.prof[id]&&!cached?FD.prof[id]:cached?{g:TRG[id].g}:null;
 if(!P||!gTried){if(!(TRG[id]&&TRG[id].busy))tradeLoad(id);return`<p class="sl">⏳ ${L("Loading your cards and")} <span data-notr>${nm}</span>${L("'s cards…")}</p>`}
 if(!TRL&&!tradeBuilder.l){tradeBuilder.l=1;loadTrades().then(()=>{tradeBuilder.l=0;if(tab==="friends"&&fsub==="trade")render()})}
 // cards already in an offer waiting for an answer are locked: yours, and your friend's
-const myLock=new Set(),hisLock=new Set();(TR||[]).filter(t=>t.status==="pending").forEach(t=>{(t.from_user===me.id?t.give:t.to_user===me.id?t.get:[]).forEach(i=>myLock.add(i));(t.from_user===id?t.give:t.to_user===id?t.get:[]).forEach(i=>hisLock.add(i))});
+const myLock=new Set(),hisLock=new Set();(TR||[]).filter(t=>t.status==="pending"&&Date.now()-new Date(t.created_at)<7*864e5).forEach(t=>{((t.from_user===me.id?t.give:t.to_user===me.id?t.get:null)||[]).forEach(i=>myLock.add(i));((t.from_user===id?t.give:t.to_user===id?t.get:null)||[]).forEach(i=>hisLock.add(i))});/* offers older than 7 days have expired */
 const fc=pid=>(P.g.find(c=>c.player_id===pid)||{}).copies||0,myD=GP.filter(p=>(COL[p.id]||0)>=2&&!fc(p.id)&&!myLock.has(p.id)),hisD=GP.filter(p=>fc(p.id)>=2&&!(COL[p.id]||0)&&!hisLock.has(p.id))/* only cards that are new for whoever gets them */,
 nLock=GP.filter(p=>(myLock.has(p.id)&&(COL[p.id]||0)>=2&&!fc(p.id))||(hisLock.has(p.id)&&fc(p.id)>=2&&!(COL[p.id]||0))).length,g=trSel.give,w=trSel.get,ok=g.length>0&&w.length>0;
 const pick=(p,sel,attr,n,own)=>`<button class="pick${sel?" sel":""}" ${attr}="${p.id}" aria-pressed="${sel}" aria-label="${esc(p.name)}, ${n} copies${own==null?"":own?", you have "+own:", new for you"}">${pcard(p,n)}${own==null?"":own?`<span class="own">✓ ${L("You have")} <b>${own}</b></span>`:`<span class="own new">\u{1F195} ${L("New for you")}</span>`}</button>`;
@@ -4622,8 +4639,7 @@ function retHtml(R,V){if(!R)return"";if(R.err)return`<div class="panel"><h3>🔁
   return`<div class="panel retpanel"><h3>🔁 Returning players <small class="hint">the number to watch</small></h3>
   <div class="stiles">${tile(pct(R.back_week,R.new),"came back within a week",1)}${tile(pct(R.back_next,R.new),"came back the next day")}${tile(Number(R.today_returning||0).toLocaleString(),"returning players today")}${tile(Number(R.week||0).toLocaleString(),"players this week")}</div>
   <p class="sl" style="margin:10px 0 4px">Of the <b>${R.new||0}</b> players who started in the last 30 days, <b>${R.back_any||0}</b> came back on another day (${pct(R.back_any,R.new)}).${R.today_new?` Today: <b>${R.today_new}</b> new.`:""}</p>
-  <h3 style="margin-top:14px">Visitors and players per day (last 14 days)</h3><div class="vwrap">${ax.html}<div class="vchart">${days.map(x=>{const v=vis(x.day);return`<div class="vbar" title="${x.day}: ${v} visitors, ${x.players} signed-in players, ${x.returning} returning"><div class="vtrio"><i class="vv" style="height:${h(v)}"></i><i class="vp" style="height:${h(x.players)}"></i><i class="vr" style="height:${h(x.returning)}"></i></div><small>${new Date(x.day).getDate()}</small></div>`}).join("")}</div></div>
-  <p class="sl" style="font-size:12px"><span class="retkey vv"></span> visitors (everyone who opened the site) · <span class="retkey vp"></span> signed-in players · <span class="retkey"></span> returning players (had been on the site before). Hover or tap a day for the numbers. Only totals are shown, never who.</p></div>`}
+  </div>`}
 function visitsHtml(D){const tile=(v,l)=>`<div class="stile"><b>${v==null?"–":Number(v).toLocaleString()}</b><span>${l}</span></div>`,days=D.days||[],ax=vAxis(Math.max(1,...days.map(x=>x.visitors)));
   return dayListHtml(D.list)+retHtml(D.ret,days)+`<div class="panel"><div class="stiles">${tile(D.today,"Visitors today")}${tile(D.today_views,"Page views today")}${tile(D.week,"Visitors (7 days)")}<div class="stile"><b>${D.week==null?"–":(Math.round(D.week/7*10)/10).toLocaleString()}</b><span>Average visitors a day (last 7 days)</span></div>${tile(D.month,"Visitors (30 days)")}</div>
   <h3 style="margin-top:14px">Visitors per day (last 30 days)</h3><div class="vwrap">${ax.html}<div class="vchart">${days.map(x=>`<div class="vbar" title="${x.day}: ${x.visitors} visitors, ${x.views} views"><div class="vtrio"><i style="height:${Math.round(x.visitors/ax.top*100)}%"></i></div><small>${new Date(x.day).getDate()}</small></div>`).join("")}</div></div>
