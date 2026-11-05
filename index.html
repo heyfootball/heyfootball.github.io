@@ -9,7 +9,7 @@
 <meta property="og:description" content="Free football news, live scores and tables, plus arcade games, player card packs and predictions with your friends.">
 <meta name="twitter:card" content="summary">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebSite","name":"HeyFootball","alternateName":["Hey Football","HeyFootball football"],"description":"Free football news, live scores, fixtures, tables, arcade games, player card packs and chat."}</script>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter+Tight:wght@700;800&family=Inter:wght@400;600;700;800&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#070b17;--card:rgba(255,255,255,.07);--ink:#f2f6ff;--mute:#9fb0d0;--line:rgba(255,255,255,.13);--turf:#4db3ff;--card-y:#5ad1ff;--pitch:#0e4a33;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 html{scroll-padding-top:env(safe-area-inset-top,0px)}*{box-sizing:border-box}
@@ -744,6 +744,108 @@ header{transition:box-shadow .3s}body.scrolled header{box-shadow:0 8px 24px #000
   .bar nav button,.bar nav a{padding:9px 12px!important}
   main,footer{max-width:1240px}
 }
+
+/* ================= EDITORIAL DESIGN (design-system.md, Part B): white, black type, Flare + Pitch accents, flat and sharp ================= */
+:root:not(#z){--ink:#0a0a0a;--paper:#fff;--paper-2:#f5f5f5;--grey-1:#e5e5e5;--grey-2:#8a8a8a;--grey-3:#4a4a4a;--flare:#ff4a1c;--pitch:#0b7a3e;--mute:#4a4a4a;--line:#e5e5e5;--bg:#fff;--card:#fff}
+:root[data-evt=derby]:not(#z){--flare:#d7263d}:root[data-evt=gold]:not(#z){--flare:#c9a227}:root[data-evt=neon]:not(#z){--flare:#e01a8f}:root[data-evt=retro]:not(#z){--flare:#2f80ed}:root[data-evt=winter]:not(#z){--flare:#1d8fe1}:root[data-evt=football]:not(#z){--flare:#0b7a3e}
+:root:not(#z) body{background:#fff!important;color:var(--ink);font-family:Inter,system-ui,sans-serif}
+:root:not(#z) body :is(p,small,button,a,input,select,textarea,li,td,th,label,h3,h4,h5){font-family:Inter,system-ui,sans-serif}
+/* page titles and big headlines */
+:root:not(#z) main h1,:root:not(#z) main h2[style*="font-size:40px"],:root:not(#z) main h2[style*="font-size:30px"],:root:not(#z) .hhero h2{font:400 clamp(44px,7vw,72px)/0.95 Anton,Impact,sans-serif!important;text-transform:uppercase;letter-spacing:.5px!important;color:var(--ink)}
+:root:not(#z) .rlead h2,:root:not(#z) .noticecard h2,:root:not(#z) .chestcard h2,:root:not(#z) .fatxt b,:root:not(#z) #a2hs.full .a2hstxt b{font-family:Anton,Impact,sans-serif!important;font-weight:400!important;text-transform:uppercase;letter-spacing:.5px;line-height:1}
+:root:not(#z) .rlead h2{font-size:clamp(30px,4vw,52px)!important}
+/* sections: a black rule and an UPPERCASE title instead of rounded boxes */
+:root:not(#z) .panel{background:#fff!important;border:0!important;border-top:2px solid var(--ink)!important;border-radius:0!important;box-shadow:none!important;padding:14px 2px 8px!important}
+:root:not(#z) .panel>h3,:root:not(#z) .hhead h3,:root:not(#z) .dwh{font:800 20px 'Inter Tight',Inter,sans-serif!important;text-transform:uppercase;letter-spacing:.2px!important;color:var(--ink)!important}
+:root:not(#z) .dwh{font-size:13px!important;letter-spacing:1.3px!important}
+:root:not(#z) .hhead .back,:root:not(#z) .back,:root:not(#z) a.back{font:700 12px Inter,sans-serif!important;text-transform:uppercase;letter-spacing:1.2px;color:var(--ink)!important;text-decoration:none}
+:root:not(#z) .back:hover{text-decoration:underline}
+:root:not(#z) .sl{color:var(--grey-3)!important}
+/* buttons: square, UPPERCASE; black, Flare for the main call to action, Pitch when you can afford a pack */
+:root:not(#z) .btn{background:var(--ink)!important;color:#fff!important;border:0!important;border-radius:2px!important;box-shadow:none!important;text-shadow:none!important;animation:none!important;font:700 14px Inter,sans-serif!important;text-transform:uppercase;letter-spacing:1px;min-height:44px;padding:0 20px!important;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+:root:not(#z) .btn:hover{background:var(--flare)!important;color:var(--ink)!important}
+:root:not(#z) .btn.ghost{background:#fff!important;color:var(--ink)!important;border:1.5px solid var(--ink)!important}
+:root:not(#z) .btn[data-hpacks],:root:not(#z) .btn[data-pack1],:root:not(#z) .btn[data-drclaim],:root:not(#z) .btn[data-sub],:root:not(#z) .fabtns .btn:first-child,:root:not(#z) .a2hsbtns .btn:first-child{background:var(--flare)!important;color:var(--ink)!important}
+:root:not(#z) .btn.packbtn.can{background:var(--pitch)!important;color:#fff!important}:root:not(#z) .btn.packbtn.cant{background:#fff!important;color:var(--grey-3)!important;border:1.5px solid var(--grey-1)!important}
+/* chips become UPPERCASE tabs with a Flare underline */
+:root:not(#z) .chip{background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;color:var(--grey-3)!important;font:700 13px Inter,sans-serif!important;text-transform:uppercase;letter-spacing:1.1px;padding:9px 2px!important;margin:0 14px 0 0}
+:root:not(#z) .chip[aria-pressed=true]{color:var(--ink)!important;box-shadow:inset 0 -3px 0 var(--flare)!important}
+:root:not(#z) .sub,:root:not(#z) .chips{border-bottom:1px solid var(--grey-1);gap:0 6px!important}
+/* badges */
+:root:not(#z) .nbadge{background:var(--flare)!important;color:var(--ink)!important;border-radius:0!important;font:800 11px Inter,sans-serif!important;text-transform:uppercase;letter-spacing:1px}
+:root:not(#z) .fm{border-radius:0!important;color:#fff!important}:root:not(#z) .fm.W{background:var(--pitch)!important}:root:not(#z) .fm.D{background:var(--grey-2)!important}:root:not(#z) .fm.L{background:var(--ink)!important}
+:root:not(#z) .pbadge{background:var(--flare)!important;color:var(--ink)!important;border-radius:0!important}:root:not(#z) .own.new{background:var(--pitch)!important;border-radius:0!important}
+/* tickers: black bars, white numbers, Flare labels */
+:root:not(#z) .tick,:root:not(#z) .rsc{background:var(--ink)!important;color:#fff!important;border-radius:0!important;font-variant-numeric:tabular-nums}
+:root:not(#z) .tick b,:root:not(#z) .rsc b{color:var(--flare)!important;background:none!important;letter-spacing:1.2px}
+:root:not(#z) .rec,:root:not(#z) .rnav{border-radius:0!important}:root:not(#z) .rnav{background:#fff!important;border-bottom:1px solid var(--grey-1)}
+:root:not(#z) .rnav button{color:var(--grey-3)!important;background:none!important;text-transform:uppercase;letter-spacing:1px;font-weight:700}
+:root:not(#z) .rnav button[aria-pressed=true]{color:var(--ink)!important;box-shadow:inset 0 -3px 0 var(--flare)}
+:root:not(#z) .rlead,:root:not(#z) .rcard,:root:not(#z) .rimg,:root:not(#z) .hstory,:root:not(#z) .himg{border-radius:0!important;box-shadow:none!important}
+:root:not(#z) .rcard b,:root:not(#z) .hstory b,:root:not(#z) .srow span{font-family:'Inter Tight',Inter,sans-serif!important;font-weight:800}
+:root:not(#z) .srow{border-color:var(--grey-1)!important}
+:root:not(#z) .nlk{background:#fff!important;color:var(--ink)!important;border-radius:0!important;box-shadow:none!important}:root:not(#z) .nlk.on b{color:var(--flare)!important}
+/* Home dashboard: big numbers, no boxes */
+:root:not(#z) .dash>.panel{padding-top:12px!important}
+:root:not(#z) .dbig,:root:not(#z) .stile b{font:400 52px/1 Anton,Impact,sans-serif!important;color:var(--ink)!important;letter-spacing:.5px}
+:root:not(#z) .stile{background:none!important;border:0!important;border-radius:0!important;text-align:left;padding:4px 0!important}
+:root:not(#z) .stile span{font:700 11px Inter,sans-serif;text-transform:uppercase;letter-spacing:1.2px;color:var(--grey-3)}
+:root:not(#z) .stile.big b{color:var(--pitch)!important}
+:root:not(#z) .hgame,:root:not(#z) .hstat,:root:not(#z) .hrow{border-radius:0!important;box-shadow:none!important}
+:root:not(#z) .hgame{background:#fff!important;border:1px solid var(--grey-1)!important;color:var(--ink)!important;text-transform:uppercase;font-weight:800;letter-spacing:.5px}
+:root:not(#z) .achbar,:root:not(#z) .collbar,:root:not(#z) .bar i{border-radius:0!important}:root:not(#z) .achbar i,:root:not(#z) .collbar i{background:var(--ink)!important;border-radius:0!important}
+:root:not(#z) #dailybox .drdays i{border-radius:0!important}:root:not(#z) #dailybox .drdays i.done{background:var(--pitch)!important;color:#fff!important}:root:not(#z) #dailybox .drdays i.now{background:var(--flare)!important;color:var(--ink)!important}
+/* player cards: flat white with a solid rarity band, no glow or gradient */
+:root:not(#z) .pc{background:#fff!important;border:1px solid var(--ink)!important;border-radius:0!important;box-shadow:none!important;color:var(--ink)!important}
+:root:not(#z) .pc-in{background:none!important;color:var(--ink)!important}
+:root:not(#z) .pc-top{background:var(--rc);margin:-5cqw -5cqw 1.5cqw;width:calc(100% + 10cqw)!important;padding:4cqw 5cqw;color:var(--ink)!important}
+:root:not(#z) .pc-top b{font-family:Anton,Impact,sans-serif!important;font-weight:400}
+:root:not(#z) .pc-av{background:var(--paper-2)!important;border:0!important;color:var(--ink)!important;font-family:Inter,sans-serif!important}
+:root:not(#z) .pc-name{font-family:'Inter Tight',Inter,sans-serif!important;text-transform:uppercase}
+:root:not(#z) .pc-meta,:root:not(#z) .pc-club,:root:not(#z) .pc-r{color:var(--grey-3)!important;opacity:1!important;text-transform:uppercase;letter-spacing:.2cqw}
+:root:not(#z) .pc-perk{background:none!important;border-top:1px solid var(--grey-1);border-radius:0!important;color:var(--grey-3)!important}:root:not(#z) .pc-perk b{color:var(--ink)!important}
+:root:not(#z) .r-legendary,:root:not(#z) .r-ultimate,:root:not(#z) .r-red_devils{box-shadow:none!important;animation:none!important;outline:0!important}
+:root:not(#z) .reveal .r-ultimate,:root:not(#z) .reveal .r-legendary,:root:not(#z) .reveal .r-red_devils{animation:flipin .7s both!important}
+:root:not(#z) .pc-hid{background:var(--ink)!important;border-color:var(--ink)!important}:root:not(#z) .pc-hid *{color:#fff!important;text-shadow:none!important}
+:root:not(#z) .flip-back{background:var(--ink)!important;border-color:var(--ink)!important;border-radius:0!important}
+:root:not(#z) .pk,:root:not(#z) .panel.pk{border:1px solid var(--grey-1)!important;border-top:2px solid var(--ink)!important;padding:16px!important}
+:root:not(#z) .freebar{background:var(--ink)!important;color:#fff!important;border-radius:0!important}
+/* pop-ups, toasts and full-screen messages: white sheets, square, black border */
+:root:not(#z) .noticecard,:root:not(#z) .chestcard,:root:not(#z) .searchcard{background:#fff!important;color:var(--ink)!important;border:1px solid var(--ink)!important;border-radius:0!important;box-shadow:none!important}
+:root:not(#z) .chestit{background:#fff!important;border:1px solid var(--grey-1)!important;border-radius:0!important}
+:root:not(#z) #searchbox,:root:not(#z) #chestbox,:root:not(#z) #warnbox{background:rgba(10,10,10,.35)!important}
+:root:not(#z) .fullask,:root:not(#z) #a2hs.full{background:#fff!important;color:var(--ink)!important}:root:not(#z) .fatxt span,:root:not(#z) #a2hs.full .a2hstxt span{color:var(--grey-3)!important}
+:root:not(#z) .toast{background:var(--ink)!important;color:#fff!important;border-radius:0!important;box-shadow:none!important}
+:root:not(#z) input,:root:not(#z) select,:root:not(#z) textarea{border-radius:0!important;background:var(--paper-2)!important;border:1px solid var(--grey-1)!important;color:var(--ink)!important}
+:root:not(#z) .bub{border-radius:0!important}
+:root:not(#z) #evbar{background:var(--flare)!important;color:var(--ink)!important;border-radius:0!important;font-weight:800;text-transform:uppercase;letter-spacing:1px}
+:root:not(#z) #evbar *{color:var(--ink)!important}
+/* sidebar (computer): black, white UPPERCASE labels, Flare bar on the current page */
+@media(min-width:761px){
+  :root:not(#z) header{background:var(--ink)!important;border:0!important;box-shadow:none!important}
+  :root:not(#z) header .logo{color:#fff!important;font:400 30px Anton,Impact,sans-serif!important;letter-spacing:1px!important}:root:not(#z) header .logo svg{display:none}
+  :root:not(#z) header .logo b{color:var(--flare)!important;font-weight:400}
+  :root:not(#z) .hdtools button{background:#1a1a1a!important;color:#fff!important;border:1px solid #333!important;border-radius:2px!important;box-shadow:none!important}
+  :root:not(#z) .bar nav button,:root:not(#z) .bar nav a{color:#cfcfcf!important;font:700 13px Inter,sans-serif!important;text-transform:uppercase!important;letter-spacing:1.3px!important;border-radius:0!important;border-left:4px solid transparent!important;padding:10px 14px!important}
+  :root:not(#z) .bar nav button:hover,:root:not(#z) .bar nav a:hover{background:#ffffff10!important;color:#fff!important}
+  :root:not(#z) .bar nav [aria-selected=true]{background:#ffffff14!important;color:#fff!important;border-left-color:var(--flare)!important}
+}
+/* phone: white top bar and bottom bar with black rules */
+@media(max-width:760px){
+  :root:not(#z) header{background:#fff!important;border-bottom:2px solid var(--ink)!important;box-shadow:none!important}
+  :root:not(#z) header .logo{color:var(--ink)!important;font:400 24px Anton,Impact,sans-serif!important;letter-spacing:1px!important}:root:not(#z) header .logo svg{display:none}:root:not(#z) header .logo b{color:var(--flare)!important;font-weight:400}
+  :root:not(#z) .hdtools button{background:#fff!important;border:1px solid var(--grey-1)!important;border-radius:2px!important;box-shadow:none!important;color:var(--ink)!important}
+  :root:not(#z) .tabbar{background:#fff!important;border-top:2px solid var(--ink)!important;box-shadow:none!important}
+  :root:not(#z) .tabbar button{color:var(--grey-3)!important;filter:none}:root:not(#z) .tabbar button span{font:700 9px Inter,sans-serif!important;text-transform:uppercase;letter-spacing:1px;color:var(--grey-3)!important}
+  :root:not(#z) .tabbar button:is([aria-current=page],.on,[aria-selected=true]){color:var(--ink)!important}:root:not(#z) .tabbar button:is([aria-current=page],.on,[aria-selected=true]) span{color:var(--ink)!important;box-shadow:0 3px 0 var(--flare)}
+  :root:not(#z) .moresheet{border-radius:0!important;border:1px solid var(--ink)!important;box-shadow:none!important;background:#fff!important}:root:not(#z) .moregrid button,:root:not(#z) .moregrid a{border-radius:0!important}
+}
+:root:not(#z) footer{border-top:2px solid var(--ink);padding-top:16px}
+:root :focus-visible{outline:2px solid var(--flare)!important;outline-offset:2px}
+
+#evfx{opacity:.35!important}
+:root:not(#z) .amsg,:root:not(#z) .amsg.gnote{border-radius:0!important;background:#f4f4f4!important;border:0!important;border-left:4px solid var(--flare)!important;color:#0a0a0a!important}:root:not(#z) .amsg.timeup{background:#fff1ec!important;border-left-color:#ff4a1c!important;color:#0a0a0a!important}:root:not(#z) .plan.auth,:root:not(#z) .auth input{border-radius:0!important}
+:root:not(#z) header .logo *,:root:not(#z) .dbig *,:root:not(#z) .stile b *,:root:not(#z) .pc-top b{font-family:Anton,Impact,sans-serif!important;font-weight:400!important}
 </style></head><body>
 <header><div class="bar"><div class="logo"><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ad1ff"/><stop offset="1" stop-color="#1b4fd8"/></linearGradient></defs><path d="M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8z" fill="url(#lg)"/><circle cx="20" cy="20" r="9" fill="#fff"/><path d="M20 14.5l4.5 3.3-1.7 5.3h-5.6l-1.7-5.3z" fill="#0a1020"/><path d="M20 11v3.5M24.5 17.8l3.3-1.2M22.8 23.1l2 2.8M17.2 23.1l-2 2.8M15.5 17.8l-3.3-1.2" stroke="#0a1020" stroke-width="1.4" stroke-linecap="round"/></svg><span>HEY<b>FOOTBALL</b></span></div>
 <div class="hdtools"><button class="musicbtn" data-music="1" aria-label="Music on or off">🎵</button><button class="searchbtn" data-search="1" aria-label="Search teams, players and news">🔍 <span>Search</span></button><button class="wkpill" data-t="arcade" data-g="lb" data-lbk="total" aria-label="Your Total Points position this week" title="Total Points this week" hidden>🏆 <b>–</b></button><button class="ibbtn" data-ibopen="1" aria-label="Inbox"><span class="ibbell" aria-hidden="true">🔔</span><span class="ibcount" hidden>0</span></button><button class="hdrbtn adminnav" data-t="admin" aria-label="Admin" title="Admin" hidden>🛡️</button><button class="hdrbtn mobnav" data-mobview="1" aria-label="Phone layout" title="Phone layout" hidden>📱</button></div><nav role="tablist"><button role="tab" aria-controls="app" data-t="home" aria-selected="false">🏠 Home</button><button role="tab" aria-controls="app" data-t="news" aria-selected="true">&#x1F4F0; News</button><button role="tab" aria-controls="app" data-t="matches" aria-selected="false">&#x26BD; Matches</button><button role="tab" aria-controls="app" data-t="tables" aria-selected="false">&#x1F4CA; Tables</button><button role="tab" aria-controls="app" data-t="form" aria-selected="false">&#x1F525; Form</button><button role="tab" aria-controls="app" data-t="chat" aria-selected="false">&#x1F4AC; Social</button><button role="tab" aria-controls="app" data-t="friends" aria-selected="false" hidden>&#x1F465; Friends</button><button role="tab" aria-controls="app" data-t="clubs" aria-selected="false">🚩 Club war</button><button role="tab" aria-controls="app" data-t="fanzone" aria-selected="false">📣 Fanzone</button><button role="tab" aria-controls="app" data-t="learn" aria-selected="false">&#x1F393; Tutorials</button><button role="tab" aria-controls="app" data-t="arcade" aria-selected="false">&#x1F3AE; Arcade</button><button role="tab" aria-controls="app" data-t="tournament" aria-selected="false">&#x1F3C6; Tournament</button><button role="tab" aria-controls="app" data-t="gallery" aria-selected="false">&#x1F0CF; Cards</button><button role="tab" aria-controls="app" data-t="stadium" aria-selected="false">🏟️ Stadium</button><button role="tab" aria-controls="app" data-t="getapp" aria-selected="false">&#x1F4F2; Get the app</button><a class="navblog" role="tab" aria-controls="app" aria-selected="false" href="blog/">📝 Blog</a><button role="tab" aria-controls="app" data-t="account" aria-selected="false">Sign in</button></nav></div></header>
@@ -1887,10 +1989,10 @@ const sym={football:["⚽","⚽","🥅","🏆","📣","⚽"],gold:["✨","🪙",
 fx.innerHTML=Array.from({length:22},(_,i)=>`<span class="evp" style="left:${(Math.random()*100).toFixed(1)}%;--s:${(10+Math.random()*16).toFixed(0)}px;--t:${(7+Math.random()*9).toFixed(1)}s;--dl:-${(Math.random()*12).toFixed(1)}s">${sym[i%sym.length]}</span>`).join("");document.body.appendChild(fx);
 if(th==="retro"&&!$("#retrofont")){const l=document.createElement("link");l.id="retrofont";l.rel="stylesheet";l.href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap";document.head.appendChild(l)}}
 const STYLE_NAMES={gold:"🥇 Gold style",neon:"💜 Neon style",football:"⚽ Football Madness style",winter:"❄️ Winter style"};
-function applyEvents(){const R=document.documentElement;const manual=((SITE&&SITE.events)||{});R.dataset.ev=evOn("theme")?abuseTheme():"";applyST();
-evFx(R.dataset.ev);let bar=$("#evbar");if(!bar){bar=document.createElement("div");bar.id="evbar";bar.setAttribute("role","status");const a=$("#announce");(a||$("main")).before(bar)}
+function applyEvents(){const R=document.documentElement;const manual=((SITE&&SITE.events)||{});const TH=evOn("theme")?abuseTheme():"";R.dataset.ev="";R.dataset.evt=TH;applyST();/* toned down: no dark restyle, just an accent + banner */
+evFx(TH);let bar=$("#evbar");if(!bar){bar=document.createElement("div");bar.id="evbar";bar.setAttribute("role","status");const a=$("#announce");(a||$("main")).before(bar)}
 const on=[["double_coins","🪙","Double coins"],["double_points","⭐","Double points"],["half_packs","🏷️","Half-price packs"]].filter(e=>evOn(e[0]));
-bar.innerHTML=(on.length||R.dataset.ev?`<span class="abuse">🔥 ${L("ADMIN ABUSE!")}</span>`:"")+on.map(e=>`<span>${e[1]} <b>${L(e[2])}</b> ${L("until")} ${evUntil(e[0])}</span>`).join("")+(R.dataset.ev?`<span><b>${L(STYLE_NAMES[R.dataset.ev]||"")}</b></span>`:"")+(ADMIN&&(on.length||R.dataset.ev)?`<button class="evstopbtn" data-stopabuse="1">⛔ ${L("Stop")}</button>`:"");bar.hidden=(!on.length&&!R.dataset.ev)||!me}
+bar.innerHTML=(on.length||TH?`<span class="abuse">🔥 ${L("ADMIN ABUSE!")}</span>`:"")+on.map(e=>`<span>${e[1]} <b>${L(e[2])}</b> ${L("until")} ${evUntil(e[0])}</span>`).join("")+(TH?`<span><b>${L(STYLE_NAMES[TH]||"")}</b></span>`:"")+(ADMIN&&(on.length||TH)?`<button class="evstopbtn" data-stopabuse="1">⛔ ${L("Stop")}</button>`:"");bar.hidden=(!on.length&&!TH)||!me}
 setInterval(()=>{if(SITE&&SITE.events)applyEvents()},60000);
 // points per game come from Supabase (admins can change them)
 async function loadGamePoints(){if(!SB)return;try{const{data}=await SB.from("game_points").select("game,weight");(data||[]).forEach(r=>{if(r.game in LBW||["head","hl","react","pass"].includes(r.game))LBW[r.game]=r.weight})}catch(e){}}
@@ -4013,6 +4115,7 @@ Sign in to collect coins every day.|Entre para receber moedas todos os dias.|Ini
 No games being played right now.|Não há jogos a decorrer agora.|No hay partidos en juego ahora.
 Your free minute is up!|O seu minuto grátis acabou!|¡Se acabó tu minuto gratis!
 Create a free account to keep playing. It only takes 10 seconds.|Crie uma conta grátis para continuar a jogar. Só demora 10 segundos.|Crea una cuenta gratis para seguir jugando. Solo tarda 10 segundos.
+Some of those cards are in offers waiting for an answer (yours or your friend's with someone else). They're hidden now: pick again.|Algumas dessas cartas estão em propostas à espera de resposta (suas ou do seu amigo com outra pessoa). Agora estão escondidas: escolha de novo.|Algunas de esas cartas están en ofertas esperando respuesta (tuyas o de tu amigo con otra persona). Ahora están ocultas: elige otra vez.
 Admins|Admins|Admins`;
 TRX.split("\n").forEach(l=>{const p=l.split("|");if(p.length===3)DICT[p[0]]=[p[1],p[2]]});
 // Phrases with numbers or times in them
@@ -4052,13 +4155,13 @@ function translateDom(root){if(lgBusy)return;lgBusy=true;try{root=root||document
 // Anything new that appears (toasts, game messages, loaded lists) is translated straight away
 new MutationObserver(()=>{if(lgBusy||lgQueued||ST.lang==="en")return;lgQueued=true;requestAnimationFrame(()=>{lgQueued=false;translateDom()})}).observe(document.documentElement,{childList:true,subtree:true,characterData:true});
 function applyST(){const R=document.documentElement,p=PRE[ST.accent]||PRE[0];R.style.setProperty("--turf",p[1]);R.style.setProperty("--card-y",p[1]);R.style.setProperty("--acc2",p[2]);R.style.setProperty("--glow",p[2]+"66");
-const dark=ST.mode==="auto"?matchMedia("(prefers-color-scheme: dark)").matches:ST.mode==="dark";R.dataset.theme=dark||R.dataset.ev?"dark":"light";/* event styles are dark: keep the text light */document.body.style.fontSize=16*ST.size/100+"px";R.classList.toggle("nomo",!ST.motion);R.classList.toggle("noticker",!ST.ticker);R.lang=ST.lang;}
+const dark=ST.mode==="auto"?matchMedia("(prefers-color-scheme: dark)").matches:ST.mode==="dark";R.dataset.theme="light";/* the editorial design is white only */document.body.style.fontSize=16*ST.size/100+"px";R.classList.toggle("nomo",!ST.motion);R.classList.toggle("noticker",!ST.ticker);R.lang=ST.lang;R.style.setProperty("--turf","#ff4a1c");R.style.setProperty("--card-y","#ff4a1c");R.style.setProperty("--acc2","#0a0a0a");R.style.setProperty("--glow","transparent");}/* fixed accents: Flare + black */
 try{matchMedia("(prefers-color-scheme: dark)").addEventListener("change",()=>{if(ST.mode==="auto")applyST()})}catch(e){}
 
 applyST();tab=ST.start||tab;
 const tg=(k,l)=>`<button class="chip" data-tog="${k}" aria-pressed="${ST[k]}">${l}: ${ST[k]?L("On"):L("Off")}</button>`;
 function settingsPage(){return `<h2 style="font-size:30px;margin:26px 0 14px">&#x2699;&#xFE0F; ${L("Settings")}</h2><div class="two">`
-+`<div class="panel" style="padding:16px"><h3>${L("Appearance")}</h3><p class="sl">${L("Mode")}</p><div class="chips">${[["dark","Dark"],["light","Light"],["auto","Auto"]].map(m=>`<button class="chip" data-tm="${m[0]}" aria-pressed="${ST.mode===m[0]}">${L(m[1])}</button>`).join("")}</div><p class="sl">${L("Accent colour")}</p><div class="sw">${PRE.map((x,i)=>`<button class="swb" data-acc="${i}" aria-pressed="${ST.accent===i}" aria-label="${x[0]}" style="background:${x[1]}"></button>`).join("")}</div><p class="sl">${L("Text size")}</p><div class="chips">${[90,100,115,130].map(z=>`<button class="chip" data-sz="${z}" aria-pressed="${ST.size===z}">${z}%</button>`).join("")}</div></div>`
++`<div class="panel" style="padding:16px"><h3>${L("Appearance")}</h3><p class="sl">${L("Text size")}</p><div class="chips">${[90,100,115,130].map(z=>`<button class="chip" data-sz="${z}" aria-pressed="${ST.size===z}">${z}%</button>`).join("")}</div></div>`
 +`<div class="panel" style="padding:16px"><h3>${L("Language")}</h3><div class="chips">${LANGS.map(l=>`<button class="chip" data-lang="${l[0]}" aria-pressed="${ST.lang===l[0]}" data-notr>${l[1]}</button>`).join("")}</div><p class="sl">${L("The site's own words change language. News stories, chat messages and player names stay as they are.")}</p><h3 style="margin-top:14px">${L("Preferences")}</h3><div class="chips">${tg("ticker",L("News ticker"))}${tg("motion",L("Animations"))}${tg("share",L("Share my activity with friends"))}</div><p class="sl">${L("Start page")}</p><div class="chips">${[["home","Home"],["news","News"],["matches","Matches"],["arcade","Arcade"],["chat","Chat"]].map(x=>`<button class="chip" data-st="${x[0]}" aria-pressed="${ST.start===x[0]}">${L(x[1])}</button>`).join("")}</div></div>`
 +`<div class="panel" style="padding:16px"><h3>${L("Data")}</h3><div class="chips"><button class="chip" data-clr="saved">${L("Clear saved stories")}</button><button class="chip" data-clr="scores">${L("Clear arcade scores")}</button><button class="chip" data-clr="reset">${L("Reset settings")}</button></div><h3 style="margin-top:14px">${L("About")}</h3><p class="sl"><b>HeyFootball by Lucsis and Andreas</b> · v1.0<br>${L("Not affiliated with any club, league or media outlet.")}</p></div></div>`}
 
@@ -4224,14 +4327,15 @@ updateFriendsDot();if(tab==="friends"&&fsub==="trades")render()}
 const cardChips=ids=>(ids||[]).map(i=>{const p=GP.find(x=>x.id===i);return p?`<span class="tcard" style="--rc:${rarOf(p.rarity)[3]}">${rarOf(p.rarity)[2]} ${esc(p.name)}</span>`:"<span class=\"tcard\">?</span>"}).join(" ");
 // trading only needs both card lists, so load just those, at the same time (not the friend's whole profile)
 var TRG={};
-async function tradeLoad(id){if(TRG[id]&&TRG[id].busy)return;TRG[id]={busy:true};const[g]=await Promise.all([SB.rpc("friend_gallery",{p_friend:id}),gTried?null:loadGallery()]);
-  TRG[id]={g:g&&!g.error?(g.data||[]):null,at:Date.now()};if(tab==="friends"&&fsub==="trade")render()}
+async function tradeLoad(id){if(TRG[id]&&TRG[id].busy)return;TRG[id]={busy:true};const[g,lk]=await Promise.all([SB.rpc("friend_gallery",{p_friend:id}),SB.rpc("trade_locks",{p_friend:id}).then(r=>r,()=>({error:1})),gTried?null:loadGallery()]);const LK=lk&&!lk.error&&lk.data?lk.data:null;
+  TRG[id]={g:g&&!g.error?(g.data||[]):null,lk:LK,at:Date.now()};if(tab==="friends"&&fsub==="trade")render()}
 function tradeBuilder(){const id=trSel&&trSel.to;if(!id)return"";const nm=esc(fname(id)),cached=TRG[id]&&TRG[id].g&&Date.now()-TRG[id].at<600000;
 const P=FD.prof[id]&&!cached?FD.prof[id]:cached?{g:TRG[id].g}:null;
 if(!P||!gTried){if(!(TRG[id]&&TRG[id].busy))tradeLoad(id);return`<p class="sl">⏳ ${L("Loading your cards and")} <span data-notr>${nm}</span>${L("'s cards…")}</p>`}
 if(!TRL&&!tradeBuilder.l){tradeBuilder.l=1;loadTrades().then(()=>{tradeBuilder.l=0;if(tab==="friends"&&fsub==="trade")render()})}
 // cards already in an offer waiting for an answer are locked: yours, and your friend's
 const myLock=new Set(),hisLock=new Set();(TR||[]).filter(t=>t.status==="pending"&&Date.now()-new Date(t.created_at)<7*864e5).forEach(t=>{((t.from_user===me.id?t.give:t.to_user===me.id?t.get:null)||[]).forEach(i=>myLock.add(i));((t.from_user===id?t.give:t.to_user===id?t.get:null)||[]).forEach(i=>hisLock.add(i))});/* offers older than 7 days have expired */
+const LKS=TRG[id]&&TRG[id].lk;if(LKS){(LKS.mine||[]).forEach(i=>myLock.add(+i));(LKS.theirs||[]).forEach(i=>hisLock.add(+i))}/* from Supabase: includes your friend's offers with other people */
 const fc=pid=>(P.g.find(c=>c.player_id===pid)||{}).copies||0,myD=GP.filter(p=>(COL[p.id]||0)>=2&&!fc(p.id)&&!myLock.has(p.id)),hisD=GP.filter(p=>fc(p.id)>=2&&!(COL[p.id]||0)&&!hisLock.has(p.id))/* only cards that are new for whoever gets them */,
 nLock=GP.filter(p=>(myLock.has(p.id)&&(COL[p.id]||0)>=2&&!fc(p.id))||(hisLock.has(p.id)&&fc(p.id)>=2&&!(COL[p.id]||0))).length,g=trSel.give,w=trSel.get,ok=g.length>0&&w.length>0;
 const pick=(p,sel,attr,n,own)=>`<button class="pick${sel?" sel":""}" ${attr}="${p.id}" aria-pressed="${sel}" aria-label="${esc(p.name)}, ${n} copies${own==null?"":own?", you have "+own:", new for you"}">${pcard(p,n)}${own==null?"":own?`<span class="own">✓ ${L("You have")} <b>${own}</b></span>`:`<span class="own new">\u{1F195} ${L("New for you")}</span>`}</button>`;
@@ -4246,7 +4350,7 @@ return `<div class="row" style="justify-content:flex-start;margin:0 0 12px"><but
 <h3 style="margin-top:18px">You get <small class="hint">${w.length}/20 picked</small></h3>${hisD.length?`<div class="pgrid">${hisD.map(p=>pick(p,w.includes(p.id),"data-tw",fc(p.id),COL[p.id]||0)).join("")}</div>`:`<p class="sl"><span data-notr>${nm}</span> ${L("has no doubles that are new for you right now.")}</p>`}
 <div class="tsum">${g.length||w.length?`<p>You give ${cardChips(g)||"—"}</p><p>You get ${cardChips(w)||"—"}</p>`:""}<button class="btn" data-tsend ${ok&&!trBusy?"":"disabled"}>${trBusy?"Sending…":ok?`Send offer (${g.length} for ${w.length})`:"Pick at least one on each side"}</button><p class="sl" role="status">${trMsg}</p></div></div>`}
 async function sendTrade(){if(!trSel||trBusy)return;trBusy=true;trMsg="";render();const{error}=await SB.rpc("propose_trade",{p_to:trSel.to,p_give:trSel.give,p_get:trSel.get});trBusy=false;
-if(error){trMsg=/does not exist|schema cache/i.test(error.message)?"Trading isn't set up in Supabase yet.":error.message.replace(/^.*?:\s*/,"");return render()}
+if(error){trMsg=/does not exist|schema cache/i.test(error.message)?"Trading isn't set up in Supabase yet.":error.message.replace(/^.*?:\s*/,"");if(/waiting for an answer/i.test(error.message)){const f=trSel.to;trSel.give=[];trSel.get=[];delete TRG[f];trMsg=L("Some of those cards are in offers waiting for an answer (yours or your friend's with someone else). They're hidden now: pick again.");tradeLoad(f)}return render()}
 toast("Offer sent to "+fname(trSel.to));trSel=null;fsub="trades";TRL=false;render()}
 async function answerTrade(id,accept){const{data,error}=await SB.rpc("respond_trade",{p_id:+id,p_accept:accept});
 if(error)toast("Couldn't answer the offer. Check your connection.");else toast(data==="accepted"?"Trade done! Check your cards.":data==="declined"?"Offer declined":data==="failed"?"Trade failed: someone doesn't have those doubles any more.":"That offer isn't available any more.");
