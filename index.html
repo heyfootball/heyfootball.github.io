@@ -844,6 +844,74 @@ header{transition:box-shadow .3s}body.scrolled header{box-shadow:0 8px 24px #000
 :root :focus-visible{outline:2px solid var(--flare)!important;outline-offset:2px}
 
 #evfx{opacity:.35!important}
+
+/* ===== CALMER: the menu is in 4 labelled groups, the floating event effects are gone ===== */
+#evfx{display:none!important}
+@media(min-width:761px){
+:root:not(#z) header .bar nav{display:flex!important;flex-direction:column}
+:root:not(#z) header .bar nav [data-t=home]{order:1}
+:root:not(#z) header .bar nav [data-t=home]::before{content:"Football";display:block;font:700 11px/1 Inter,sans-serif;letter-spacing:1.6px;text-transform:uppercase;color:#8a8a8a;margin:0 0 8px 0;pointer-events:none;flex-basis:100%;width:100%}
+:root:not(#z) header .bar nav [data-t=news]{order:2}
+:root:not(#z) header .bar nav [data-t=matches]{order:3}
+:root:not(#z) header .bar nav [data-t=tables]{order:4}
+:root:not(#z) header .bar nav [data-t=form]{order:5}
+:root:not(#z) header .bar nav [data-t=arcade]{order:6}
+:root:not(#z) header .bar nav [data-t=arcade]::before{content:"Play";display:block;font:700 11px/1 Inter,sans-serif;letter-spacing:1.6px;text-transform:uppercase;color:#8a8a8a;margin:14px 0 8px 0;pointer-events:none;flex-basis:100%;width:100%}
+:root:not(#z) header .bar nav [data-t=tournament]{order:7}
+:root:not(#z) header .bar nav [data-t=gallery]{order:8}
+:root:not(#z) header .bar nav [data-t=stadium]{order:9}
+:root:not(#z) header .bar nav [data-t=chat]{order:10}
+:root:not(#z) header .bar nav [data-t=chat]::before{content:"Community";display:block;font:700 11px/1 Inter,sans-serif;letter-spacing:1.6px;text-transform:uppercase;color:#8a8a8a;margin:14px 0 8px 0;pointer-events:none;flex-basis:100%;width:100%}
+:root:not(#z) header .bar nav [data-t=friends]{order:11}
+:root:not(#z) header .bar nav [data-t=fanzone]{order:12}
+:root:not(#z) header .bar nav [data-t=clubs]{order:13}
+:root:not(#z) header .bar nav [data-t=learn]{order:14}
+:root:not(#z) header .bar nav [data-t=learn]::before{content:"More";display:block;font:700 11px/1 Inter,sans-serif;letter-spacing:1.6px;text-transform:uppercase;color:#8a8a8a;margin:14px 0 8px 0;pointer-events:none;flex-basis:100%;width:100%}
+:root:not(#z) header .bar nav [data-t=getapp]{order:15}
+:root:not(#z) header .bar nav a.navblog{order:16}
+:root:not(#z) header .bar nav [data-t=account]{order:17}
+:root:not(#z) header .bar nav :is([data-t=home],[data-t=arcade],[data-t=chat],[data-t=learn]){flex-wrap:wrap}
+}
+
+/* ===== NO SCROLLING LISTS: rows wrap, long pages turn into pages with Back / Next ===== */
+:root:not(#z) main :is(.rnav,.days,.chips:not(.drdays)){flex-wrap:wrap!important;overflow:visible!important}:root:not(#z) main :is(.rsc,.livestrip,.trow){flex-wrap:nowrap!important;overflow:hidden!important}
+:root:not(#z) main .clbrank{max-height:none!important;overflow:visible!important}
+:root:not(#z) main#app .gamechips{display:none!important}
+.gamepick{display:flex;align-items:center;gap:10px;margin:0 0 12px}
+.gamepick label{font:700 12px Inter,sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:#555}
+.gamepick select{flex:1;max-width:420px;font:700 16px Inter,sans-serif;padding:10px 12px;border:2px solid #0a0a0a;border-radius:0;background:#fff;color:#0a0a0a}
+body.locked{overflow:hidden!important;height:100dvh}
+body.locked footer{display:none!important}
+body.locked main#app{display:flex;flex-direction:column;overflow:hidden;padding-bottom:0!important;box-sizing:border-box}
+body.locked .pinhead{position:static!important;flex:none}
+.pagewrap{position:relative;flex:1;min-height:0}
+:root:not(#z) .pinhead:empty{display:none}
+:root:not(#z) main :is(.chips,.sub)>:is(button,a){white-space:normal!important;line-height:1.2;overflow:visible!important;text-overflow:clip!important}
+@media(max-width:600px){:root:not(#z) main :is(.chips,.sub)>:is(button,a){font-size:12px!important;letter-spacing:.6px!important;padding:10px 4px!important}}
+.pagebody{position:absolute;inset:0;overflow:hidden}
+.pgmask{position:absolute;left:0;right:0;bottom:0;background:var(--bg,#fff);pointer-events:none;z-index:2}
+:root:not(#z) .pgmask{background:#fff}
+.pager{flex:none;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:10px 0 12px;border-top:2px solid #0a0a0a;background:#fff}
+.pager button{font:700 14px Inter,sans-serif;letter-spacing:1px;text-transform:uppercase;padding:12px 18px;border:2px solid #0a0a0a;background:#fff;color:#0a0a0a;border-radius:0;cursor:pointer;min-height:44px}
+.pager button.nx{background:#0a0a0a;color:#fff;justify-self:end}
+.pager button.bk{justify-self:start}
+.pager button:disabled{opacity:.3;cursor:default}
+.pager span{font:700 13px Inter,sans-serif;letter-spacing:1.2px;color:#555;text-transform:uppercase;white-space:nowrap}
+/* ===== FIXED FRAME: the page title and its menu tabs stay put, only the content under them moves ===== */
+html,body{overscroll-behavior-y:none}
+:root:not(#z) .pinhead{position:sticky;top:var(--hdh,0px);z-index:4;background:#fff!important;margin:-22px -16px 14px;padding:14px 16px 2px;border-bottom:2px solid #0a0a0a}
+:root:not(#z) .pinhead>:last-child{margin-bottom:10px}
+/* neat, even menu tabs: same width, lined up in a grid, text centred */
+:root:not(#z) main :is(.chips,.sub,.gamechips){display:grid!important;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0!important;flex-wrap:initial!important;margin-right:0!important;padding-right:0!important}
+:root:not(#z) main .gamechips{grid-template-columns:repeat(auto-fill,minmax(175px,1fr))}
+:root:not(#z) main :is(.chips,.sub,.gamechips)>:is(button,a){width:100%;justify-content:center;text-align:center;margin:0!important;padding:10px 6px!important;border-bottom:2px solid #e5e5e5!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+:root:not(#z) main :is(.chips,.sub,.gamechips)>[aria-pressed=true]{border-bottom-color:var(--flare)!important}
+:root:not(#z) main :is(h1,h2,h3,.panel h3){text-align:left}
+:root:not(#z) .hgrid,:root:not(#z) .grid{align-items:stretch}
+:root:not(#z) .hgrid>.panel,:root:not(#z) .grid>*{height:auto}
+@media(max-width:600px){:root:not(#z) main :is(.chips,.sub){grid-template-columns:repeat(auto-fit,minmax(110px,1fr))}:root:not(#z) main .gamechips{display:flex!important;overflow-x:auto;flex-wrap:nowrap!important}:root:not(#z) main .gamechips>button{width:auto;flex:none}}
+@media(max-width:600px){:root:not(#z) .pinhead{margin:-12px -12px 12px;padding:10px 12px 0}:root:not(#z) .pinhead h1,:root:not(#z) .pinhead h2{margin-top:0!important}}
+
 :root:not(#z) .amsg,:root:not(#z) .amsg.gnote{border-radius:0!important;background:#f4f4f4!important;border:0!important;border-left:4px solid var(--flare)!important;color:#0a0a0a!important}:root:not(#z) .amsg.timeup{background:#fff1ec!important;border-left-color:#ff4a1c!important;color:#0a0a0a!important}:root:not(#z) .plan.auth,:root:not(#z) .auth input{border-radius:0!important}
 :root:not(#z) header .logo *,:root:not(#z) .dbig *,:root:not(#z) .stile b *,:root:not(#z) .pc-top b{font-family:Anton,Impact,sans-serif!important;font-weight:400!important}
 </style></head><body>
@@ -4971,4 +5039,106 @@ else if(d.psv!==undefined){predSave();return}
 else if(d.play){play(d.play);return}else if(d.seek){const[a,b]=d.seek.split(":");stop(a);show(a,+b);return}else return;
 render()});
 render();
-</script></body></html>
+</script><script>
+/* fixed frame: on every page except Activity, Fanzone and player collections, nothing scrolls.
+   The title and menu tabs stay at the top, and long pages are split into screens with Back / Next. */
+(function(){
+  const app=document.getElementById("app"),hd=document.querySelector("header"),B=document.body;
+  const MENU=".chips,.sub,nav,[role=tablist]";
+  const BRK=".panel,tr,section,li,article,.side,.grid>*,.hgrid>*,h3,h2,.sec,.pc,.mrow,.row,.player,.plan,.gamepick,.tbl,table";
+  let PG={key:"",starts:[0],i:0},busy=false;
+  const side=()=>matchMedia("(min-width:761px)").matches;
+  function free(){try{return tab==="fanzone"||(tab==="friends"&&(fsub==="feed"||fsub==="profile"))||(tab==="gallery"&&gsub==="col")}catch(e){return false}}
+  function key(){try{return [tab,typeof gsub!=="undefined"?gsub:"",typeof fsub!=="undefined"?fsub:"",typeof nm!=="undefined"?nm:"",typeof open!=="undefined"?open:""].join("|")}catch(e){return ""}}
+  function setH(){document.documentElement.style.setProperty("--hdh",side()?"0px":(hd?hd.offsetHeight:0)+"px")}
+  /* the arcade game list becomes one tidy drop-down */
+  function gamePick(){
+    const gc=app.querySelector(".gamechips");if(!gc||app.querySelector(".gamepick"))return;
+    const bs=[...gc.querySelectorAll("button")];if(!bs.length)return;
+    const w=document.createElement("div");w.className="gamepick";
+    const sel=document.createElement("select");sel.id="gamepick";sel.setAttribute("aria-label","Choose a game");
+    bs.forEach((b,i)=>{const o=document.createElement("option");o.value=i;o.textContent=b.textContent.trim();if(b.getAttribute("aria-pressed")==="true")o.selected=true;sel.appendChild(o)});
+    sel.onchange=()=>bs[+sel.value]&&bs[+sel.value].click();
+    const l=document.createElement("label");l.htmlFor="gamepick";l.textContent="Game";
+    w.append(l,sel);gc.after(w);
+  }
+  function head(){
+    const kids=[...app.children];if(kids.length<2)return null;
+    let last=-1;
+    for(let i=0;i<Math.min(6,kids.length-1);i++){const k=kids[i];if(k.matches(MENU+",.gamepick")||(k.querySelector(":scope>"+MENU.split(",").join(",:scope>"))&&k.offsetHeight<innerHeight*.25))last=i}
+    /* the pinned part never takes more than a third of the screen */
+    while(last>=0&&kids.slice(0,last+1).reduce((h,k)=>h+k.offsetHeight,0)>innerHeight*.34)last--;
+    if(last<0&&/^H[12]$/.test(kids[0].tagName)){last=0;if(kids[1]&&kids[1].tagName==="P"&&kids.length>2)last=1}
+    if(last<0)return null;
+    const w=document.createElement("div");w.className="pinhead";app.insertBefore(w,kids[0]);
+    for(let i=0;i<=last;i++)w.appendChild(kids[i]);
+    return w;
+  }
+  /* menu tabs in even rows: the same number of tabs on every row where possible */
+  function evenTabs(){app.querySelectorAll(":is(.chips,.sub)").forEach(m=>{const n=m.children.length;if(n<2)return;const max=side()?8:(innerWidth<420?3:4),rows=Math.ceil(n/max);m.style.gridTemplateColumns="repeat("+Math.ceil(n/rows)+",minmax(0,1fr))"})}
+  function unlock(){B.classList.remove("locked");app.style.height=""}
+  let LS="";
+  function layout(force){
+    const body=app.querySelector(":scope>.pagewrap>.pagebody");if(!body)return;
+    const tb=document.querySelector(".tabbar"),tbh=tb&&getComputedStyle(tb).display!=="none"&&!side()?tb.offsetHeight:0;
+    const top=app.getBoundingClientRect().top;
+    app.style.height=Math.max(320,innerHeight-top-tbh)+"px";
+    const H=body.clientHeight,total=body.scrollHeight,sig=PG.key+"|"+H+"|"+total+"|"+body.clientWidth;if(force!==true&&sig===LS)return;LS=sig;
+    const bt=body.getBoundingClientRect().top-body.scrollTop;
+    const R=[...body.querySelectorAll(BRK+",:scope>*,:scope>*>*")].map(e=>{const r=e.getBoundingClientRect();return{t:Math.round(r.top-bt),b:Math.round(r.bottom-bt),h:r.height}}).filter(r=>r.h>0);
+    /* a screen may only end where it does not cut a box that would fit on one screen */
+    const tops=[...new Set(R.map(r=>r.t).filter(t=>t>0))].sort((x,y)=>x-y),cuts=t=>R.reduce((n,r)=>n+(r.h<=H&&r.t<t-1&&r.b>t+1?1:0),0);
+    const starts=[0];let st=0;
+    while(H>80&&st+H<total-4&&starts.length<200){
+      let nx=st+H,best=1e9;for(const t of tops){if(t<=st+H*.45||t>st+H)continue;const c=cuts(t);if(c<=best){best=c;nx=t}}
+      starts.push(nx);st=nx;
+    }
+    PG.starts=starts;if(PG.i>=starts.length)PG.i=starts.length-1;
+    show();
+  }
+  function show(){
+    const body=app.querySelector(":scope>.pagewrap>.pagebody"),pg=app.querySelector(":scope>.pager");if(!body||!pg)return;
+    const S=PG.starts,i=PG.i,H=body.clientHeight;
+    body.scrollTop=S[i];
+    const end=i+1<S.length?S[i+1]-S[i]:H,mask=app.querySelector(".pgmask");
+    if(mask)mask.style.height=Math.max(0,H-end)+"px";
+    pg.hidden=S.length<2;
+    const lab="Page "+(i+1)+" of "+S.length,sp=pg.querySelector("span");if(sp.textContent!==lab)sp.textContent=lab;
+    pg.querySelector(".bk").disabled=i===0;pg.querySelector(".nx").disabled=i===S.length-1;
+  }
+  function go(d){PG.i=Math.max(0,Math.min(PG.starts.length-1,PG.i+d));show()}
+  function build(){
+    setH();
+    if(app.firstElementChild&&app.firstElementChild.classList.contains("pinhead"))return;
+    if(free()){unlock();return}
+    gamePick();evenTabs();
+    const kids=[...app.children];if(!kids.length){unlock();return}
+    const k=key();if(k!==PG.key){PG={key:k,starts:[0],i:0}}
+    head()||(()=>{const w=document.createElement("div");w.className="pinhead";app.prepend(w)})();
+    const rest=[...app.children].slice(1);
+    const wrap=document.createElement("div");wrap.className="pagewrap";
+    const body=document.createElement("div");body.className="pagebody";
+    const mask=document.createElement("div");mask.className="pgmask";
+    rest.forEach(n=>body.appendChild(n));wrap.append(body,mask);app.appendChild(wrap);
+    const pg=document.createElement("div");pg.className="pager";
+    pg.innerHTML='<button class="bk" type="button">▲ Back</button><span aria-live="polite"></span><button class="nx" type="button">Next ▼</button>';
+    pg.querySelector(".bk").onclick=()=>go(-1);pg.querySelector(".nx").onclick=()=>go(1);
+    app.appendChild(pg);
+    B.classList.add("locked");scrollTo(0,0);
+    layout(true);
+    /* pictures and fonts that arrive later change the page size */
+    body.querySelectorAll("img").forEach(im=>{if(!im.complete)im.addEventListener("load",()=>requestAnimationFrame(layout),{once:true})});
+    /* code that scrolls something into view still works: the page number follows */
+    body.addEventListener("scroll",()=>{if(busy)return;const t=body.scrollTop,S=PG.starts;let j=0;S.forEach((v,x)=>{if(v<=t+2)j=x});if(j!==PG.i&&Math.abs(S[PG.i]-t)>2){PG.i=j;busy=true;show();busy=false}});
+  }
+  let q=false;
+  new MutationObserver(()=>{if(q)return;q=true;queueMicrotask(()=>{q=false;build()})}).observe(app,{childList:true});
+  /* a part of the page that changes size (a game ending, a list loading) re-measures the screens */
+  let rq=0;new MutationObserver(()=>{if(!B.classList.contains("locked")||rq)return;rq=setTimeout(()=>{rq=0;layout()},400)}).observe(app,{childList:true,subtree:true});
+  addEventListener("resize",()=>{setH();evenTabs();if(B.classList.contains("locked"))layout()});
+  addEventListener("keydown",e=>{if(!B.classList.contains("locked")||/INPUT|TEXTAREA|SELECT/.test((e.target||{}).tagName||""))return;if(e.key==="PageDown"){go(1);e.preventDefault()}if(e.key==="PageUp"){go(-1);e.preventDefault()}});
+  if(document.fonts)document.fonts.ready.then(()=>B.classList.contains("locked")&&layout());
+  setTimeout(build,0);
+})();
+</script>
+</body></html>
