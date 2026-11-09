@@ -858,8 +858,16 @@ header{transition:box-shadow .3s}body.scrolled header{box-shadow:0 8px 24px #000
 
 }
 /* ===== SMOOTH PAGE CHANGES: the new page fades and slides up gently ===== */
-@keyframes pgin{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-main#app.pgin{animation:pgin .26s cubic-bezier(.2,.7,.2,1)}
+@keyframes pgin{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+main#app.pgin{animation:pgin .32s cubic-bezier(.22,.61,.36,1)}
+main#app{view-transition-name:page}
+::view-transition-group(page){animation:none}
+::view-transition-old(page){animation:vtout .16s ease-in both}
+::view-transition-new(page){animation:vtin .34s cubic-bezier(.22,.61,.36,1) .06s both}
+::view-transition-old(root),::view-transition-new(root){animation-duration:.2s}
+@keyframes vtout{to{opacity:0;transform:translateY(-6px)}}
+@keyframes vtin{from{opacity:0;transform:translateY(10px)}}
+@media(prefers-reduced-motion:reduce){::view-transition-old(page),::view-transition-new(page){animation:none}}
 :root:not(#z) main :is(.chips,.sub)>:is(button,a){transition:border-color .2s,color .2s}
 :root:not(#z) header .bar nav :is(button,a){transition:background-color .2s,color .2s}
 @media(prefers-reduced-motion:reduce){main#app.pgin{animation:none}}
@@ -889,6 +897,9 @@ h3.hhd{cursor:default;margin:0;padding:12px 4px 8px;min-height:0}h3.hhd:hover b{
 .hfz{max-width:420px}
 @media(max-width:760px){.hacc{grid-template-columns:1fr}.hhd{padding:11px 2px}}
 /* ===== CHAT LIST ===== */
+.ctop{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.ctop .pass{display:flex;gap:8px;flex:1;min-width:240px;max-width:440px;margin:0}
+.ctop .pass input{flex:1;min-width:0}
 .clist{display:flex;flex-direction:column;border-top:2px solid var(--ink,#0a0a0a)}
 .crow{all:unset;box-sizing:border-box;display:flex;align-items:center;gap:12px;padding:12px 6px;border-bottom:1px solid #e5e5e5;cursor:pointer;position:relative}
 .crow:hover{background:#f6f6f6}
@@ -1634,9 +1645,9 @@ if(SB)loadGroups();const fr=chatFriends(),list=allChats();
 if(!room||!(list.some(x=>x[0]===room)||ROOMS.some(x=>x[0]===room)||(room.startsWith("g:")&&!GROUPS)))room=(list[0]||ROOMS[0])[0];
 const rb=x=>`<button data-room="${esc(x[0])}" aria-pressed="${room===x[0]}" class="${UNREAD.has(x[0])?"hasdot":""}">${x[2]==="dm"?avSm(dmOther(x[0]),x[1].replace(/^\S+\s/,""),"xs")+esc(x[1].replace(/^\S+\s/,""))+onDot(dmOther(x[0])):esc(x[1])}</button>`,grp=list.filter(x=>x[2]==="grp"),dms=list.filter(x=>x[2]==="dm").sort((a,b)=>ONLINE.has(dmOther(b[0]))-ONLINE.has(dmOther(a[0])));
 if(!CHATOPEN&&!NEWG){loadLast(list);const rows=[...list,...ROOMS].map(x=>({x,m:LASTM[x[0]]})).sort((a,b)=>(b.m?+new Date(b.m.t):0)-(a.m?+new Date(a.m.t):0)),nm_=x=>x[1].replace(/^\S+\s/,"");
-  return h+`<div class="row" style="justify-content:flex-start;gap:10px;flex-wrap:wrap;margin:0 0 10px">${SB&&fr.length>=2?`<button class="btn ghost" data-newg>+ ${L("New group chat")}</button>`:""}</div><div class="pass" style="max-width:420px"><input id="frcode" placeholder="${L("Friend's code")}" maxlength="6" autocapitalize="characters" aria-label="Friend code" style="text-transform:uppercase"><button class="btn" data-addcode="1">${L("Add friend")}</button></div><p id="frmsg" role="status" class="sl" style="margin:6px 0 12px"></p><div class="clist">${rows.map(({x,m})=>`<button class="crow${UNREAD.has(x[0])?" hasdot":""}" data-room="${esc(x[0])}">${x[2]==="dm"?avSm(dmOther(x[0]),nm_(x),"xs"):`<span class="cav" aria-hidden="true">${esc(x[1].split(" ")[0])}</span>`}<span class="cmain"><b data-notr>${esc(nm_(x))}</b><small>${m?esc(((x[2]!=="dm"&&m.n)?m.n+": ":"")+m.b.split("\n")[0].slice(0,90)):L("No messages yet")}</small></span>${m?`<time>${ago(m.t)}</time>`:""}</button>`).join("")}</div>`}
+  return h+`<div class="ctop">${SB?`<button class="btn ghost" data-newg>+ ${L("New group chat")}</button>`:""}<div class="pass"><input id="frcode" placeholder="${L("Friend's code")}" maxlength="6" autocapitalize="characters" aria-label="Friend code" style="text-transform:uppercase"><button class="btn" data-addcode="1">${L("Add friend")}</button></div></div><p id="frmsg" role="status" class="sl" style="margin:6px 0 12px"></p><div class="clist">${rows.map(({x,m})=>`<button class="crow${UNREAD.has(x[0])?" hasdot":""}" data-room="${esc(x[0])}">${x[2]==="dm"?avSm(dmOther(x[0]),nm_(x),"xs"):`<span class="cav" aria-hidden="true">${esc(x[1].split(" ")[0])}</span>`}<span class="cmain"><b data-notr>${esc(nm_(x))}</b><small>${m?esc(((x[2]!=="dm"&&m.n)?m.n+": ":"")+m.b.split("\n")[0].slice(0,90)):L("No messages yet")}</small></span>${m?`<time>${ago(m.t)}</time>`:""}</button>`).join("")}</div>`}
 const side=`<div class="panel rooms" id="chatrooms" style="padding:14px"><div class="rhead"><h3>Groups</h3>${SB&&fr.length>=2?`<button class="plus" data-newg aria-label="New group chat" title="New group chat">+</button>`:""}</div>${grp.length?grp.map(rb).join(""):`<p class="sl" style="margin:0 0 4px">Add friends to chat with them.</p>`}${SB&&fr.length===1?`<p class="sl" style="margin:4px 0">Add another friend to make your own groups.</p>`:""}<h3 style="margin:16px 0 8px">Friends</h3>${dms.length?dms.map(rb).join(""):'<p class="sl" style="margin:0 0 4px">No friends yet. Type a friend’s code to add them:</p>'}<div class="pass" style="margin-top:8px"><input id="frcode" placeholder="${L("Friend's code")}" maxlength="6" autocapitalize="characters" aria-label="Friend code" style="text-transform:uppercase"><button class="btn" data-addcode="1">${L("Add friend")}</button></div><p id="frmsg" role="status" class="sl" style="margin-bottom:0"></p><div style="margin-top:12px">${ROOMS.map(rb).join("")}</div></div>`;
-if(NEWG)return h+`<p style="color:var(--mute);margin:0 0 12px">Private chats and group chats with your friends. Only the people in a chat can see it.</p><div class="chat chat1"><div class="panel" style="padding:14px"><button class="back" data-gcancel style="margin:0 0 8px">← ${L("All chats")}</button><h3>➕ New group chat</h3><input id="gname" class="gname" placeholder="Group name" maxlength="40" value="${esc(NEWG.name)}" aria-label="Group name"><p class="sl">Pick 2 or more friends:</p><div class="gpick">${fr.map(f=>`<button class="chip" data-gpick="${esc(f.id)}" aria-pressed="${NEWG.sel.includes(f.id)}">${NEWG.sel.includes(f.id)?"✓ ":""}${esc(f.name)}</button>`).join("")}</div><p class="sl" role="status">${esc(L(NEWG.msg||""))}</p><div class="row" style="justify-content:flex-start;gap:10px;flex-wrap:wrap"><button class="btn" data-gcreate ${NEWG.sel.length>=2?"":"disabled"}>${L("Create group")} <b>${NEWG.sel.length}</b></button><button class="btn ghost" data-gcancel>Cancel</button></div></div></div>`;
+if(NEWG)return h+`<p style="color:var(--mute);margin:0 0 12px">Private chats and group chats with your friends. Only the people in a chat can see it.</p><div class="chat chat1"><div class="panel" style="padding:14px"><button class="back" data-gcancel style="margin:0 0 8px">← ${L("All chats")}</button><h3>➕ New group chat</h3><input id="gname" class="gname" placeholder="Group name" maxlength="40" value="${esc(NEWG.name)}" aria-label="Group name"><p class="sl">${fr.length<2?L("You need at least 2 friends to make a group. Add friends with their code first."):"Pick 2 or more friends:"}</p><div class="gpick">${fr.map(f=>`<button class="chip" data-gpick="${esc(f.id)}" aria-pressed="${NEWG.sel.includes(f.id)}">${NEWG.sel.includes(f.id)?"✓ ":""}${esc(f.name)}</button>`).join("")}</div><p class="sl" role="status">${esc(L(NEWG.msg||""))}</p><div class="row" style="justify-content:flex-start;gap:10px;flex-wrap:wrap"><button class="btn" data-gcreate ${NEWG.sel.length>=2?"":"disabled"}>${L("Create group")} <b>${NEWG.sel.length}</b></button><button class="btn ghost" data-gcancel>Cancel</button></div></div></div>`;
 const g=groupOf(room),head=room.startsWith("af:")?(room===afId(me.id)?`<div class="chead"><b>👥 All my friends</b><small>Everyone you're friends with can read and write here.</small></div>`:`<div class="chead"><b>${esc((list.find(x=>x[0]===room)||[,""])[1])}</b><small>${L("Friends chat of")} <span data-notr>${esc(fname(room.slice(3)))}</span></small></div>`)
 :g?`<div class="chead"><b>💬 <span data-notr>${esc(g.name)}</span></b>${LEAVEASK===g.id?`<span class="leave">${L("Leave this group?")} <button class="btn" data-leavegyes="${g.id}">Yes, leave</button><button class="btn ghost" data-leaveg="${g.id}">Cancel</button></span>`:`<button class="back" data-leaveg="${g.id}">Leave group</button>`}<small data-notr>${g.members.map(m=>esc(m.id===me.id?L("You"):m.name)).join(", ")}</small></div>`:"";
 return h+`<p style="color:var(--mute);margin:0 0 12px">${SB?"Private chats and group chats with your friends. To keep chat safe, admins can see messages.":"Demo mode: messages stay on this device."}</p><div class="chat chat1"><div class="panel" style="padding:14px"><button class="back" data-chatback="1" style="margin:0 0 8px">← ${L("All chats")}</button>${head||`<div class="chead"><b data-notr>${esc(((list.find(x=>x[0]===room)||ROOMS.find(x=>x[0]===room))||[,""])[1].replace(/^\S+\s/,""))}</b></div>`}<div class="thread" id="thread"></div>${MYR?`<p class="restrict" role="status">🔒 ${esc(restrictText(MYR))}${MYR.reason?` Reason: ${esc(MYR.reason)}`:""}</p>`:""}<div class="sendrow"><input id="msgin" placeholder="${MYR?"You can't send messages right now":"Message"}" aria-label="Message" maxlength="500" ${MYR?"disabled":""}><button class="btn" data-send ${MYR?"disabled":""}>Send</button></div></div></div>`}
@@ -2039,7 +2050,7 @@ document.addEventListener("keydown",e=>{if(e.key==="Enter"&&e.target.closest&&e.
 function GUEST(){return!me}function USER(){return!!me}
 const GUEST_LIMIT=60000;
 function guestSince(){try{let t=+localStorage.getItem("rf_guest_since");if(!t){t=Date.now();localStorage.setItem("rf_guest_since",String(t))}return t}catch(e){return Date.now()}}
-function guestTimeUp(){return!me&&!!SB&&Date.now()-guestSince()>=GUEST_LIMIT}
+function guestTimeUp(){return false}/* no time limit: visitors can look around for as long as they like (the sign-in reminders at good moments stay) */
 setInterval(()=>{if(guestTimeUp()&&authReady&&tab!=="account"){document.querySelector(".shorts")?.remove();document.getElementById("signask")?.remove();document.body.classList.remove("noscroll");try{gameStop()}catch(e){}render()}},3000);
 const GOK=["home","news","matches","tables","form","arcade","gallery","stadium","getapp","account"];
 function lbLock(){return`<div class="panel lblock"><h3>🏆 ${L("Leaderboards")}</h3><p class="sl">${L("Sign in to see the leaderboards and get your name on them.")}</p><button class="btn" data-t="account">🔐 ${L("Sign in for leaderboards")}</button></div>`}
@@ -5165,7 +5176,7 @@ function bugLog(kind,msg,detail){try{if(!SB||BUGN>=20)return;msg=String(msg||"")
   const dev=(innerWidth<761?"Phone":"Computer")+" · "+((navigator.userAgent.match(/(Edg|OPR|SamsungBrowser|CriOS|Chrome|Firefox|FxiOS|Version)\/\d+/)||["?"])[0]).replace("Version","Safari");
   SB.rpc("log_error",{p_kind:kind,p_msg:msg,p_page:pg,p_detail:String(detail||"").slice(0,1500),p_device:dev}).then(()=>{},()=>{})}catch(e){}}
 addEventListener("error",e=>{if(!e.message||/^Script error/.test(e.message)||/ResizeObserver/.test(e.message))return;bugLog("error",e.message,(String(e.filename||"").split("/").pop()||"page")+" line "+e.lineno+":"+e.colno+"\n"+(e.error&&e.error.stack||""))});
-addEventListener("unhandledrejection",e=>{const r=e.reason;const m=String(r&&r.message||r||"");if(!m||/Failed to fetch|NetworkError|Load failed|aborted/i.test(m))return;bugLog("error","Unhandled: "+m,r&&r.stack)});
+addEventListener("unhandledrejection",e=>{const r=e.reason;const m=String(r&&r.message||r||"");if(!m||/Failed to fetch|NetworkError|Load failed|aborted|Transition was skipped/i.test(m))return;bugLog("error","Unhandled: "+m,r&&r.stack)});
 
 /* the checks: [{ok, t (what was checked), d (details)}] */
 async function bugChecks(deep){const R=[],add=(ok,t,d)=>{R.push({ok,t,d:d||""});if(!ok)bugLog("check",t,d)};const MAIN=["PL","PD","SA","BL1","FL1","PPL"];
@@ -5193,9 +5204,9 @@ async function bugChecks(deep){const R=[],add=(ok,t,d)=>{R.push({ok,t,d:d||""});
     await Promise.all(MAIN.flatMap(c=>months.map(async m=>{try{const j=await fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/${ESPN_LG[c]}/scoreboard?dates=${m}&limit=500`).then(r=>r.json());
       (j.events||[]).forEach(e=>{const co=(e.competitions||[])[0],st=co&&co.status&&co.status.type,t=+new Date(e.date);if(!st||st.state!=="post"||st.completed===false||Date.now()-t>30*864e5||Date.now()-t<4*36e5)return;
         const H=co.competitors.find(x=>x.homeAway==="home"),A=co.competitors.find(x=>x.homeAway==="away");if(!H||!A)return;const hn=H.team.shortDisplayName||H.team.displayName,an=A.team.shortDisplayName||A.team.displayName;
-        const sH=r=>same(r.h,hn)||same(r.h,H.team.displayName),sA=r=>same(r.a,an)||same(r.a,A.team.displayName),near=HIST().filter(r=>r.c===c&&Math.abs(new Date(r.t)-t)<30*36e5&&(sH(r)||sA(r)));
+        const sH=r=>same(r.h,hn)||same(r.h,H.team.displayName),sA=r=>same(r.a,an)||same(r.a,A.team.displayName),dt=r=>Math.abs(new Date(r.t)-t),near=HIST().filter(r=>r.c===c&&dt(r)<6*36e5&&(sH(r)||sA(r))).sort((a,b)=>(sH(b)&&sA(b))-(sH(a)&&sA(a))||dt(a)-dt(b));
         /* both teams if possible; one is enough when the two sources spell a club differently (Köln / Cologne) */
-        const x=near.find(r=>sH(r)&&sA(r))||(near.length===1?near[0]:null);
+        const x=near[0];/* the game at (nearly) the same kick-off time; both teams matching comes first */
         if(!x)diff.push(`Missing: ${hn} ${H.score}-${A.score} ${an} · ${LGS_(c)} ${new Date(t).toLocaleDateString("en-GB")}`);
         else if(+x.hs!==+H.score||+x.as!==+A.score)diff.push(`Different score: ${x.h} ${x.hs}-${x.as} ${x.a}, ESPN says ${H.score}-${A.score}`)})}catch(e){}})));
     add(!diff.length,diff.length?diff.length+" results don't match ESPN":"All results from the last 30 days match ESPN",[...new Set(diff)].slice(0,25).join("\n"))}
@@ -5284,14 +5295,18 @@ function bugsPage(){if(!SB)return'<p class="sl">Needs Supabase.</p>';if(BUGS.lis
   let lastPage="";
   function pageKey(){try{return [tab,typeof gsub!=="undefined"?gsub:"",typeof fsub!=="undefined"?fsub:"",typeof nm!=="undefined"?nm:""].join("|")}catch(e){return ""}}
   /* only a real page change animates, not the small refreshes while you are on a page */
-  function smooth(){const k=pageKey();if(k===lastPage)return;const first=!lastPage;lastPage=k;if(first)return;app.classList.remove("pgin");void app.offsetWidth;app.classList.add("pgin");clearTimeout(smooth.t);smooth.t=setTimeout(()=>app.classList.remove("pgin"),450)}
+  function smooth(){const k=pageKey();if(k===lastPage)return false;const first=!lastPage;lastPage=k;if(first||VTING)return true;app.classList.remove("pgin");void app.offsetWidth;app.classList.add("pgin");clearTimeout(smooth.t);smooth.t=setTimeout(()=>app.classList.remove("pgin"),500);return true}
+  /* switching to another tab: the old page fades out while the new one glides in (browsers that can; others use the fade above) */
+  let VTING=false;
+  if(document.startViewTransition&&typeof render==="function"){const _render=render;render=function(){const args=arguments,k=pageKey();
+    if(!lastPage||k.split("|")[0]===lastPage.split("|")[0]||document.hidden||!ST.motion||matchMedia("(prefers-reduced-motion: reduce)").matches)return _render.apply(this,args);
+    VTING=true;try{let ran=false;const t=document.startViewTransition(()=>{ran=true;_render.apply(window,args)});[t.ready,t.updateCallbackDone,t.finished].forEach(p=>p.catch(()=>{}));t.finished.finally(()=>{VTING=false}).catch(()=>{});setTimeout(()=>{if(!ran)t.skipTransition()},200)/* never keep the new page waiting */}catch(e){VTING=false;_render.apply(this,args)}}}
   app.addEventListener("animationend",()=>app.classList.remove("pgin"));
   function build(){
-    setH();smooth();
-    if(app.firstElementChild&&app.firstElementChild.classList.contains("pinhead"))return;
-    if(free())return;
-    gamePick();evenTabs();
-    head();
+    setH();const changed=smooth();
+    if(!(app.firstElementChild&&app.firstElementChild.classList.contains("pinhead"))&&!free()){gamePick();evenTabs();head()}
+    /* a new page gets its final size straight away, so nothing jumps after it appears */
+    if(changed){plain();fit()}
   }
   let q=false;
   new MutationObserver(()=>{if(q)return;q=true;queueMicrotask(()=>{q=false;build()})}).observe(app,{childList:true});
