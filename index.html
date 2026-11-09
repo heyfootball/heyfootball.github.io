@@ -880,7 +880,8 @@ body.fitpage main#app{padding-bottom:12px!important}
 .hhd small+i{margin-left:6px}
 .hhd:hover b{color:var(--flare,#ff4a1c)}
 .hhd:focus-visible{outline:2px solid var(--flare,#ff4a1c);outline-offset:2px}
-.hbody{padding:2px 4px 18px;animation:pgin .22s ease}
+.hbody{padding:2px 4px 18px}
+h3.hhd{cursor:default;margin:0;padding:12px 4px 8px;min-height:0}h3.hhd:hover b{color:inherit}
 .hbody .panel{border:0!important;padding:0!important;margin:0!important;background:none!important;box-shadow:none!important}
 .hbody .hhead{display:none}
 .hscore{font-size:18px;margin:4px 0 6px}
@@ -911,6 +912,17 @@ body.fitpage main#app{padding-bottom:12px!important}
 :root:not(#z) .nlk.on b{color:#fff!important}
 /* the old design: hide the new-design extras */
 #z .gamepick,#z .navgrp{display:none!important}
+
+/* ===== ADMIN → BUGS ===== */
+.bugrow{border-top:1px solid #e5e5e5;padding:10px 0}
+.bugrow summary{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;cursor:pointer;list-style:none}
+.bugrow summary::-webkit-details-marker{display:none}
+.bugrow summary b{flex:1;min-width:200px;word-break:break-word}
+.bugrow summary small{color:var(--mute);width:100%;padding-left:28px}
+.bugpre{white-space:pre-wrap;word-break:break-word;font:12px/1.45 ui-monospace,Consolas,monospace;background:#f4f4f4;padding:10px;margin:8px 0;max-height:260px;overflow:auto}
+.bugrun{margin-top:14px;display:grid;gap:6px}
+.bugck{padding:8px 10px;background:#f6f6f6;border-left:4px solid #0b7a3e}
+.bugck.no{border-left-color:#c62828;background:#fff1ec}
 /* ===== EVEN CALMER: News starts with the stories, not three strips of scores ===== */
 :root:not(#z) main :is(.livestrip,.rsc,.tick){display:none!important}
 /* ===== CALMER: the menu is in 4 labelled groups, the floating event effects are gone ===== */
@@ -1622,8 +1634,7 @@ if(SB)loadGroups();const fr=chatFriends(),list=allChats();
 if(!room||!(list.some(x=>x[0]===room)||ROOMS.some(x=>x[0]===room)||(room.startsWith("g:")&&!GROUPS)))room=(list[0]||ROOMS[0])[0];
 const rb=x=>`<button data-room="${esc(x[0])}" aria-pressed="${room===x[0]}" class="${UNREAD.has(x[0])?"hasdot":""}">${x[2]==="dm"?avSm(dmOther(x[0]),x[1].replace(/^\S+\s/,""),"xs")+esc(x[1].replace(/^\S+\s/,""))+onDot(dmOther(x[0])):esc(x[1])}</button>`,grp=list.filter(x=>x[2]==="grp"),dms=list.filter(x=>x[2]==="dm").sort((a,b)=>ONLINE.has(dmOther(b[0]))-ONLINE.has(dmOther(a[0])));
 if(!CHATOPEN&&!NEWG){loadLast(list);const rows=[...list,...ROOMS].map(x=>({x,m:LASTM[x[0]]})).sort((a,b)=>(b.m?+new Date(b.m.t):0)-(a.m?+new Date(a.m.t):0)),nm_=x=>x[1].replace(/^\S+\s/,"");
-  return h+`<div class="clist">${rows.map(({x,m})=>`<button class="crow${UNREAD.has(x[0])?" hasdot":""}" data-room="${esc(x[0])}">${x[2]==="dm"?avSm(dmOther(x[0]),nm_(x),"xs"):`<span class="cav" aria-hidden="true">${esc(x[1].split(" ")[0])}</span>`}<span class="cmain"><b data-notr>${esc(nm_(x))}</b><small>${m?esc(((x[2]!=="dm"&&m.n)?m.n+": ":"")+m.b.split("\n")[0].slice(0,90)):L("No messages yet")}</small></span>${m?`<time>${ago(m.t)}</time>`:""}</button>`).join("")}</div>
-  <div class="row" style="justify-content:flex-start;gap:10px;flex-wrap:wrap;margin-top:12px">${SB&&fr.length>=2?`<button class="btn ghost" data-newg>+ ${L("New group chat")}</button>`:""}</div><div class="pass" style="margin-top:12px;max-width:420px"><input id="frcode" placeholder="${L("Friend's code")}" maxlength="6" autocapitalize="characters" aria-label="Friend code" style="text-transform:uppercase"><button class="btn" data-addcode="1">${L("Add friend")}</button></div><p id="frmsg" role="status" class="sl" style="margin-bottom:0"></p>`}
+  return h+`<div class="row" style="justify-content:flex-start;gap:10px;flex-wrap:wrap;margin:0 0 10px">${SB&&fr.length>=2?`<button class="btn ghost" data-newg>+ ${L("New group chat")}</button>`:""}</div><div class="pass" style="max-width:420px"><input id="frcode" placeholder="${L("Friend's code")}" maxlength="6" autocapitalize="characters" aria-label="Friend code" style="text-transform:uppercase"><button class="btn" data-addcode="1">${L("Add friend")}</button></div><p id="frmsg" role="status" class="sl" style="margin:6px 0 12px"></p><div class="clist">${rows.map(({x,m})=>`<button class="crow${UNREAD.has(x[0])?" hasdot":""}" data-room="${esc(x[0])}">${x[2]==="dm"?avSm(dmOther(x[0]),nm_(x),"xs"):`<span class="cav" aria-hidden="true">${esc(x[1].split(" ")[0])}</span>`}<span class="cmain"><b data-notr>${esc(nm_(x))}</b><small>${m?esc(((x[2]!=="dm"&&m.n)?m.n+": ":"")+m.b.split("\n")[0].slice(0,90)):L("No messages yet")}</small></span>${m?`<time>${ago(m.t)}</time>`:""}</button>`).join("")}</div>`}
 const side=`<div class="panel rooms" id="chatrooms" style="padding:14px"><div class="rhead"><h3>Groups</h3>${SB&&fr.length>=2?`<button class="plus" data-newg aria-label="New group chat" title="New group chat">+</button>`:""}</div>${grp.length?grp.map(rb).join(""):`<p class="sl" style="margin:0 0 4px">Add friends to chat with them.</p>`}${SB&&fr.length===1?`<p class="sl" style="margin:4px 0">Add another friend to make your own groups.</p>`:""}<h3 style="margin:16px 0 8px">Friends</h3>${dms.length?dms.map(rb).join(""):'<p class="sl" style="margin:0 0 4px">No friends yet. Type a friend’s code to add them:</p>'}<div class="pass" style="margin-top:8px"><input id="frcode" placeholder="${L("Friend's code")}" maxlength="6" autocapitalize="characters" aria-label="Friend code" style="text-transform:uppercase"><button class="btn" data-addcode="1">${L("Add friend")}</button></div><p id="frmsg" role="status" class="sl" style="margin-bottom:0"></p><div style="margin-top:12px">${ROOMS.map(rb).join("")}</div></div>`;
 if(NEWG)return h+`<p style="color:var(--mute);margin:0 0 12px">Private chats and group chats with your friends. Only the people in a chat can see it.</p><div class="chat chat1"><div class="panel" style="padding:14px"><button class="back" data-gcancel style="margin:0 0 8px">← ${L("All chats")}</button><h3>➕ New group chat</h3><input id="gname" class="gname" placeholder="Group name" maxlength="40" value="${esc(NEWG.name)}" aria-label="Group name"><p class="sl">Pick 2 or more friends:</p><div class="gpick">${fr.map(f=>`<button class="chip" data-gpick="${esc(f.id)}" aria-pressed="${NEWG.sel.includes(f.id)}">${NEWG.sel.includes(f.id)?"✓ ":""}${esc(f.name)}</button>`).join("")}</div><p class="sl" role="status">${esc(L(NEWG.msg||""))}</p><div class="row" style="justify-content:flex-start;gap:10px;flex-wrap:wrap"><button class="btn" data-gcreate ${NEWG.sel.length>=2?"":"disabled"}>${L("Create group")} <b>${NEWG.sel.length}</b></button><button class="btn ghost" data-gcancel>Cancel</button></div></div></div>`;
 const g=groupOf(room),head=room.startsWith("af:")?(room===afId(me.id)?`<div class="chead"><b>👥 All my friends</b><small>Everyone you're friends with can read and write here.</small></div>`:`<div class="chead"><b>${esc((list.find(x=>x[0]===room)||[,""])[1])}</b><small>${L("Friends chat of")} <span data-notr>${esc(fname(room.slice(3)))}</span></small></div>`)
@@ -2783,8 +2794,8 @@ function homePage(){const hr=new Date().getHours(),greet=hr<12?L("Good morning")
     ["leaders","🏆",L("Leaders"),"",()=>homeLeaders()],
     ["form","📈",L("Form"),"",()=>homeForm()||load],
     ["hot","🔥",L("Hot right now"),"",()=>homeHot()]];
-  return`<section class="hhero"><div><h2>${greet}${me?", "+esc(me.name.split(" ")[0]):""} 👋</h2><p class="sl" style="margin:0">${L("Tap a title to open it.")}</p></div></section>
-<div class="hacc">${T.map(([k,ic,t,sum,body])=>{const on=HACC===k;return`<div class="hit${on?" on":""}"><button class="hhd" data-hacc="${k}" aria-expanded="${on}"><span class="hic" aria-hidden="true">${ic}</span><b>${t}</b>${sum?`<small>${esc(sum)}</small>`:""}<i aria-hidden="true">${on?"−":"+"}</i></button>${on?`<div class="hbody">${body()}</div>`:""}</div>`}).join("")}</div>`}
+  return`<section class="hhero"><div><h2>${greet}${me?", "+esc(me.name.split(" ")[0]):""} 👋</h2><p class="sl" style="margin:0">${L("Here's everything on HeyFootball today.")}</p></div></section>
+<div class="hacc">${T.map(([k,ic,t,sum,body])=>`<section class="hit" data-hk="${k}"><h3 class="hhd"><span class="hic" aria-hidden="true">${ic}</span><b>${t}</b></h3><div class="hbody">${body()}</div></section>`).join("")}</div>`}
 /* the two games played by the most people this week (Supabase popular_games) */
 function homePlay(){if(SB&&Date.now()-POPAT>600000){POPAT=Date.now();SB.rpc("popular_games").then(({data,error})=>{POP=error?[]:(data||[]);if(tab==="home"&&HACC==="play")render()},()=>{POP=[]})}
   if(POP===null&&SB)return`<p class="sl">${L("Loading…")}</p>`;
@@ -4595,8 +4606,9 @@ aMsg="";AD.overview=undefined}catch(e){aMsg="⚠️ "+e.message}render()}
 const FEATS={news:"📰 News",matches:"⚽ Matches & Tables",chat:"💬 Chat",arcade:"🎮 Arcade",gallery:"🃏 Cards",friends:"👥 Friends",trading:"🔄 Trading"};
 function adminPage(){const h='<h2 style="font-size:40px;margin-bottom:6px">🛡️ Admin</h2>';
 if(!ADMIN)return h+'<p class="sl">This area is only for HeyFootball administrators.</p>';
-const subs=[["overview","📊 Overview"],["reports","🚩 Reports"],["chat","💬 Chat"],["users","👤 Users"],["safety","🧰 Safety"],["site","🌐 Site"],["audit","📜 Audit log"],["admins","🛡️ Admins"],["visits","📈 Visitors"],["fun","🔥 Abuse & Arcade"],["blog","📝 Blog"]];
+const subs=[["overview","📊 Overview"],["reports","🚩 Reports"],["chat","💬 Chat"],["users","👤 Users"],["safety","🧰 Safety"],["site","🌐 Site"],["audit","📜 Audit log"],["admins","🛡️ Admins"],["visits","📈 Visitors"],["fun","🔥 Abuse & Arcade"],["blog","📝 Blog"],["bugs","🐞 Bugs"]];
 const nav=`<p class="sl" style="margin-top:0">Everything here is checked by Supabase. Every action is recorded in the audit log under your name.</p><div class="sub gamechips">${subs.map(([k,l])=>`<button class="chip" data-as="${k}" aria-pressed="${asub===k}">${l}</button>`).join("")}</div>${aMsg?`<p class="amsg" role="alert">${esc(aMsg)}</p>`:""}`;
+if(asub==="bugs")return h+nav+bugsPage();
 const D=AD[asub];if(D===undefined){aLoad(asub);return h+nav+'<p class="sl">Loading…</p>'}if(D===null)return h+nav+'<p class="sl">Loading…</p>';
 if(D&&D.err)return h+nav+`<p class="amsg">⚠️ ${esc(D.err)}</p><button class="btn ghost" data-aref>Try again</button>`;
 const tile=(v,l)=>`<div class="stile"><b>${v==null?"–":v}</b><span>${l}</span></div>`;
@@ -5065,11 +5077,11 @@ function keepScroll(root,fn){const saved=[];if(root)root.querySelectorAll("*").f
 (()=>{const real=render;render=function(){if(LOADNEXT){LOADNEXT=false;showLoad();setTimeout(()=>{try{real()}finally{hideLoad()}},30);return}if(render.last===tab)keepScroll(document.body,real);else real();if(authReady&&loadEl.classList.contains("first")&&!LOADN)loadEl.classList.remove("on","first")}})();
 // anything you tapped that waits for Supabase (opening packs, battles, posting...) shows it too
 document.addEventListener("click",()=>{LASTCLICK=Date.now()},true);
-if(SB){const rr=SB.rpc.bind(SB),quiet=["hit","stadium_claim","react_get","react_send","stadium_get","ping","mark_seen","fz_my_stats","live_room","battle_list","lb_history","friends_online","lb_state","lb_invite","lb_answer","lb_deck","lb_play","inbox_get","inbox_mark","collection_state","is_site_owner"];SB.rpc=function(fn,args,opt){const p=Promise.resolve(rr(fn,args,opt));if(Date.now()-LASTCLICK<1500&&!quiet.includes(fn)){showLoad();p.then(hideLoad,hideLoad)}return p}}document.addEventListener("click",e=>{let t=e.target.closest("button,i,[data-open],[data-lvteam],[data-splayer]");if(!t)return;
+if(SB){const rr=SB.rpc.bind(SB),quiet=["log_error","admin_errors","popular_games","hit","stadium_claim","react_get","react_send","stadium_get","ping","mark_seen","fz_my_stats","live_room","battle_list","lb_history","friends_online","lb_state","lb_invite","lb_answer","lb_deck","lb_play","inbox_get","inbox_mark","collection_state","is_site_owner"];SB.rpc=function(fn,args,opt){const p=Promise.resolve(rr(fn,args,opt));if(fn!=="log_error")p.then(r=>{const m=r&&r.error&&r.error.message||"";if(m&&typeof bugLog==="function"&&/function|does not exist|schema cache|relation|column|permission denied|violates|syntax|ambiguous/i.test(m))bugLog("server",fn+": "+m.slice(0,200),JSON.stringify(args||{}).slice(0,300))},()=>{});if(Date.now()-LASTCLICK<1500&&!quiet.includes(fn)){showLoad();p.then(hideLoad,hideLoad)}return p}}document.addEventListener("click",e=>{let t=e.target.closest("button,i,[data-open],[data-lvteam],[data-splayer]");if(!t)return;
 if((t.dataset.lvteam||t.dataset.splayer)&&t.tagName!=="BUTTON"){e.preventDefault();const pb=t.parentElement&&t.parentElement.closest("button");if(pb&&Object.keys(pb.dataset).some(k=>!/^(lvteam|splayer|enAriaLabel|trAriaLabel)$/.test(k)))t=pb}
 if(t.dataset.open)e.preventDefault();const d=t.dataset;
 if(d.t){if(d.g)curGame=d.g;if(d.lbk)LBK=d.lbk;if(d.t!==tab)LOADNEXT=true;if(d.t==="friends"&&tab!=="friends")FD.loaded=false;if(d.t==="leagues"){LQ.list=null;LQ.msg=""}if(d.t==="clubs"){CW.d=null;CW.msg="";CW.pick=null}if(d.t==="stadium"&&tab!=="stadium"){STD.view=null;STD.data=null;STD.watch=null;STD.msg="";STD.form=null}if(d.t==="fanzone"&&tab!=="fanzone"){FZ.list=null;FZ.msg=""}if(d.t==="gallery"&&tab!=="gallery"){BT.msg="";LB.hist=null;btCheck();if(btIn().length){gsub="battle";BT.step=null;BT.show=null}}if(d.t==="matches"){MR.on=false;MR.id=null;mday=0}if(d.t==="chat")CHATOPEN=false;tab=d.t;open=null;$("#more").hidden=true;$(".tabbar [data-more]").setAttribute("aria-expanded","false");scrollTo(0,0)}else if(d.more!==undefined){const m=$("#more");m.hidden=!m.hidden;t.closest(".tabbar")&&t.setAttribute("aria-expanded",String(!m.hidden));$(".tabbar [data-more]").setAttribute("aria-expanded",String(!m.hidden));return}else if(d.cat)cat=d.cat;else if(d.g)curGame=d.g;else if(d.wk){wKey(d.wk);return}else if(d.mt)msub=d.mt;else if(d.room){room=d.room;CHATOPEN=true;NEWG=null;LEAVEASK=null;markSeen(room);if(innerWidth<=700)setTimeout(()=>{const t=document.getElementById("thread");if(t)t.closest(".panel").scrollIntoView({block:"start"})},60)/* phones: show the chat you picked */}else if(d.send!==undefined){doSend();return}else if(d.addf!==undefined){addFriend();return}else if(d.lg){lg=d.lg;lgSet=true}else if(d.qa!==undefined){qAns(+d.qa);return}else if(d.mc!==undefined){mFlip(+d.mc);return}else if(d.yt!==undefined){const y=CFG.YT[+d.yt];logAct("tutorial",{t:y.t});t.closest(".yt").querySelector(".thumb").outerHTML=`<iframe class="ytf" src="https://www.youtube-nocookie.com/embed/${y.id}?autoplay=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="${y.t}"></iframe>`;return}else if(d.open){closeSearch();openFrom=tab==="news"?openFrom||"news":tab;open=d.open;tab="news";setTimeout(()=>scrollTo(0,0),0);const n=ANY().find(x=>x.id===d.open);if(n&&n.url&&!VIEWED.has(n.id)){VIEWED.add(n.id);logAct("view",{t:n.t.slice(0,200),url:n.url})}}
-else if(d.hacc){HACC=HACC===d.hacc?"":d.hacc}else if(d.trside){trSide=d.trside}else if(d.chatback!==undefined){CHATOPEN=false;LASTMAT=0}else if(d.htrade){tab="friends";FD.loaded=false;delete TRG[d.htrade];TRMT=0;trSel={to:d.htrade,give:[],get:[]};trMsg="";fsub="trade";trSide="give";scrollTo(0,0)}else if(d.classic!==undefined){const v=d.classic==="1";if(!!ST.classic===v)return;ST.classic=v;saveST();location.reload();return}else if(d.fs){fsub=d.fs;unfAsk=null;if(d.fs!=="profile")fView=null;if(d.fs==="feed")loadFriends()}else if(d.fview){fView=d.fview;fsub="profile";unfAsk=null;delete FD.prof[d.fview]}else if(d.freload){delete FD.prof[d.freload];loadFriend(d.freload);render();return}else if(d.trade){delete TRG[d.trade];TRMT=0;trSel={to:d.trade,give:[],get:[]};trMsg="";fsub="trade";trSide="give"}else if(d.tg){const i=+d.tg,a=trSel.give;trSel.give=a.includes(i)?a.filter(x=>x!==i):a.length<20?[...a,i]:a;trMsg=""}else if(d.tw){const i=+d.tw,a=trSel.get;trSel.get=a.includes(i)?a.filter(x=>x!==i):a.length<20?[...a,i]:a;trMsg=""}else if(d.tsend!==undefined){sendTrade();return}else if(d.tacc){answerTrade(d.tacc,true);return}else if(d.tdec){answerTrade(d.tdec,false);return}else if(d.tcan){cancelTrade(d.tcan);return}else if(d.newg!==undefined){NEWG={name:"",sel:[],msg:""}}else if(d.gpick){NEWG.name=($("#gname")||{}).value||NEWG.name;NEWG.sel=NEWG.sel.includes(d.gpick)?NEWG.sel.filter(x=>x!==d.gpick):[...NEWG.sel,d.gpick];NEWG.msg=""}else if(d.gcreate!==undefined){createGroup();return}else if(d.gcancel!==undefined){NEWG=null}else if(d.leaveg){LEAVEASK=LEAVEASK===+d.leaveg?null:+d.leaveg}else if(d.leavegyes){leaveGroup(+d.leavegyes);return}else if(d.fmlg){fmLg=d.fmlg}else if(d.gadev){gaDev=d.gadev}else if(d.lbk){LBK=d.lbk;lbRender();return}else if(d.tk){TK=d.tk;TOUR=null;TOURERR="";loadTour(true)}
+else if(d.bugrun!==undefined){bugRunNow();return}else if(d.bugclr!==undefined){bugClear(d.bugclr);return}else if(d.hacc){HACC=HACC===d.hacc?"":d.hacc}else if(d.trside){trSide=d.trside}else if(d.chatback!==undefined){CHATOPEN=false;LASTMAT=0}else if(d.htrade){tab="friends";FD.loaded=false;delete TRG[d.htrade];TRMT=0;trSel={to:d.htrade,give:[],get:[]};trMsg="";fsub="trade";trSide="give";scrollTo(0,0)}else if(d.classic!==undefined){const v=d.classic==="1";if(!!ST.classic===v)return;ST.classic=v;saveST();location.reload();return}else if(d.fs){fsub=d.fs;unfAsk=null;if(d.fs!=="profile")fView=null;if(d.fs==="feed")loadFriends()}else if(d.fview){fView=d.fview;fsub="profile";unfAsk=null;delete FD.prof[d.fview]}else if(d.freload){delete FD.prof[d.freload];loadFriend(d.freload);render();return}else if(d.trade){delete TRG[d.trade];TRMT=0;trSel={to:d.trade,give:[],get:[]};trMsg="";fsub="trade";trSide="give"}else if(d.tg){const i=+d.tg,a=trSel.give;trSel.give=a.includes(i)?a.filter(x=>x!==i):a.length<20?[...a,i]:a;trMsg=""}else if(d.tw){const i=+d.tw,a=trSel.get;trSel.get=a.includes(i)?a.filter(x=>x!==i):a.length<20?[...a,i]:a;trMsg=""}else if(d.tsend!==undefined){sendTrade();return}else if(d.tacc){answerTrade(d.tacc,true);return}else if(d.tdec){answerTrade(d.tdec,false);return}else if(d.tcan){cancelTrade(d.tcan);return}else if(d.newg!==undefined){NEWG={name:"",sel:[],msg:""}}else if(d.gpick){NEWG.name=($("#gname")||{}).value||NEWG.name;NEWG.sel=NEWG.sel.includes(d.gpick)?NEWG.sel.filter(x=>x!==d.gpick):[...NEWG.sel,d.gpick];NEWG.msg=""}else if(d.gcreate!==undefined){createGroup();return}else if(d.gcancel!==undefined){NEWG=null}else if(d.leaveg){LEAVEASK=LEAVEASK===+d.leaveg?null:+d.leaveg}else if(d.leavegyes){leaveGroup(+d.leavegyes);return}else if(d.fmlg){fmLg=d.fmlg}else if(d.gadev){gaDev=d.gadev}else if(d.lbk){LBK=d.lbk;lbRender();return}else if(d.tk){TK=d.tk;TOUR=null;TOURERR="";loadTour(true)}
 else if(d.fun){const[a1,a2]=d.fun.split(":");funDo(a1,a2);return}else if(d.trpick!==undefined){t.classList.toggle("on");return}
 else if(d.shorts!==undefined){openShorts();return}
 else if(d.dtp){dreamPick(+d.dtp)}else if(d.dtslot!==undefined){DTSLOT=+d.dtslot}else if(d.dtsave!==undefined){saveDream();return}
@@ -5143,6 +5155,73 @@ else if(d.play){play(d.play);return}else if(d.seek){const[a,b]=d.seek.split(":")
 render()});
 render();
 </script><script>
+/* ---- AUTOMATIC BUG CATCHER (supabase-bug-catcher.sql)
+   1. Every visitor's browser reports crashes and broken Supabase calls by itself.
+   2. Once a day, each device checks the scores, tables, form, news and that every page builds.
+   3. Admins also compare the results with ESPN every 6 hours, and get told when something new turns up.
+   Everything lands in Admin -> Bugs. ---- */
+const BUGSENT=new Set();let BUGN=0;
+function bugLog(kind,msg,detail){try{if(!SB||BUGN>=20)return;msg=String(msg||"").slice(0,300);if(!msg)return;const pg=String(typeof tab!=="undefined"?tab:"");const k=kind+"|"+msg+"|"+pg;if(BUGSENT.has(k))return;BUGSENT.add(k);BUGN++;
+  const dev=(innerWidth<761?"Phone":"Computer")+" · "+((navigator.userAgent.match(/(Edg|OPR|SamsungBrowser|CriOS|Chrome|Firefox|FxiOS|Version)\/\d+/)||["?"])[0]).replace("Version","Safari");
+  SB.rpc("log_error",{p_kind:kind,p_msg:msg,p_page:pg,p_detail:String(detail||"").slice(0,1500),p_device:dev}).then(()=>{},()=>{})}catch(e){}}
+addEventListener("error",e=>{if(!e.message||/^Script error/.test(e.message)||/ResizeObserver/.test(e.message))return;bugLog("error",e.message,(String(e.filename||"").split("/").pop()||"page")+" line "+e.lineno+":"+e.colno+"\n"+(e.error&&e.error.stack||""))});
+addEventListener("unhandledrejection",e=>{const r=e.reason;const m=String(r&&r.message||r||"");if(!m||/Failed to fetch|NetworkError|Load failed|aborted/i.test(m))return;bugLog("error","Unhandled: "+m,r&&r.stack)});
+
+/* the checks: [{ok, t (what was checked), d (details)}] */
+async function bugChecks(deep){const R=[],add=(ok,t,d)=>{R.push({ok,t,d:d||""});if(!ok)bugLog("check",t,d)};const MAIN=["PL","PD","SA","BL1","FL1","PPL"];
+  // 1. every page and every Home section builds without crashing
+  const kH=HACC,kM=msub,bad=[];
+  for(const [n,f] of [["Home",()=>homePage()],["News",()=>newsPage()],["Matches",()=>{msub="fix";return matches()}],["Tables",()=>{msub="lg";return matches()}],["Form",()=>formPage()],["Get the app",()=>getAppPage()]]){try{f()}catch(e){bad.push(n);bugLog("check","Page crashed: "+n,e&&e.stack)}}
+  
+  HACC=kH;msub=kM;R.push({ok:!bad.length,t:bad.length?"Pages that crash: "+bad.join(", "):"Every page builds without crashing",d:""});
+  // 2. scores, tables, news
+  add(DATAOK,DATAOK?"Scores loaded":"Scores didn't load from the scores server",DATAOK?"":dataStatus);
+  const noTab=MAIN.filter(c=>((DATA.leagues||{})[LGN(c)]||[]).length<10).map(LGN);
+  add(!noTab.length,noTab.length?"League tables missing: "+noTab.join(", "):"All main league tables are there");
+  const nN=(typeof ALL==="function"?ALL():[]).length;add(nN>0,nN?"News loaded ("+nN+" stories)":"No news stories loaded");
+  // 3. the same match twice
+  const seen={},dups=new Set();[...(DATA.fx||[]),...(DATA.res||[]),...(DATA.live||[])].forEach(m=>{const k=String(m.t).slice(0,10)+"|"+enorm2(m.h).sort().join(" ")+"|"+enorm2(m.a).sort().join(" ");if(seen[k]&&seen[k]!==String(m.id))dups.add(m.h+" v "+m.a+" ("+String(m.t).slice(0,10)+")");seen[k]=String(m.id)});
+  add(!dups.size,dups.size?"The same match is listed twice ("+dups.size+")":"No match is listed twice",[...dups].slice(0,10).join("\n"));
+  // 4. results are up to date, and every team's form has 5 games
+  const stale=MAIN.filter(c=>{const r=HIST().filter(x=>x.c===c).sort((a,b)=>new Date(b.t)-new Date(a.t))[0];return!r||Date.now()-new Date(r.t)>16*864e5}).map(LGN);
+  add(!stale.length,stale.length?"No results in the last 16 days for: "+stale.join(", "):"Every main league has recent results");
+  const short=[];MAIN.forEach(c=>((DATA.leagues||{})[LGN(c)]||[]).forEach(r=>{if(r[1]+r[2]+r[3]>=5&&formOf(r[0]).o.length<5)short.push(r[0]+" ("+formOf(r[0]).o.length+")")}));
+  add(!short.length,short.length?"Form is missing games for "+short.length+" teams":"Every team's form has 5 games",short.slice(0,20).join(", "));
+  // 5. (admins) our results compared with ESPN's, this month and last month
+  if(deep){const diff=[],now=new Date(),mo=d=>d.toISOString().slice(0,7).replace("-",""),months=[mo(now),mo(new Date(now-20*864e5))].filter((x,i,a)=>a.indexOf(x)===i);
+    const STOP=new Set(["united","city","real","club","athletic","atletico","sporting","town","rovers","wanderers","albion","hotspur","olympique","olympic","borussia","racing","stade","deportivo","union","inter","saint","calcio","football","sport"]),same=(a,b)=>xSame(a,b)||enorm2(a).some(w=>w.length>3&&!STOP.has(w)&&enorm2(b).includes(w));
+    await Promise.all(MAIN.flatMap(c=>months.map(async m=>{try{const j=await fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/${ESPN_LG[c]}/scoreboard?dates=${m}&limit=500`).then(r=>r.json());
+      (j.events||[]).forEach(e=>{const co=(e.competitions||[])[0],st=co&&co.status&&co.status.type,t=+new Date(e.date);if(!st||st.state!=="post"||st.completed===false||Date.now()-t>30*864e5||Date.now()-t<4*36e5)return;
+        const H=co.competitors.find(x=>x.homeAway==="home"),A=co.competitors.find(x=>x.homeAway==="away");if(!H||!A)return;const hn=H.team.shortDisplayName||H.team.displayName,an=A.team.shortDisplayName||A.team.displayName;
+        const sH=r=>same(r.h,hn)||same(r.h,H.team.displayName),sA=r=>same(r.a,an)||same(r.a,A.team.displayName),near=HIST().filter(r=>r.c===c&&Math.abs(new Date(r.t)-t)<30*36e5&&(sH(r)||sA(r)));
+        /* both teams if possible; one is enough when the two sources spell a club differently (Köln / Cologne) */
+        const x=near.find(r=>sH(r)&&sA(r))||(near.length===1?near[0]:null);
+        if(!x)diff.push(`Missing: ${hn} ${H.score}-${A.score} ${an} · ${LGS_(c)} ${new Date(t).toLocaleDateString("en-GB")}`);
+        else if(+x.hs!==+H.score||+x.as!==+A.score)diff.push(`Different score: ${x.h} ${x.hs}-${x.as} ${x.a}, ESPN says ${H.score}-${A.score}`)})}catch(e){}})));
+    add(!diff.length,diff.length?diff.length+" results don't match ESPN":"All results from the last 30 days match ESPN",[...new Set(diff)].slice(0,25).join("\n"))}
+  return R}
+
+/* once a day on every device, quietly, a little after the page opens */
+setTimeout(()=>{try{const k="rf_bugday",d=new Date().toISOString().slice(0,10);if(!SB||localStorage.getItem(k)===d)return;localStorage.setItem(k,d)}catch(e){return}bugChecks(false).catch(()=>{})},45000);
+/* admins: the deeper check every 6 hours, and a heads-up when new problems were found */
+setTimeout(async function adminBugs(){if(!(SB&&me&&ADMIN)){setTimeout(adminBugs,60000);return}
+  try{const k="rf_bugdeep";if(Date.now()-(+localStorage.getItem(k)||0)>216e5){localStorage.setItem(k,String(Date.now()));await bugChecks(true)}}catch(e){}
+  try{const{data,error}=await SB.rpc("admin_errors");if(error||!data)return;const seenAt=+localStorage.getItem("rf_bugseen")||0,n=data.filter(b=>+new Date(b.last_at)>seenAt).length;if(n&&!(tab==="admin"&&asub==="bugs"))toast(`🐞 ${n} new ${n===1?"problem":"problems"} found automatically · Admin → Bugs`)}catch(e){}},30000);
+
+/* Admin -> Bugs */
+let BUGS={list:null,loading:false,run:null,msg:""};
+async function bugLoad(){if(BUGS.loading)return;BUGS.loading=true;const{data,error}=await SB.rpc("admin_errors");BUGS.loading=false;BUGS.list=error?[]:(data||[]);
+  BUGS.msg=error?(/function|schema cache|does not exist/i.test(error.message)?"Run supabase-bug-catcher.sql in Supabase to switch the bug catcher on.":error.message):"";try{localStorage.setItem("rf_bugseen",String(Date.now()))}catch(e){}if(tab==="admin"&&asub==="bugs")render()}
+async function bugRunNow(){if(BUGS.run&&BUGS.run.busy)return;BUGS.run={busy:true};render();let res=[];try{res=await bugChecks(true)}catch(e){res=[{ok:false,t:"The checks themselves crashed",d:String(e&&e.stack||e)}]}BUGS.run={done:true,res};BUGS.list=null;try{localStorage.setItem("rf_bugdeep",String(Date.now()))}catch(e){}render()}
+async function bugClear(id){if(id==="all"&&!confirm("Remove every problem from the list?"))return;const{error}=await SB.rpc("admin_clear_errors",{p_id:id==="all"?null:+id});if(error){toast(error.message);return}BUGS.list=id==="all"?[]:(BUGS.list||[]).filter(b=>String(b.id)!==String(id));render()}
+function bugsPage(){if(!SB)return'<p class="sl">Needs Supabase.</p>';if(BUGS.list===null){bugLoad();return'<p class="sl">Loading…</p>'}
+  const K={error:["💥","Crash"],check:["🔎","Automatic check"],server:["🗄️","Supabase"]},run=BUGS.run;
+  return`<div class="panel"><h3>🐞 Problems found automatically</h3><p class="sl" style="margin-top:0">Every visitor's browser reports crashes and Supabase errors here by itself. Once a day each device also checks the scores, tables, form, news and every page. Admins' browsers also compare our results with ESPN every 6 hours.</p>
+  <div class="row" style="justify-content:flex-start;gap:10px;flex-wrap:wrap"><button class="btn" data-bugrun="1" ${run&&run.busy?"disabled":""}>${run&&run.busy?"Checking…":"🔎 Run all checks now"}</button>${BUGS.list.length?`<button class="btn ghost" data-bugclr="all">🧹 Clear all</button>`:""}</div>${BUGS.msg?`<p class="amsg" role="alert">${esc(BUGS.msg)}</p>`:""}
+  ${run&&run.done?`<div class="bugrun">${run.res.map(r=>`<div class="bugck ${r.ok?"ok":"no"}"><b>${r.ok?"✅":"❌"} ${esc(r.t)}</b>${!r.ok&&r.d?`<pre class="bugpre">${esc(r.d)}</pre>`:""}</div>`).join("")}</div>`:""}</div>
+  <div class="panel"><h3>Reported problems <small class="hint">${BUGS.list.length}</small></h3>${BUGS.list.length?BUGS.list.map(b=>{const k=K[b.kind]||["❓",b.kind];return`<details class="bugrow"><summary><span aria-hidden="true">${k[0]}</span><b>${esc(b.msg)}</b><small>${esc(k[1])} · ${esc(b.page||"–")} · ${b.count}× · ${ago(b.last_at)}</small></summary><p class="sl">First seen ${new Date(b.first_at).toLocaleString("en-GB")} · last on ${esc(b.device||"?")}</p>${b.detail?`<pre class="bugpre">${esc(b.detail)}</pre>`:""}<button class="back" data-bugclr="${b.id}">✓ Fixed, remove it</button></details>`}).join(""):'<p class="sl">No problems reported. 🎉</p>'}</div>`}
+</script>
+<script>
 /* on every page except Activity, Fanzone and player collections the title and menu tabs stay pinned at the top */
 (function(){
   const app=document.getElementById("app"),hd=document.querySelector("header"),B=document.body;
