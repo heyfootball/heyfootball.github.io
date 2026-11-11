@@ -949,6 +949,15 @@ h3.hhd{cursor:default;margin:0;padding:12px 4px 8px;min-height:0}h3.hhd:hover b{
 .bugrun{margin-top:14px;display:grid;gap:6px}
 .bugck{padding:8px 10px;background:#f6f6f6;border-left:4px solid #0b7a3e}
 .bugck.no{border-left-color:#c62828;background:#fff1ec}
+/* ===== EVERYTHING CENTRED: titles, text, buttons and tables sit in the middle on every page ===== */
+:root:not(#z) main#app{text-align:center}
+:root:not(#z) main#app :is(h1,h2,h3,h4,h5,p,small,label,.sl,.tag,.hint,th,td,caption,figcaption){text-align:center}
+:root:not(#z) main#app :is(.row,.hhead,.chead,.rhead,.sendrow,.gamepick,.btnrow,.hstats,.chbtns){justify-content:center!important}
+:root:not(#z) main#app :is(.plan,.pass,.gamepick,table,.sharebox){margin-left:auto!important;margin-right:auto!important}
+:root:not(#z) main#app .pass{justify-content:center}
+:root:not(#z) main#app :is(.fx,.mrow) > *{text-align:center}
+/* things that read better left-aligned stay that way: what you type, chat messages and code */
+:root:not(#z) main#app :is(input,textarea,select,.thread,.thread *,.bugpre,pre){text-align:left}
 /* ===== EVEN CALMER: News starts with the stories, not three strips of scores ===== */
 :root:not(#z) main :is(.livestrip,.rsc,.tick){display:none!important}
 /* ===== CALMER: the menu is in 4 labelled groups, the floating event effects are gone ===== */
