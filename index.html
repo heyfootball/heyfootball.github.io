@@ -449,7 +449,7 @@ header{transition:box-shadow .3s}body.scrolled header{box-shadow:0 8px 24px #000
 .htvs{display:flex;align-items:center;justify-content:space-around;gap:10px;padding:10px;border-radius:14px;background:#ffffff0a}.htvs div{display:flex;flex-direction:column;align-items:center;min-width:0}.htvs small{color:var(--mute);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.htvs b{font-size:30px}.htvs span{font-weight:800;color:var(--mute)}
 .hblog{display:flex;flex-direction:column;gap:8px}.hblogl{display:flex;gap:10px;align-items:center;padding:10px 12px;border-radius:12px;background:#ffffff08;border:1px solid var(--line);color:inherit;text-decoration:none}.hblogl:hover{border-color:var(--turf)}.hblogl span{font-size:22px}.hblogl b{font-size:14px;line-height:1.3}
 .hfree{margin:10px 0;padding:8px 12px;border-radius:12px;background:#1f9d5522;border:1px solid #1f9d5566}
-.htable{display:flex;flex-direction:column;gap:4px}.hrow{display:grid;grid-template-columns:24px 1fr auto 36px;gap:8px;align-items:center;padding:7px 10px;border-radius:10px;border:0;background:#ffffff08;color:inherit;font:inherit;cursor:pointer;text-align:left}.hrow:hover{background:#ffffff14}.hrow small{color:var(--mute)}.hform{grid-template-columns:24px 1fr auto 36px}.hform span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hchips{display:flex;gap:2px}.hchips .fm{width:18px;height:18px;font-size:10px;margin:0}
+.htable{display:flex;flex-direction:column;gap:4px}.hrow{display:grid;grid-template-columns:24px 1fr auto 36px;gap:8px;align-items:center;padding:7px 10px;border-radius:10px;border:0;background:#ffffff08;color:inherit;font:inherit;cursor:pointer;text-align:left}.hrow:hover{background:#ffffff14}.hrow small{color:var(--mute)}.hform{grid-template-columns:24px 1fr auto 36px}.hlead{grid-template-columns:110px 1fr auto}.hform span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hchips{display:flex;gap:2px}.hchips .fm{width:18px;height:18px;font-size:10px;margin:0}
 .hstats{display:grid;grid-template-columns:1fr 1fr;gap:8px}.hstat{display:flex;flex-direction:column;align-items:center;padding:12px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:inherit;font:inherit;cursor:pointer}.hstat b{font-size:26px}.hstat small{color:var(--mute)}
 .shsheet{position:fixed;inset:0;z-index:104;background:#0008;display:flex;align-items:flex-end;justify-content:center}.shsheetin{width:100%;max-width:560px;background:#0d1630;border:1px solid var(--line);border-radius:22px 22px 0 0;padding:18px 18px calc(18px + env(safe-area-inset-bottom,0px));color:#fff;animation:sheetup .25s ease}
 @keyframes sheetup{from{transform:translateY(100%)}}.shsheetin>b{font-size:18px}.shsub{color:var(--mute);font-size:14px;margin:4px 0 12px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.shrooms{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 14px;max-height:30vh;overflow-y:auto}
@@ -896,6 +896,21 @@ h3.hhd{cursor:default;margin:0;padding:12px 4px 8px;min-height:0}h3.hhd:hover b{
 .hlead small{min-width:110px;color:var(--mute)}
 .hfz{max-width:420px}
 @media(max-width:760px){.hacc{grid-template-columns:1fr}.hhd{padding:11px 2px}}
+/* ===== HOME: everything in each box is centred ===== */
+:root:not(#z) .hit{text-align:center}
+:root:not(#z) .hit h3.hhd{justify-content:center}
+:root:not(#z) .hit .hbody{display:flex;flex-direction:column;align-items:center}
+:root:not(#z) .hit .hbody>*{max-width:100%}
+:root:not(#z) .hit .hbody p{text-align:center}
+:root:not(#z) .hit .dbig{justify-content:center}
+:root:not(#z) .hit .hstories,:root:not(#z) .hit .hgames{justify-content:center;width:100%}
+:root:not(#z) .hit .htable{width:100%}
+:root:not(#z) .hit .hgames{display:flex!important;flex-wrap:wrap;justify-content:center;gap:10px}
+:root:not(#z) .hit .hgames>*{flex:0 1 180px}
+:root:not(#z) .hit .hrow{text-align:center;justify-items:center}
+:root:not(#z) .hit .hchips{justify-content:center}
+:root:not(#z) .hit .fzhead{justify-content:center}
+:root:not(#z) .hit .hfz{margin:0 auto}
 /* ===== CHAT LIST ===== */
 .ctop{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
 .ctop .pass{display:flex;gap:8px;flex:1;min-width:240px;max-width:440px;margin:0}
@@ -1169,11 +1184,14 @@ const SNAP={t:"Snapshot 13 Oct 2026",leagues:{"Liga Portugal":[["Porto",8,0,0,24
 let DATA=SNAP,dataStatus="Showing the saved snapshot from 13 Oct 2026.",msub="fix",mday=0,matchT=0,lg="Premier League",room="",chatT=0;
 CFG.DATA_URL=CFG.WORKER;
 // DATAOK = the live list has arrived; until then Matches says "Loading" instead of showing the old saved list
-var DATAOK=false,DATATRY=0;
+var DATAOK=false,DATATRY=0,ESPNMAIN=false;
 async function loadData(){if(!CFG.DATA_URL)return;DATATRY++;try{const j=await fetch(CFG.DATA_URL).then(x=>x.json()).catch(()=>sbFn(CFG.SUPA_URL+"/functions/v1/scores").then(x=>x.json()));if(j.error)throw 0;// if the worker is blocked on this internet connection, ask Supabase to fetch it instead
+if(j.error&&typeof bugLog==="function")bugLog("server","Scores server: "+(j.detail||j.error));
 const ok=a=>Array.isArray(a)&&!(a.length&&Array.isArray(a[0]));// ignore lists from an older version of the scores worker
 DATA={leagues:{...SNAP.leagues,...Object.fromEntries(Object.entries(j.leagues||{}).filter(([k,v])=>v.length))},fx:ok(j.fx)?j.fx:SNAP.fx,res:ok(j.res)?j.res:SNAP.res,live:ok(j.live)?j.live:[],hist:ok(j.hist)?j.hist:[],ko:Array.isArray(j.ko)?j.ko:[]};
-DATAOK=true;DATATRY=0;try{mergeX();espnExtra().then(ch=>{if(ch&&["matches","home","tables","form"].includes(tab))render()})}catch(e){}dataStatus="Updated "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" · refreshes every 5 min"}catch(e){dataStatus="Update failed, showing saved data";if(DATATRY<4){setTimeout(loadData,3000*DATATRY);return}}if(tab==="matches"||tab==="tables"||tab==="form"||tab==="home"||(tab==="news"&&!open))render()}
+DATAOK=true;DATATRY=0;ESPNMAIN=false;try{mergeX();espnExtra().then(ch=>{if(ch&&["matches","home","tables","form"].includes(tab))render()})}catch(e){}dataStatus="Updated "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" · refreshes every 5 min"}catch(e){dataStatus="Update failed, showing saved data";if(DATATRY<4){setTimeout(loadData,3000*DATATRY);return}
+/* the scores server isn't answering: get the main leagues from ESPN instead, so nobody sees old scores */
+if(!DATAOK&&!ESPNMAIN){ESPNMAIN=true;XDATA.at=0;XTAB.at=0;espnExtra().then(()=>{if(XDATA.list.some(m=>MAINLG.includes(m.c))){DATAOK=true;dataStatus="Scores from ESPN (the main scores server isn't answering) · "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})}if(["matches","home","tables","form"].includes(tab))render()},()=>{})}}if(tab==="matches"||tab==="tables"||tab==="form"||tab==="home"||(tab==="news"&&!open))render()}
 loadData();setInterval(loadData,CFG.REFRESH);
 setInterval(()=>{if(document.hidden||tab==="matches")return;const now=Date.now();if((DATA.live||[]).length||(DATA.fx||[]).some(m=>new Date(m.t)<now+5*6e4&&new Date(m.t)>now-3*36e5))loadData()},60000);
 function liveStop(){clearInterval(chatT);clearInterval(matchT);if(MR)clearInterval(MR.t);if(typeof STD!=="undefined"&&STD){STD.t.forEach(clearInterval);STD.t=[]}if(chanT){SB.removeChannel(chanT);chanT=null}}
@@ -2098,8 +2116,8 @@ const SEED_RES=[["567268","PPL","2026-08-14T19:15:00Z","Sporting CP","Vitória S
 // (every game of the last 60 days, fetched on 12 Oct 2026). The latest scores are always added on top.
 let HISTC=null,HISTD=null,HISTK="";
 /* every result we know: the built-in list, the worker's season list and the latest scores (each game once, even if two sources send it) */
-const HIST=()=>{const k=(DATA.res||[]).length+"|"+(DATA.hist||[]).length;if(HISTD===DATA&&HISTK===k)return HISTC;const m=new Map(),seen=new Set(),nk=x=>x.c+"|"+String(x.t).slice(0,10)+"|"+String(x.h).toLowerCase()+"|"+String(x.a).toLowerCase();
-[...(DATA.res||[]),...(DATA.hist||[]),...SEED_RES].forEach(x=>{if(!x||x.hs==null||x.as==null)return;const id=String(x.id),a=nk(x);if(m.has(id)||seen.has(a))return;seen.add(a);m.set(id,x)});HISTD=DATA;HISTK=k;HISTC=[...m.values()];return HISTC};
+const HIST=()=>{const k=(DATA.res||[]).length+"|"+(DATA.hist||[]).length+"|"+ESPNMAIN;if(HISTD===DATA&&HISTK===k)return HISTC;const m=new Map(),seen=new Set(),nk=x=>x.c+"|"+String(x.t).slice(0,10)+"|"+String(x.h).toLowerCase()+"|"+String(x.a).toLowerCase();
+[...(DATA.res||[]),...(ESPNMAIN?[]:[...(DATA.hist||[]),...SEED_RES])].forEach(x=>{if(!x||x.hs==null||x.as==null)return;const id=String(x.id),a=nk(x);if(m.has(id)||seen.has(a))return;seen.add(a);m.set(id,x)});HISTD=DATA;HISTK=k;HISTC=[...m.values()];return HISTC};
 const sgn=n=>n>0?"+"+n:""+n;
 /* ---- CHAMPIONS LEAGUE: what each league-phase place means, and the knockout bracket (fills in by itself from February) ---- */
 const clKey=()=>`<div class="zkey"><span class="z1"><b>1–8</b> ${L("Round of 16")}</span><span class="z2"><b>9–24</b> ${L("Knockout play-offs")}</span><span class="z3"><b>25–36</b> ${L("Out")}</span></div>`;
@@ -2764,7 +2782,7 @@ function homeBlog(){if(BLOGDYN===null&&SB){BLOGDYN=[];SB.from("blog_posts").sele
 function homeForm(){const lgs=Object.keys(DATA.leagues||{}).filter(n=>n!=="Champions League");
   const rows=lgs.flatMap(n=>(DATA.leagues[n]||[]).map((r,i)=>Object.assign(formOf(r[0]),{tm:r[0],pos:i+1,lg:n}))).filter(f=>f.o.length>=3).sort((a,b)=>(b.gf-b.ga)-(a.gf-a.ga)||b.gf-a.gf||b.pts-a.pts);
   if(!rows.length)return"";const top=rows.slice(0,5),cold=rows[rows.length-1];
-  const row=(f,icon)=>`<button class="hrow hform" data-lvteam="${esc(f.tm)}"><b>${icon}</b><span>${esc(f.tm)}<small> · ${esc(L(f.lg))}</small></span><span class="hchips">${fchips(f)}</span><b>${sgn(f.gf-f.ga)}</b></button>`;
+  const row=(f,icon)=>`<button class="hrow hform" data-lvteam="${esc(f.tm)}" title="${esc(f.tm+" · "+L(f.lg))}"><b>${icon}</b><span>${esc(f.tm)}</span><span class="hchips">${fchips(f)}</span><b>${sgn(f.gf-f.ga)}</b></button>`;
   return`<div class="panel"><div class="hhead"><h3>🔥 ${L("Form")}</h3><button class="back" data-t="form">${L("Form")} →</button></div><p class="sl" style="margin:0 0 8px">${L("Goal difference over the last 5 league games")}</p><div class="htable">${top.map((f,i)=>row(f,i+1)).join("")}</div><p class="sl" style="margin:10px 0 4px">🥶 ${L("Coldest team")}</p><div class="htable">${row(cold,"🥶")}</div></div>`}
 // Home: a hub for your club (Manchester United by default): live score or next match, last result, league position
 function clubHub(){const c=myClubs()[0];if(!c||!DATA)return"";const mine=m=>c.rx.test(m.h)||c.rx.test(m.a),now=Date.now();
@@ -2805,8 +2823,13 @@ function homePage(){const hr=new Date().getHours(),greet=hr<12?L("Good morning")
     ["leaders","🏆",L("Leaders"),"",()=>homeLeaders()],
     ["form","📈",L("Form"),"",()=>homeForm()||load],
     ["hot","🔥",L("Hot right now"),"",()=>homeHot()]];
+  /* real content first: Top news goes right after Wallet */
+  T.splice(2,0,...T.splice(T.findIndex(x=>x[0]==="top"),1));
+  /* signed out: one Sign in card instead of six cards that each only say "Sign in" */
+  const GATED=["daily","last","next","yours","trade","hot"],gi=T.findIndex(x=>GATED.includes(x[0])),TT=me?T:T.filter(x=>!GATED.includes(x[0]));
+  if(!me)TT.splice(gi,0,["signin","🔐",L("Sign in"),"",()=>`<p class="sl" style="margin:0 0 10px">${L("Sign in to collect daily coins, follow your teams' results and news, trade cards and join the Fanzone. It's free.")}</p><button class="btn" data-t="account">${L("Sign in")}</button>`]);
   return`<section class="hhero"><div><h2>${greet}${me?", "+esc(me.name.split(" ")[0]):""} 👋</h2><p class="sl" style="margin:0">${L("Here's everything on HeyFootball today.")}</p></div></section>
-<div class="hacc">${T.map(([k,ic,t,sum,body])=>`<section class="hit" data-hk="${k}"><h3 class="hhd"><span class="hic" aria-hidden="true">${ic}</span><b>${t}</b></h3><div class="hbody">${body()}</div></section>`).join("")}</div>`}
+<div class="hacc">${TT.map(([k,ic,t,sum,body])=>`<section class="hit" data-hk="${k}"><h3 class="hhd"><span class="hic" aria-hidden="true">${ic}</span><b>${t}</b></h3><div class="hbody">${body()}</div></section>`).join("")}</div>`}
 /* the two games played by the most people this week (Supabase popular_games) */
 function homePlay(){if(SB&&Date.now()-POPAT>600000){POPAT=Date.now();SB.rpc("popular_games").then(({data,error})=>{POP=error?[]:(data||[]);if(tab==="home"&&HACC==="play")render()},()=>{POP=[]})}
   if(POP===null&&SB)return`<p class="sl">${L("Loading…")}</p>`;
@@ -4953,17 +4976,18 @@ async function espnExtra(){if(XDATA.busy)return false;const now=Date.now(),wait=
       const H=c.competitors.find(x=>x.homeAway==="home"),A=c.competitors.find(x=>x.homeAway==="away");if(!H||!A)return;const t=(c.status&&c.status.type)||{},st=t.state==="in"?"live":t.state==="post"?"ft":"up";
       list.push({id:"e"+e.id,c:code,t:e.date,h:fix(H.team.shortDisplayName||H.team.displayName),a:fix(A.team.shortDisplayName||A.team.displayName),hs:st==="up"?null:+H.score,as:st==="up"?null:+A.score,v:(c.venue&&c.venue.fullName)||"",min:st==="live"?(t.shortDetail||"LIVE"):undefined,st})})}catch(e){badDays.add(d)}}));
   /* ESPN gives a whole month at a time: this month every 10 minutes, the months before it every 6 hours (they don't change) */
-  const ymd=x=>new Date(x).toISOString().slice(0,10).replace(/-/g,""),ym=x=>ymd(x).slice(0,6),cur=ym(now),months=[...new Set([ym(now-40*864e5),ym(now-20*864e5),cur,ym(now+7*864e5)])],skip=new Set(),badLg=new Set(),tabs={};XTAB.m=XTAB.m||{};
-  const jobs=[];Object.entries(ELG).forEach(([code,v])=>months.forEach(mo=>{const k=code+"|"+mo;if(mo<cur&&now-(XTAB.m[k]||0)<216e5&&XDATA.list.some(m=>m.c===code&&ym(m.t)===mo))skip.add(k);else jobs.push([code,v,mo])}));
+  const ymd=x=>new Date(x).toISOString().slice(0,10).replace(/-/g,""),ym=x=>ymd(x).slice(0,6),cur=ym(now),months=[...new Set([ym(now-60*864e5),ym(now-40*864e5),ym(now-20*864e5),cur,ym(now+7*864e5)])],skip=new Set(),badLg=new Set(),tabs={};XTAB.m=XTAB.m||{};
+  const LGL=ESPNMAIN?{...ELG,...Object.fromEntries(MAINLG.map(c=>[c,[LGN(c),LGS_(c),ESPN_LG[c],0,c==="CL"?0:1]]))}:ELG;
+  const jobs=[];Object.entries(LGL).forEach(([code,v])=>months.forEach(mo=>{const k=code+"|"+mo;if(mo<cur&&now-(XTAB.m[k]||0)<216e5&&XDATA.list.some(m=>m.c===code&&ym(m.t)===mo))skip.add(k);else jobs.push([code,v,mo])}));
   await Promise.all(jobs.map(async([code,v,mo])=>{try{const j=await fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/${v[2]}/scoreboard?dates=${mo}&limit=500`).then(r=>r.json());XTAB.m[code+"|"+mo]=now;
     (j.events||[]).forEach(e=>{const c=(e.competitions||[])[0];if(!c)return;const H=c.competitors.find(x=>x.homeAway==="home"),A=c.competitors.find(x=>x.homeAway==="away");if(!H||!A)return;const t=(c.status&&c.status.type)||{},st=t.state==="in"?"live":t.state==="post"?"ft":"up";if(st==="ft"&&t.completed===false)return;
-      if(new Date(e.date)<now-40*864e5||new Date(e.date)>now+8*864e5)return;list.push({id:"e"+e.id,c:code,t:e.date,h:(H.team.shortDisplayName||H.team.displayName||"").trim(),a:(A.team.shortDisplayName||A.team.displayName||"").trim(),hs:st==="up"?null:+H.score,as:st==="up"?null:+A.score,v:(c.venue&&c.venue.fullName)||"",min:st==="live"?(t.shortDetail||"LIVE"):undefined,st})})}catch(e){badLg.add(code+"|"+mo)}}));
-  await Promise.all(Object.entries(ELG).map(async([code,v])=>{if(v[4]&&now-(XTAB.at||0)>1800000){try{const sj=await fetch(`https://site.api.espn.com/apis/v2/sports/soccer/${v[2]}/standings`).then(r=>r.json()),en=(((sj.children||[])[0]||{}).standings||{}).entries||[],g=(e,k)=>((e.stats||[]).find(x=>x.name===k)||{}).value||0;
+      if(new Date(e.date)<now-60*864e5||new Date(e.date)>now+8*864e5)return;list.push({id:"e"+e.id,c:code,t:e.date,h:(H.team.shortDisplayName||H.team.displayName||"").trim(),a:(A.team.shortDisplayName||A.team.displayName||"").trim(),hs:st==="up"?null:+H.score,as:st==="up"?null:+A.score,v:(c.venue&&c.venue.fullName)||"",min:st==="live"?(t.shortDetail||"LIVE"):undefined,st})})}catch(e){badLg.add(code+"|"+mo)}}));
+  await Promise.all(Object.entries(LGL).map(async([code,v])=>{if(v[4]&&now-(XTAB.at||0)>1800000){try{const sj=await fetch(`https://site.api.espn.com/apis/v2/sports/soccer/${v[2]}/standings`).then(r=>r.json()),en=(((sj.children||[])[0]||{}).standings||{}).entries||[],g=(e,k)=>((e.stats||[]).find(x=>x.name===k)||{}).value||0;
       if(en.length)tabs[v[0]]=[...en].sort((a,b)=>(g(a,"rank")||99)-(g(b,"rank")||99)).map(e=>[e.team.shortDisplayName.trim(),g(e,"wins"),g(e,"ties"),g(e,"losses"),g(e,"points"),g(e,"pointDifferential")])}catch(e){}}}));
   if(Object.keys(tabs).length)XTAB={at:now,t:{...XTAB.t,...tabs},m:XTAB.m};
-  const kept=XDATA.list.filter(m=>ELG[m.c]?(skip.has(m.c+"|"+ym(m.t))||badLg.has(m.c+"|"+ym(m.t))):badDays.has(ymd(m.t)));
+  const kept=XDATA.list.filter(m=>LGL[m.c]?(skip.has(m.c+"|"+ym(m.t))||badLg.has(m.c+"|"+ym(m.t))):badDays.has(ymd(m.t)));
   const before=JSON.stringify(XDATA.list);XDATA={at:now,list:[...new Map([...kept,...list].map(m=>[m.id,m])).values()],busy:false};xSave();mergeX();return JSON.stringify(XDATA.list)!==before}
-function mergeX(){const L=XDATA.list,keep=a=>(a||[]).filter(m=>!String(m.id).startsWith("e"));if(XTAB.t&&DATA.leagues)Object.assign(DATA.leagues,XTAB.t);if(!L.length)return;
+function mergeX(){if(!ESPNMAIN){if(XDATA.list.some(m=>MAINLG.includes(m.c)))XDATA.list=XDATA.list.filter(m=>!MAINLG.includes(m.c));if(XTAB.t)MAINLG.forEach(c=>delete XTAB.t[LGN(c)])}const L=XDATA.list,keep=a=>(a||[]).filter(m=>!String(m.id).startsWith("e")&&!(ESPNMAIN&&MAINLG.includes(m.c)));/* ESPN mode: the old saved copy of the main leagues goes, so no game shows twice */if(XTAB.t&&DATA.leagues)Object.assign(DATA.leagues,XTAB.t);if(!L.length)return;
   DATA.fx=[...keep(DATA.fx),...L.filter(m=>m.st==="up")].sort((a,b)=>new Date(a.t)-new Date(b.t));
   DATA.res=[...keep(DATA.res),...L.filter(m=>m.st==="ft")].sort((a,b)=>new Date(b.t)-new Date(a.t));
   DATA.live=[...keep(DATA.live),...L.filter(m=>m.st==="live")]}
@@ -5186,7 +5210,8 @@ async function bugChecks(deep){const R=[],add=(ok,t,d)=>{R.push({ok,t,d:d||""});
   
   HACC=kH;msub=kM;R.push({ok:!bad.length,t:bad.length?"Pages that crash: "+bad.join(", "):"Every page builds without crashing",d:""});
   // 2. scores, tables, news
-  add(DATAOK,DATAOK?"Scores loaded":"Scores didn't load from the scores server",DATAOK?"":dataStatus);
+  add(DATAOK&&!ESPNMAIN,!DATAOK?"Scores didn't load (the scores server and ESPN both failed)":ESPNMAIN?"The scores server isn't answering, so scores come from ESPN for now":"Scores loaded",ESPNMAIN||!DATAOK?"Check the worker in Cloudflare (Workers > rf-data > Logs). "+dataStatus:"");
+  if(!DATAOK)return R;/* old saved scores: every other check would just repeat this problem */
   const noTab=MAIN.filter(c=>((DATA.leagues||{})[LGN(c)]||[]).length<10).map(LGN);
   add(!noTab.length,noTab.length?"League tables missing: "+noTab.join(", "):"All main league tables are there");
   const nN=(typeof ALL==="function"?ALL():[]).length;add(nN>0,nN?"News loaded ("+nN+" stories)":"No news stories loaded");
@@ -5199,7 +5224,7 @@ async function bugChecks(deep){const R=[],add=(ok,t,d)=>{R.push({ok,t,d:d||""});
   const short=[];MAIN.forEach(c=>((DATA.leagues||{})[LGN(c)]||[]).forEach(r=>{if(r[1]+r[2]+r[3]>=5&&formOf(r[0]).o.length<5)short.push(r[0]+" ("+formOf(r[0]).o.length+")")}));
   add(!short.length,short.length?"Form is missing games for "+short.length+" teams":"Every team's form has 5 games",short.slice(0,20).join(", "));
   // 5. (admins) our results compared with ESPN's, this month and last month
-  if(deep){const diff=[],now=new Date(),mo=d=>d.toISOString().slice(0,7).replace("-",""),months=[mo(now),mo(new Date(now-20*864e5))].filter((x,i,a)=>a.indexOf(x)===i);
+  if(deep&&!ESPNMAIN){const diff=[],now=new Date(),mo=d=>d.toISOString().slice(0,7).replace("-",""),months=[mo(now),mo(new Date(now-20*864e5))].filter((x,i,a)=>a.indexOf(x)===i);
     const STOP=new Set(["united","city","real","club","athletic","atletico","sporting","town","rovers","wanderers","albion","hotspur","olympique","olympic","borussia","racing","stade","deportivo","union","inter","saint","calcio","football","sport"]),same=(a,b)=>xSame(a,b)||enorm2(a).some(w=>w.length>3&&!STOP.has(w)&&enorm2(b).includes(w));
     await Promise.all(MAIN.flatMap(c=>months.map(async m=>{try{const j=await fetch(`https://site.api.espn.com/apis/site/v2/sports/soccer/${ESPN_LG[c]}/scoreboard?dates=${m}&limit=500`).then(r=>r.json());
       (j.events||[]).forEach(e=>{const co=(e.competitions||[])[0],st=co&&co.status&&co.status.type,t=+new Date(e.date);if(!st||st.state!=="post"||st.completed===false||Date.now()-t>30*864e5||Date.now()-t<4*36e5)return;
