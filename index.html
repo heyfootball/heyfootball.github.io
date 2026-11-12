@@ -1196,7 +1196,10 @@ CFG.DATA_URL=CFG.WORKER;
 var DATAOK=false,DATATRY=0,ESPNMAIN=false;
 async function loadData(){if(!CFG.DATA_URL)return;DATATRY++;try{const j=await fetch(CFG.DATA_URL).then(x=>x.json()).catch(()=>sbFn(CFG.SUPA_URL+"/functions/v1/scores").then(x=>x.json()));if(j.error)throw 0;// if the worker is blocked on this internet connection, ask Supabase to fetch it instead
 if(j.error&&typeof bugLog==="function")bugLog("server","Scores server: "+(j.detail||j.error));
-const ok=a=>Array.isArray(a)&&!(a.length&&Array.isArray(a[0]));// ignore lists from an older version of the scores worker
+const ok=a=>Array.isArray(a)&&!(a.length&&Array.isArray(a[0]));
+/* a half-ready answer (the worker is still filling up): keep the full copy we have, or use ESPN instead */
+const full=["PL","PD","SA","BL1","FL1","PPL"].every(c=>((j.leagues||{})[LGN(c)]||[]).length>=10)&&ok(j.res)&&j.res.length>0&&ok(j.hist)&&j.hist.length>=100;
+if(!full){if(DATAOK&&!ESPNMAIN&&DATA.hist&&DATA.hist.length>=100)return;DATATRY=4;throw new Error("incomplete")}// ignore lists from an older version of the scores worker
 DATA={leagues:{...SNAP.leagues,...Object.fromEntries(Object.entries(j.leagues||{}).filter(([k,v])=>v.length))},fx:ok(j.fx)?j.fx:SNAP.fx,res:ok(j.res)?j.res:SNAP.res,live:ok(j.live)?j.live:[],hist:ok(j.hist)?j.hist:[],ko:Array.isArray(j.ko)?j.ko:[]};
 DATAOK=true;DATATRY=0;ESPNMAIN=false;try{mergeX();espnExtra().then(ch=>{if(ch&&["matches","home","tables","form"].includes(tab))render()})}catch(e){}dataStatus="Updated "+new Date().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"})+" · refreshes every 5 min"}catch(e){dataStatus="Update failed, showing saved data";if(DATATRY<4){setTimeout(loadData,3000*DATATRY);return}
 /* the scores server isn't answering: get the main leagues from ESPN instead, so nobody sees old scores */
