@@ -958,6 +958,40 @@ h3.hhd{cursor:default;margin:0;padding:12px 4px 8px;min-height:0}h3.hhd:hover b{
 :root:not(#z) main#app :is(.fx,.mrow) > *{text-align:center}
 /* things that read better left-aligned stay that way: what you type, chat messages and code */
 :root:not(#z) main#app :is(input,textarea,select,.thread,.thread *,.bugpre,pre){text-align:left}
+
+/* ===== NEW MENUS + CLEANER LOOK ===== */
+/* left: 8 main tabs, roomy and calm */
+@media(min-width:761px){
+:root:not(#z) header .bar nav>*{order:0!important}
+:root:not(#z) header .bar nav{gap:4px!important;margin-top:8px}
+:root:not(#z) header .bar nav :is(button,a){font:700 15px/1 Inter,system-ui,sans-serif!important;letter-spacing:1.2px!important;text-transform:uppercase!important;padding:14px 16px!important;border-radius:0!important;color:#bdbdbd!important}
+:root:not(#z) header .bar nav :is(button,a):hover{color:#fff!important;background:#161616!important}
+:root:not(#z) header .bar nav [aria-selected=true]{color:#fff!important;background:#1c1c1c!important;box-shadow:inset 4px 0 0 var(--flare)!important}
+:root:not(#z) header .bar nav [data-t=account]{margin-top:auto}
+:root:not(#z) header .hdtools .wkpill{display:none!important}
+}
+/* bottom: the sub-tabs of the tab you're in */
+#subbar{position:fixed;left:0;right:0;bottom:var(--tbh2,0px);z-index:7;display:flex;background:#fff;border-top:2px solid #0a0a0a;box-shadow:0 -6px 18px rgba(0,0,0,.06);padding:0 max(8px,env(safe-area-inset-left))}
+#subbar[hidden]{display:none}
+#subbar button{all:unset;box-sizing:border-box;flex:1;text-align:center;padding:16px 6px 14px;font:700 13px/1 Inter,system-ui,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:#6b6b6b;cursor:pointer;position:relative;border-top:3px solid transparent;margin-top:-2px}
+#subbar button:hover{color:#0a0a0a}
+#subbar button[aria-current=page]{color:#0a0a0a;border-top-color:var(--flare,#ff4a1c)}
+#subbar button.hasdot::after{content:"";position:absolute;top:10px;margin-left:4px;width:7px;height:7px;border-radius:50%;background:var(--flare,#ff4a1c)}
+#subbar button:focus-visible{outline:2px solid var(--flare,#ff4a1c);outline-offset:-4px}
+@media(min-width:761px){#subbar{left:236px}}
+@media(max-width:760px){#subbar button{padding:13px 4px 11px;font-size:12px;letter-spacing:.6px}}
+body.hassub main#app{padding-bottom:calc(var(--tbh2,0px) + 80px)!important}
+body.hassub footer{padding-bottom:calc(var(--tbh2,0px) + 70px)!important}
+/* cleaner pages: more air, quieter lines, softer greys */
+:root:not(#z) main#app{max-width:1180px;margin-left:auto;margin-right:auto}
+:root:not(#z) .panel{box-shadow:none!important}
+:root:not(#z) main#app :is(h1,h2):first-child{letter-spacing:.5px}
+:root:not(#z) .pinhead{border-bottom:1px solid #e3e3e3!important;margin-bottom:22px!important}
+:root:not(#z) main :is(.chips,.sub)>:is(button,a){border-bottom-width:1px!important;border-bottom-color:#ececec!important}
+:root:not(#z) main :is(.chips,.sub)>[aria-pressed=true]{border-bottom:3px solid var(--flare)!important}
+:root:not(#z) .hit{border-top-width:1px!important;border-top-color:#dcdcdc!important}
+:root:not(#z) h3.hhd b{letter-spacing:1.4px}
+:root:not(#z) .tabbar button{font-weight:700}
 /* ===== EVEN CALMER: News starts with the stories, not three strips of scores ===== */
 :root:not(#z) main :is(.livestrip,.rsc,.tick){display:none!important}
 /* ===== CALMER: the menu is in 4 labelled groups, the floating event effects are gone ===== */
@@ -1017,12 +1051,12 @@ html,body{overscroll-behavior-y:none}
 :root:not(#z) header .logo *,:root:not(#z) .dbig *,:root:not(#z) .stile b *,:root:not(#z) .pc-top b{font-family:Anton,Impact,sans-serif!important;font-weight:400!important}
 </style></head><body>
 <header><div class="bar"><div class="logo"><svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5ad1ff"/><stop offset="1" stop-color="#1b4fd8"/></linearGradient></defs><path d="M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8z" fill="url(#lg)"/><circle cx="20" cy="20" r="9" fill="#fff"/><path d="M20 14.5l4.5 3.3-1.7 5.3h-5.6l-1.7-5.3z" fill="#0a1020"/><path d="M20 11v3.5M24.5 17.8l3.3-1.2M22.8 23.1l2 2.8M17.2 23.1l-2 2.8M15.5 17.8l-3.3-1.2" stroke="#0a1020" stroke-width="1.4" stroke-linecap="round"/></svg><span>HEY<b>FOOTBALL</b></span></div>
-<div class="hdtools"><button class="musicbtn" data-music="1" aria-label="Music on or off">🎵</button><button class="searchbtn" data-search="1" aria-label="Search teams, players and news">🔍 <span>Search</span></button><button class="wkpill" data-t="arcade" data-g="lb" data-lbk="total" aria-label="Your Total Points position this week" title="Total Points this week" hidden>🏆 <b>–</b></button><button class="ibbtn" data-ibopen="1" aria-label="Inbox"><span class="ibbell" aria-hidden="true">🔔</span><span class="ibcount" hidden>0</span></button><button class="hdrbtn adminnav" data-t="admin" aria-label="Admin" title="Admin" hidden>🛡️</button><button class="hdrbtn mobnav" data-mobview="1" aria-label="Phone layout" title="Phone layout" hidden>📱</button></div><nav role="tablist"><button role="tab" aria-controls="app" data-t="home" aria-selected="false">🏠 Home</button><button role="tab" aria-controls="app" data-t="news" aria-selected="true">&#x1F4F0; News</button><button role="tab" aria-controls="app" data-t="matches" aria-selected="false">&#x26BD; Matches</button><button role="tab" aria-controls="app" data-t="tables" aria-selected="false">&#x1F4CA; Tables</button><button role="tab" aria-controls="app" data-t="form" aria-selected="false">&#x1F525; Form</button><button role="tab" aria-controls="app" data-t="chat" aria-selected="false">&#x1F4AC; Social</button><button role="tab" aria-controls="app" data-t="friends" aria-selected="false" hidden>&#x1F465; Friends</button><button role="tab" aria-controls="app" data-t="clubs" aria-selected="false">🚩 Club war</button><button role="tab" aria-controls="app" data-t="fanzone" aria-selected="false">📣 Fanzone</button><button role="tab" aria-controls="app" data-t="learn" aria-selected="false">&#x1F393; Tutorials</button><button role="tab" aria-controls="app" data-t="arcade" aria-selected="false">&#x1F3AE; Arcade</button><button role="tab" aria-controls="app" data-t="tournament" aria-selected="false">&#x1F3C6; Tournament</button><button role="tab" aria-controls="app" data-t="gallery" aria-selected="false">&#x1F0CF; Cards</button><button role="tab" aria-controls="app" data-t="stadium" aria-selected="false">🏟️ Stadium</button><button role="tab" aria-controls="app" data-t="getapp" aria-selected="false">&#x1F4F2; Get the app</button><a class="navblog" role="tab" aria-controls="app" aria-selected="false" href="blog/">📝 Blog</a><button role="tab" aria-controls="app" data-t="account" aria-selected="false">Sign in</button></nav></div></header>
+<div class="hdtools"><button class="musicbtn" data-music="1" aria-label="Music on or off">🎵</button><button class="searchbtn" data-search="1" aria-label="Search teams, players and news">🔍 <span>Search</span></button><button class="wkpill" data-t="arcade" data-g="lb" data-lbk="total" aria-label="Your Total Points position this week" title="Total Points this week" hidden>🏆 <b>–</b></button><button class="ibbtn" data-ibopen="1" aria-label="Inbox"><span class="ibbell" aria-hidden="true">🔔</span><span class="ibcount" hidden>0</span></button><button class="hdrbtn adminnav" data-t="admin" aria-label="Admin" title="Admin" hidden>🛡️</button><button class="hdrbtn mobnav" data-mobview="1" aria-label="Phone layout" title="Phone layout" hidden>📱</button></div><nav role="tablist" aria-label="Main menu"><button role="tab" aria-controls="app" data-t="home" data-grp="home" aria-selected="false">Home</button><button role="tab" aria-controls="app" data-t="arcade" data-grp="play" aria-selected="false">Play</button><button role="tab" aria-controls="app" data-t="news" data-grp="football" aria-selected="false">Football</button><button role="tab" aria-controls="app" data-t="chat" data-grp="social" aria-selected="false">Social</button><button role="tab" aria-controls="app" data-t="friends" aria-selected="false" hidden>Friends</button><button role="tab" aria-controls="app" data-t="fanzone" data-grp="fanzone" aria-selected="false">Fanzone</button><button role="tab" aria-controls="app" data-t="getapp" data-grp="getapp" aria-selected="false">Get the app</button><a class="navblog" role="tab" aria-controls="app" aria-selected="false" href="blog/">Blog</a><button role="tab" aria-controls="app" data-t="account" data-grp="profile" aria-selected="false">Profile</button></nav></div></header>
 <div id="announce" class="announce" role="status" hidden></div>
 <main id="app" role="tabpanel" aria-label="Page"></main>
 <div id="warnbox" class="warnbox" hidden></div>
-<div id="more" class="moresheet" hidden><div class="morehead"><b>More</b><button class="back" data-more aria-label="Close">✕</button></div><div class="moregrid"><button data-t="tables">📊<span>Tables</span></button><button data-t="form">&#x1F525;<span>Form</span></button><button data-t="tournament">&#x1F3C6;<span>Tournament</span></button><button data-t="learn">🎓<span>Tutorials</span></button><button data-t="clubs">🚩<span>Club war</span></button><button data-t="stadium">🏟️<span>Stadium</span></button><button data-t="fanzone">📣<span>Fanzone</span></button><button data-t="getapp">&#x1F4F2;<span>Get the app</span></button><a class="moreblog" href="blog/">📝<span>Blog</span></a><button data-t="account">👤<span>Profile</span></button></div></div>
-<nav class="tabbar" aria-label="Main menu"><button data-t="home">🏠<span>Home</span></button><button data-t="news">📰<span>News</span></button><button data-t="matches">⚽<span>Matches</span></button><button data-t="arcade">🎮<span>Arcade</span></button><button data-t="gallery">&#x1F0CF;<span>Cards</span></button><button data-t="chat">💬<span>Social</span></button><button data-more aria-expanded="false">☰<span>More</span></button></nav>
+<div id="more" class="moresheet" hidden><div class="morehead"><b>More</b><button class="back" data-more aria-label="Close">✕</button></div><div class="moregrid"><button data-t="getapp" data-grp="getapp">&#x1F4F2;<span>Get the app</span></button><a class="moreblog" href="blog/">📝<span>Blog</span></a><button data-t="account" data-grp="profile">👤<span>Profile</span></button></div></div>
+<nav class="tabbar" aria-label="Main menu"><button data-t="home" data-grp="home">🏠<span>Home</span></button><button data-t="arcade" data-grp="play">🎮<span>Play</span></button><button data-t="news" data-grp="football">⚽<span>Football</span></button><button data-t="chat" data-grp="social">💬<span>Social</span></button><button data-t="fanzone" data-grp="fanzone">📣<span>Fanzone</span></button><button data-more aria-expanded="false">☰<span>More</span></button></nav>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <footer><b class="footby">⚽ HeyFootball by Lucsis and Andreas</b><br><a href="blog/" class="footblog">📝 Read the blog: guides, tips &amp; football legends</a><br>Scores and tables from football-data.org. News from BBC Sport, The Guardian, Sky Sports, ESPN and Google News. HeyFootball is not affiliated with any club, league or media outlet.</footer>
 <script>
@@ -1277,7 +1311,7 @@ const socErr=e=>{const m=(e&&e.message)||String(e||"");return/does not exist|sch
 // the Social menu button stays lit on Chat, Friends and Leagues
 function navIs(t){return t===tab||(t==="chat"&&(tab==="friends"||tab==="leagues"))}
 function socFrDot(){const f=$(".bar nav [data-t=friends]");return!!(f&&f.classList.contains("hasdot"))}
-function socialHead(k){return`<h2 style="font-size:40px;margin-bottom:6px">💬 ${L("Social")}</h2><div class="sub socbar">${[["chat","💬 "+L("Chat"),typeof UNREAD!=="undefined"&&UNREAD.size>0],["friends","👥 "+L("Friends"),socFrDot()],["leagues","🏆 "+L("Leagues"),false]].map(([t,l,dot])=>`<button class="chip${dot?" hasdot":""}" data-t="${t}" aria-pressed="${k===t}">${l}</button>`).join("")}</div>`}
+function socialHead(k){return`<h2 style="font-size:40px;margin-bottom:6px">💬 ${L("Social")}</h2><div class="sub socbar" hidden>${[["chat","💬 "+L("Chat"),typeof UNREAD!=="undefined"&&UNREAD.size>0],["friends","👥 "+L("Friends"),socFrDot()],["leagues","🏆 "+L("Leagues"),false]].map(([t,l,dot])=>`<button class="chip${dot?" hasdot":""}" data-t="${t}" aria-pressed="${k===t}">${l}</button>`).join("")}</div>`}
 function copyText(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast("📋 "+L("Copied!")),()=>toast(t))}
 
 /* ---- MATCH ROOM: quick picks during live games, checked by Supabase against the live score ---- */
@@ -4693,7 +4727,7 @@ function card(n,lead){const s=isSaved(n.id);
 return `<article class="card${lead?" lead":""}"><div class="thumb" ${n.img?bg(n.img):`style="${lead?"":"background:"+(tint[n.cat]||"#3aa0ff")+"22"}"`}>${n.img?"":n.e}</div><div class="body"><span class="tag">${esc(n.cat)}</span><h3>${esc(n.t)}</h3><p>${esc(n.s)}</p><div class="row">${n.url?`<button class="btn" data-open="${esc(n.id)}">Read story</button>`:`<button class="btn" data-open="${esc(n.id)}">Read story</button>`}<button class="btn ghost" data-sv="${esc(n.id)}" aria-pressed="${s}">${s?"★ Saved":"☆ Save"}</button></div></div></article>`}
 function news(list,empty){if(!list.length)return `<p class="empty">${empty}</p>`;return `<div class="grid">${list.map((n,i)=>card(n,i===0&&cat==="All"&&tab==="news")).join("")}</div>`}
 function render(){setTimeout(translateDom,0);{const k=(me?me.id:"guest")+"|"+drDay(0);if(SB&&authReady&&DAYMARK!==k){DAYMARK=k;SB.rpc("day_mark",{p_dev:devCode()}).then(()=>{},()=>{})}}const tabChanged=render.last!==tab;render.last=tab;if(tabChanged)setTimeout(()=>pageHit("/"+tab),0);if(tabChanged&&["friends","chat","gallery","stadium","leagues"].includes(tab)&&typeof ONLINEAT!=="undefined"&&Date.now()-ONLINEAT>10000)setTimeout(onlineLoad,0);setTimeout(()=>afterRender(tabChanged),0);if(SITE&&SITE.events)setTimeout(applyEvents,0);document.querySelectorAll("nav button").forEach(b=>b.setAttribute("aria-selected",navIs(b.dataset.t)));setTimeout(()=>{try{btDot()}catch(e){}syncBar()},0);accBtn();
-const app=$("#app");stopAll();if(tab==="settings")tab="account";
+const app=$("#app");stopAll();if(tab==="settings")tab="account";if(["stadium","clubs","learn"].includes(tab))tab="home";
 // Sign-in required: visitors who are not signed in only ever see the sign-in page
 document.documentElement.classList.toggle("guest",!me);
 if(USER()&&!(PREF()&&PREF().v>=2)&&!["setup","account","getapp","admin"].includes(tab)){if(!wantTab)wantTab=tab;setupDraft=null;tab="setup"}/* everyone picks their teams */
@@ -5270,6 +5304,34 @@ function bugsPage(){if(!SB)return'<p class="sl">Needs Supabase.</p>';if(BUGS.lis
   <div class="panel"><h3>Reported problems <small class="hint">${BUGS.list.length}</small></h3>${BUGS.list.length?BUGS.list.map(b=>{const k=K[b.kind]||["❓",b.kind];return`<details class="bugrow"><summary><span aria-hidden="true">${k[0]}</span><b>${esc(b.msg)}</b><small>${esc(k[1])} · ${esc(b.page||"–")} · ${b.count}× · ${ago(b.last_at)}</small></summary><p class="sl">First seen ${new Date(b.first_at).toLocaleString("en-GB")} · last on ${esc(b.device||"?")}</p>${b.detail?`<pre class="bugpre">${esc(b.detail)}</pre>`:""}<button class="back" data-bugclr="${b.id}">✓ Fixed, remove it</button></details>`}).join(""):'<p class="sl">No problems reported. 🎉</p>'}</div>`}
 </script>
 <script>
+/* ---- MENUS: LEFT the main tabs, BOTTOM the sub-tabs of the tab you're in, TOP the pages inside it ---- */
+(function(){
+  const GRP={home:["home"],play:["arcade","tournament","gallery"],football:["news","matches","tables","form"],social:["chat","friends","leagues"],fanzone:["fanzone"],getapp:["getapp"],profile:["account","settings","setup"]};
+  const NAME={arcade:"Arcade",tournament:"Tournament",gallery:"Cards",news:"News",matches:"Matches",tables:"Tables",form:"Form",chat:"Chat",friends:"Friends",leagues:"Leagues"};
+  const grpOf=t=>Object.keys(GRP).find(g=>GRP[g].includes(t));
+  const LAST={};
+  // a main tab counts as "you're here" for every page inside it
+  navIs=t=>{const a=grpOf(t);return t===tab||(!!a&&a===grpOf(tab))};
+  // a main tab opens the sub-tab you used last (or its first one when you're already in it)
+  document.addEventListener("click",e=>{const b=e.target.closest&&e.target.closest("[data-grp]");if(!b)return;const g=b.dataset.grp;b.dataset.t=grpOf(tab)===g?GRP[g][0]:(LAST[g]||GRP[g][0])},true);
+  const bar=document.createElement("nav");bar.id="subbar";bar.setAttribute("aria-label","Sections");bar.hidden=true;document.body.appendChild(bar);
+  function dot(t){try{if(t==="chat")return UNREAD.size>0;if(t==="friends")return socFrDot()}catch(e){}return false}
+  function sync(){
+    const g=grpOf(tab);if(g)LAST[g]=tab;const subs=g?GRP[g]:[];
+    const show=subs.length>1&&!(typeof open!=="undefined"&&open&&tab==="news");
+    const html=show?subs.map(t=>`<button data-t="${t}" aria-current="${t===tab?"page":"false"}" class="${dot(t)?"hasdot":""}">${L(NAME[t])}</button>`).join(""):"";
+    if(bar.innerHTML!==html)bar.innerHTML=html;bar.hidden=!show;document.body.classList.toggle("hassub",show);
+    const tb=document.querySelector(".tabbar"),tbh=tb&&getComputedStyle(tb).display!=="none"?tb.offsetHeight:0;
+    document.documentElement.style.setProperty("--tbh2",(matchMedia("(min-width:761px)").matches?0:tbh)+"px");
+    document.querySelectorAll("header .bar nav [data-t],.tabbar [data-t],#more [data-t]").forEach(b=>{const on=navIs(b.dataset.t);b.setAttribute(b.closest(".tabbar,#more")?"aria-current":"aria-selected",on?(b.closest(".tabbar,#more")?"page":"true"):"false")});
+    const mb=document.querySelector(".tabbar [data-more]");if(mb)mb.classList.toggle("on",["getapp","profile"].includes(g));
+  }
+  const app=document.getElementById("app");let q=false;
+  new MutationObserver(()=>{if(q)return;q=true;queueMicrotask(()=>{q=false;sync()})}).observe(app,{childList:true});
+  addEventListener("resize",sync);setTimeout(sync,0);setInterval(sync,4000);
+})();
+</script>
+<script>
 /* on every page except Activity, Fanzone and player collections the title and menu tabs stay pinned at the top */
 (function(){
   const app=document.getElementById("app"),hd=document.querySelector("header"),B=document.body;
@@ -5325,8 +5387,6 @@ function bugsPage(){if(!SB)return'<p class="sl">Needs Supabase.</p>';if(BUGS.lis
   const EMO=/^[\s\u200d\ufe0f\u20e3\u2190-\u2bff\u{1f000}-\u{1faff}]+/u;
   function plain(){if(document.documentElement.id==="z")return;document.querySelectorAll("header .bar nav :is(button,a),main :is(.chips,.sub)>:is(button,a)").forEach(b=>{const t=[...b.childNodes].find(n=>n.nodeType===3&&n.textContent.trim());if(t&&EMO.test(t.textContent)&&b.textContent.replace(EMO,"").trim())t.textContent=t.textContent.replace(EMO,"")})}
   plain();
-  /* group names in the left menu */
-  [["home","Football","g1",1],["arcade","Play","",6],["chat","Community","",10],["learn","More","",14]].forEach(([t,n,c,o])=>{const b=document.querySelector("header .bar nav [data-t="+t+"]");if(!b)return;const d=document.createElement("div");d.className="navgrp "+c;d.setAttribute("aria-hidden","true");d.textContent=n;d.style.order=o;b.before(d)});
   addEventListener("load",fitSoon);if(document.fonts)document.fonts.ready.then(fitSoon);
   app.addEventListener("load",fitSoon,true);
   let lastPage="";
