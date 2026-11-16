@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="guest"><head><meta charset="utf-8"><meta name="author" content="Lucsis and Andreas">
+<html lang="en" class="guest" data-build="2026-11-16a"><head><meta charset="utf-8"><meta name="author" content="Lucsis and Andreas">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HeyFootball: football news, scores, games and cards</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%235ad1ff'/%3E%3Cstop offset='1' stop-color='%231b4fd8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8z' fill='url(%23g)'/%3E%3Ccircle cx='20' cy='20' r='9' fill='%23fff'/%3E%3Cpath d='M20 14.5l4.5 3.3-1.7 5.3h-5.6l-1.7-5.3z' fill='%230a1020'/%3E%3C/svg%3E">
@@ -478,6 +478,14 @@ header{transition:box-shadow .3s}body.scrolled header{box-shadow:0 8px 24px #000
 @media (prefers-reduced-motion:reduce){.ibbtn.has,.ibbtn.has .ibbell,.ibbtn.ring .ibbell{animation:none}}
 .guest .ibbtn{display:none}
 main#app:empty~footer{visibility:hidden}
+.hx .xhero.xhnoimg{min-height:300px;background:#0a0a0a}
+.hx .xhero.xhnoimg .xtxt{background:none}
+.kwadd{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.kwadd input{flex:1 1 200px;min-width:0}
+.kwlist{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:4px 18px}
+.kwrow{display:flex;align-items:center;gap:6px;padding:5px 0;border-bottom:1px solid var(--line)}.kwrow span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kwrow .back{padding:2px 9px;min-width:0}.kwp{min-width:30px;text-align:center}.kwp.up{color:#0b7a3e}.kwp.down{color:#c81e1e}
+.kwstory span{white-space:normal}
+
 :root:not(#z) body>header .hdacc{display:inline-flex!important;align-items:center!important;gap:8px!important}
 :root:not(#z) body>header .hdacc .avatar{width:24px;height:24px;min-width:24px;border-radius:50%;overflow:hidden;display:grid;place-items:center;background:#0a0a0a;color:#fff;font-size:11px;margin:-6px 0;padding:0;border:0}
 :root:not(#z) body>header .hdacc .avatar svg{width:100%;height:100%;display:block}
@@ -1454,12 +1462,20 @@ const NUP=/\b(sacked|sacks|appointed|appoints|new manager|signs|signed|signing|c
 const NDOWN=/\b(rumou?rs?|could|linked|ratings|quiz|predicted|preview|how to watch|odds|betting|tips|live stream|what time|tv channel|gossip|reportedly|in pictures)\b/i;
 const NSTOP=new Set("about after again against ahead amid back been before being from have here into just last more over says said says than that their them then they this were what when where which while with will would your best first after".split(" "));
 let NIMP={},NIMPK="";
+/* KEYWORDS: words in a headline add their points (Admin -> News). Accents and capitals don't matter. */
+let KW=undefined,KWRX=[],KWBUSY=false;
+const kwNorm=t=>String(t||"").normalize("NFD").replace(/\p{M}/gu,"").toLowerCase();
+function kwBuild(){KWRX=(KW||[]).map(k=>({k,rx:new RegExp("(?<![\\p{L}\\p{N}])"+kwNorm(k.word).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"(?![\\p{L}\\p{N}])","u")}))}
+async function kwLoad(force){if(KWBUSY||!SB||(KW!==undefined&&!force))return;KWBUSY=true;try{const{data,error}=await SB.from("news_keywords").select("id,word,points").order("points",{ascending:false}).order("word");KW=error?null:(data||[]);KWMSG=error?(/relation|does not exist|schema cache/i.test(error.message)?"Run supabase-news-keywords.sql in Supabase to switch this on.":error.message):""}catch(e){KW=null}KWBUSY=false;kwBuild();NIMPK="";if(["home","news","admin"].includes(tab))render()}
+let KWMSG="";
+/* how many points the keywords give a headline (the words it contains, together -4 to +6) */
+function kwScore(t){const n=kwNorm(t);let p=0;for(const x of KWRX)if(x.rx.test(n))p+=x.k.points;return Math.max(-4,Math.min(6,p))}
 function nKeys(t){return [...new Set(String(t||"").toLowerCase().replace(/[^\p{L}\p{N} ]+/gu," ").split(" ").filter(w=>w.length>=4&&!NSTOP.has(w)))]}
-function newsImp(list){const k=list.length+"|"+(list[0]&&(list[0].id||list[0].t));if(k===NIMPK)return NIMP;NIMPK=k;NIMP={};
+function newsImp(list){if(KW===undefined)setTimeout(kwLoad,0);const k=list.length+"|"+(list[0]&&(list[0].id||list[0].t));if(k===NIMPK)return NIMP;NIMPK=k;NIMP={};
   const K=list.map(n=>({n,w:nKeys(n.t),t:+new Date(n.d||0)}));
   K.forEach(a=>{const others=new Set();K.forEach(b=>{if(a===b||(b.n.cat||"")===(a.n.cat||"")||Math.abs(a.t-b.t)>36*36e5)return;let c=0;for(const w of a.w)if(b.w.includes(w)&&++c>=2){others.add(b.n.cat||"?");break}});
     const t=a.n.t||"",big=Math.min(2,(t.match(NBIG)||[]).length),star=Math.min(2,(t.match(NSTAR)||[]).length);
-    NIMP[a.n.id||a.n.t]=Math.max(0,Math.min(10,Math.min(6,others.size*2)+big+star+(NUP.test(t)?2:0)-(NDOWN.test(t)?2:0)))});
+    NIMP[a.n.id||a.n.t]=Math.max(0,Math.min(10,Math.min(6,others.size*2)+(KW&&KW.length?kwScore(t):big+star+(NUP.test(t)?2:0)-(NDOWN.test(t)?2:0))))});
   return NIMP}
 /* top stories you have already seen: remembered for 6 hours. For the first 10 minutes it stays on top (so it doesn't jump while you browse), after that it drops 10 hours */
 const TOPK="rf_tops_seen";let TOPS={};try{TOPS=JSON.parse(localStorage.getItem(TOPK)||"{}")}catch(e){}
@@ -1483,7 +1499,7 @@ if(nm==="saved")return top+`<h3 style="margin:6px 0 12px">🔖 Saved stories</h3
 const pic=n=>n.img?`<div class="ximg" ${bg(n.img)}></div>`:srcBar(n),src=n=>esc(n.cat||"")+(n.d?" · "+ago(n.d):"");
 const side=L.slice(1,5),grid=L.slice(5,17),more=L.slice(17,40);
 return top+`<div class="rnav">${secs.map(x=>`<button data-cat="${esc(x)}" aria-pressed="${x===cat}">${esc(x)}</button>`).join("")}${nm==="mine"?'<button data-t="setup" title="Change your teams">Edit my teams</button>':""}</div>
-<div class="hx">${h?`<section class="xlead"><a class="xhero" ${lk(h)}>${pic(h)}<div class="xtxt"><div class="xkicker">${src(h)} · ${readMins(h)} min</div><h1 class="xdisplay">${esc(h.t)}</h1>${h.s?`<p>${esc(plainT(h.s).slice(0,200))}</p>`:""}</div></a>
+<div class="hx">${h?`<section class="xlead"><a class="xhero${h.img?"":" xhnoimg"}" ${lk(h)}>${h.img?pic(h):""}<div class="xtxt"><div class="xkicker">${src(h)} · ${readMins(h)} min</div><h1 class="xdisplay">${esc(h.t)}</h1>${h.s?`<p>${esc(plainT(h.s).slice(0,200))}</p>`:""}</div></a>
 <div class="xside"><h2>Top stories</h2>${side.map(n=>`<a class="xstory${n.img?"":" xnoimg"}" ${lk(n)}><div><div class="xkicker">${src(n)}</div><h3>${esc(n.t)}</h3></div>${pic(n)}</a>`).join("")}</div></section>
 ${grid.length?`<section class="xsec"><div class="xshead"><h2 class="xdisplay">Latest</h2></div><div class="xgrid4">${grid.map(n=>`<a class="xcard${n.img?"":" xnoimg"}" ${lk(n)}>${pic(n)}<div><div class="xkicker">${esc(n.cat||"")}</div><h3>${esc(n.t)}</h3><time>${n.d?ago(n.d):""}</time></div></a>`).join("")}</div></section>`:""}
 ${more.length?`<section class="xsec"><div class="xshead"><h2 class="xdisplay">More news</h2></div><div class="xlist">${more.map(n=>`<a class="xli" ${lk(n)}><time>${hm(n.d)}</time><span>${esc(n.t)}</span><small>${esc(n.cat||"")}</small></a>`).join("")}</div></section>`:""}`
@@ -3153,7 +3169,7 @@ function homePage(){if(!gTried&&SB&&me)setTimeout(loadGallery,0);
   const games=[["daily","🕵️","Who Am I?","Name today's mystery player"],["pen","⚽","Penalty shootout","5 shots. Beat the keeper"],["pred","🔮","Predictions","Call this weekend's scores"],["hl","📊","Higher or lower","Who has the better rating?"]];
   return`<div class="hx">
 ${strip?`<div class="xscores" aria-label="${L("Scores")}"><div class="xscw"><div class="xsday"><b>${L("Scores")}</b><small>${esc(day(now))}</small></div>${strip}</div></div>`:""}
-${lead?`<section class="xlead" aria-label="${L("Top stories")}"><a class="xhero" href="#" data-open="${esc(lead.id)}">${pic(lead)}<div class="xtxt"><div class="xkicker">${src(lead)}</div><h1 class="xdisplay">${esc(lead.t)}</h1>${lead.s?`<p>${esc(plainT(lead.s).slice(0,180))}</p>`:""}</div></a>
+${lead?`<section class="xlead" aria-label="${L("Top stories")}"><a class="xhero${lead.img?"":" xhnoimg"}" href="#" data-open="${esc(lead.id)}">${lead.img?pic(lead):""}<div class="xtxt"><div class="xkicker">${src(lead)}</div><h1 class="xdisplay">${esc(lead.t)}</h1>${lead.s?`<p>${esc(plainT(lead.s).slice(0,180))}</p>`:""}</div></a>
 <div class="xside"><h2>${L("Top stories")}</h2>${top.map(n=>`<a class="xstory${n.img?"":" xnoimg"}" href="#" data-open="${esc(n.id)}"><div><div class="xkicker">${src(n)}</div><h3>${esc(n.t)}</h3></div>${pic(n)}</a>`).join("")}</div></section>`:`<p class="sl">${L("Loading the latest news…")}</p>`}
 ${latest.length?`<section class="xsec"><div class="xshead"><h2 class="xdisplay">${L("Latest")}</h2><button class="xmore" data-t="news">${L("All news")}</button></div><div class="xgrid4">${latest.map(n=>`<a class="xcard${n.img?"":" xnoimg"}" href="#" data-open="${esc(n.id)}">${pic(n)}<div><div class="xkicker">${esc(n.cat||"")}</div><h3>${esc(n.t)}</h3><time>${n.d?ago(n.d):""}</time></div></a>`).join("")}</div></section>`:""}
 <section class="xsec xtwo"><div><div class="xshead"><h2 class="xdisplay">${L("Matches")}</h2><button class="xmore" data-t="matches">${L("All matches")}</button></div>
@@ -4980,9 +4996,9 @@ aMsg="";AD.overview=undefined}catch(e){aMsg="⚠️ "+e.message}render()}
 const FEATS={news:"📰 News",matches:"⚽ Matches & Tables",chat:"💬 Chat",arcade:"🎮 Arcade",gallery:"🃏 Cards",friends:"👥 Friends",trading:"🔄 Trading"};
 function adminPage(){const h='<h2 style="font-size:40px;margin-bottom:6px">🛡️ Admin</h2>';
 if(!ADMIN)return h+'<p class="sl">This area is only for HeyFootball administrators.</p>';
-const subs=[["overview","📊 Overview"],["reports","🚩 Reports"],["chat","💬 Chat"],["users","👤 Users"],["safety","🧰 Safety"],["site","🌐 Site"],["audit","📜 Audit log"],["admins","🛡️ Admins"],["visits","📈 Visitors"],["fun","🔥 Abuse & Arcade"],["blog","📝 Blog"],["bugs","🐞 Bugs"]];
+const subs=[["overview","📊 Overview"],["reports","🚩 Reports"],["chat","💬 Chat"],["users","👤 Users"],["safety","🧰 Safety"],["site","🌐 Site"],["audit","📜 Audit log"],["admins","🛡️ Admins"],["visits","📈 Visitors"],["fun","🔥 Abuse & Arcade"],["blog","📝 Blog"],["bugs","🐞 Bugs"],["news","📰 News"]];
 const nav=`<p class="sl" style="margin-top:0">Everything here is checked by Supabase. Every action is recorded in the audit log under your name.</p><div class="sub gamechips">${subs.map(([k,l])=>`<button class="chip" data-as="${k}" aria-pressed="${asub===k}">${l}</button>`).join("")}</div>${aMsg?`<p class="amsg" role="alert">${esc(aMsg)}</p>`:""}`;
-if(asub==="bugs")return h+nav+bugsPage();
+if(asub==="bugs")return h+nav+bugsPage();if(asub==="news")return h+nav+kwPage();
 const D=AD[asub];if(D===undefined){aLoad(asub);return h+nav+'<p class="sl">Loading…</p>'}if(D===null)return h+nav+'<p class="sl">Loading…</p>';
 if(D&&D.err)return h+nav+`<p class="amsg">⚠️ ${esc(D.err)}</p><button class="btn ghost" data-aref>Try again</button>`;
 const tile=(v,l)=>`<div class="stile"><b>${v==null?"–":v}</b><span>${l}</span></div>`;
@@ -5456,7 +5472,7 @@ if(SB){const rr=SB.rpc.bind(SB),quiet=["log_error","admin_errors","popular_games
 if((t.dataset.lvteam||t.dataset.splayer)&&t.tagName!=="BUTTON"){e.preventDefault();const pb=t.parentElement&&t.parentElement.closest("button");if(pb&&Object.keys(pb.dataset).some(k=>!/^(lvteam|splayer|enAriaLabel|trAriaLabel)$/.test(k)))t=pb}
 if(t.dataset.open)e.preventDefault();const d=t.dataset;
 if(d.t){if(d.g)curGame=d.g;if(d.lbk)LBK=d.lbk;if(d.t!==tab)LOADNEXT=true;if(d.t==="friends"&&tab!=="friends")FD.loaded=false;if(d.t==="leagues"){LQ.list=null;LQ.msg=""}if(d.t==="clubs"){CW.d=null;CW.msg="";CW.pick=null}if(d.t==="stadium"&&tab!=="stadium"){STD.view=null;STD.data=null;STD.watch=null;STD.msg="";STD.form=null}if(d.t==="fanzone"&&tab!=="fanzone"&&!(FZ.at&&Date.now()-FZ.at<120000)){FZ.list=null;FZ.msg=""}if(d.t==="gallery"&&tab!=="gallery"){BT.msg="";LB.hist=null;btCheck();if(btIn().length){gsub="battle";BT.step=null;BT.show=null}}if(d.t==="matches"){MR.on=false;MR.id=null;mday=0}if(d.t==="news"&&tab!=="news")newsShuffle();if(d.t==="home"&&tab!=="home"){newsShuffle();HPICK=Math.random()}if(d.t==="chat")CHATOPEN=false;tab=d.t;open=null;($("#more")||{}).hidden=true;$(".tabbar [data-more]")?.setAttribute("aria-expanded","false");scrollTo(0,0)}else if(d.more!==undefined){const m=$("#more");m.hidden=!m.hidden;t.closest(".tabbar")&&t.setAttribute("aria-expanded",String(!m.hidden));$(".tabbar [data-more]")?.setAttribute("aria-expanded",String(!m.hidden));return}else if(d.cat)cat=d.cat;else if(d.g)curGame=d.g;else if(d.wk){wKey(d.wk);return}else if(d.mt)msub=d.mt;else if(d.room){room=d.room;CHATOPEN=true;NEWG=null;LEAVEASK=null;markSeen(room);if(innerWidth<=700)setTimeout(()=>{const t=document.getElementById("thread");if(t)t.closest(".panel").scrollIntoView({block:"start"})},60)/* phones: show the chat you picked */}else if(d.send!==undefined){doSend();return}else if(d.addf!==undefined){addFriend();return}else if(d.lg){lg=d.lg;lgSet=true}else if(d.qa!==undefined){qAns(+d.qa);return}else if(d.mc!==undefined){mFlip(+d.mc);return}else if(d.yt!==undefined){const y=CFG.YT[+d.yt];logAct("tutorial",{t:y.t});t.closest(".yt").querySelector(".thumb").outerHTML=`<iframe class="ytf" src="https://www.youtube-nocookie.com/embed/${y.id}?autoplay=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen title="${y.t}"></iframe>`;return}else if(d.open){closeSearch();openFrom=tab==="news"?openFrom||"news":tab;open=d.open;tab="news";setTimeout(()=>scrollTo(0,0),0);const n=ANY().find(x=>x.id===d.open);if(n&&n.url&&!VIEWED.has(n.id)){VIEWED.add(n.id);logAct("view",{t:n.t.slice(0,200),url:n.url})}}
-else if(d.nmix){ST.nmix=d.nmix;saveST();newsShuffle()}else if(d.flare){ST.flare=d.flare;saveST();applyST()}else if(d.hmd!==undefined){HMD=+d.hmd}else if(d.hlg){HLG=d.hlg}else if(d.bugrun!==undefined){bugRunNow();return}else if(d.bugclr!==undefined){bugClear(d.bugclr);return}else if(d.hacc){HACC=HACC===d.hacc?"":d.hacc}else if(d.trside){trSide=d.trside}else if(d.chatback!==undefined){CHATOPEN=false;LASTMAT=0}else if(d.htrade){tab="friends";FD.loaded=false;delete TRG[d.htrade];TRMT=0;trSel={to:d.htrade,give:[],get:[]};trMsg="";fsub="trade";trSide="give";scrollTo(0,0)}else if(d.classic!==undefined){const v=d.classic==="1";if(!!ST.classic===v)return;ST.classic=v;saveST();location.reload();return}else if(d.fs){fsub=d.fs;unfAsk=null;if(d.fs!=="profile")fView=null;if(d.fs==="feed")loadFriends()}else if(d.fview){fView=d.fview;fsub="profile";unfAsk=null;delete FD.prof[d.fview]}else if(d.freload){delete FD.prof[d.freload];loadFriend(d.freload);render();return}else if(d.trade){delete TRG[d.trade];TRMT=0;trSel={to:d.trade,give:[],get:[]};trMsg="";fsub="trade";trSide="give"}else if(d.tg){const i=+d.tg,a=trSel.give;trSel.give=a.includes(i)?a.filter(x=>x!==i):a.length<20?[...a,i]:a;trMsg=""}else if(d.tw){const i=+d.tw,a=trSel.get;trSel.get=a.includes(i)?a.filter(x=>x!==i):a.length<20?[...a,i]:a;trMsg=""}else if(d.tsend!==undefined){sendTrade();return}else if(d.tacc){answerTrade(d.tacc,true);return}else if(d.tdec){answerTrade(d.tdec,false);return}else if(d.tcan){cancelTrade(d.tcan);return}else if(d.newg!==undefined){NEWG={name:"",sel:[],msg:""}}else if(d.gpick){NEWG.name=($("#gname")||{}).value||NEWG.name;NEWG.sel=NEWG.sel.includes(d.gpick)?NEWG.sel.filter(x=>x!==d.gpick):[...NEWG.sel,d.gpick];NEWG.msg=""}else if(d.gcreate!==undefined){createGroup();return}else if(d.gcancel!==undefined){NEWG=null}else if(d.leaveg){LEAVEASK=LEAVEASK===+d.leaveg?null:+d.leaveg}else if(d.leavegyes){leaveGroup(+d.leavegyes);return}else if(d.fmlg){fmLg=d.fmlg}else if(d.gadev){gaDev=d.gadev}else if(d.lbk){LBK=d.lbk;lbRender();return}else if(d.tk){TK=d.tk;TOUR=null;TOURERR="";loadTour(true)}
+else if(d.nmix){ST.nmix=d.nmix;saveST();newsShuffle()}else if(d.flare){ST.flare=d.flare;saveST();applyST()}else if(d.hmd!==undefined){HMD=+d.hmd}else if(d.hlg){HLG=d.hlg}else if(d.bugrun!==undefined){bugRunNow();return}else if(d.bugclr!==undefined){bugClear(d.bugclr);return}else if(d.kwadd){kwSave((document.getElementById("kwword")||{}).value,(document.getElementById("kwpts")||{}).value);return}else if(d.kwset){kwSave(d.kww,d.kwv);return}else if(d.kwdel){kwDel(d.kwdel);return}else if(d.hacc){HACC=HACC===d.hacc?"":d.hacc}else if(d.trside){trSide=d.trside}else if(d.chatback!==undefined){CHATOPEN=false;LASTMAT=0}else if(d.htrade){tab="friends";FD.loaded=false;delete TRG[d.htrade];TRMT=0;trSel={to:d.htrade,give:[],get:[]};trMsg="";fsub="trade";trSide="give";scrollTo(0,0)}else if(d.classic!==undefined){const v=d.classic==="1";if(!!ST.classic===v)return;ST.classic=v;saveST();location.reload();return}else if(d.fs){fsub=d.fs;unfAsk=null;if(d.fs!=="profile")fView=null;if(d.fs==="feed")loadFriends()}else if(d.fview){fView=d.fview;fsub="profile";unfAsk=null;delete FD.prof[d.fview]}else if(d.freload){delete FD.prof[d.freload];loadFriend(d.freload);render();return}else if(d.trade){delete TRG[d.trade];TRMT=0;trSel={to:d.trade,give:[],get:[]};trMsg="";fsub="trade";trSide="give"}else if(d.tg){const i=+d.tg,a=trSel.give;trSel.give=a.includes(i)?a.filter(x=>x!==i):a.length<20?[...a,i]:a;trMsg=""}else if(d.tw){const i=+d.tw,a=trSel.get;trSel.get=a.includes(i)?a.filter(x=>x!==i):a.length<20?[...a,i]:a;trMsg=""}else if(d.tsend!==undefined){sendTrade();return}else if(d.tacc){answerTrade(d.tacc,true);return}else if(d.tdec){answerTrade(d.tdec,false);return}else if(d.tcan){cancelTrade(d.tcan);return}else if(d.newg!==undefined){NEWG={name:"",sel:[],msg:""}}else if(d.gpick){NEWG.name=($("#gname")||{}).value||NEWG.name;NEWG.sel=NEWG.sel.includes(d.gpick)?NEWG.sel.filter(x=>x!==d.gpick):[...NEWG.sel,d.gpick];NEWG.msg=""}else if(d.gcreate!==undefined){createGroup();return}else if(d.gcancel!==undefined){NEWG=null}else if(d.leaveg){LEAVEASK=LEAVEASK===+d.leaveg?null:+d.leaveg}else if(d.leavegyes){leaveGroup(+d.leavegyes);return}else if(d.fmlg){fmLg=d.fmlg}else if(d.gadev){gaDev=d.gadev}else if(d.lbk){LBK=d.lbk;lbRender();return}else if(d.tk){TK=d.tk;TOUR=null;TOURERR="";loadTour(true)}
 else if(d.fun){const[a1,a2]=d.fun.split(":");funDo(a1,a2);return}else if(d.trpick!==undefined){t.classList.toggle("on");return}
 else if(d.shorts!==undefined){openShorts();return}
 else if(d.dtp){dreamPick(+d.dtp)}else if(d.dtslot!==undefined){DTSLOT=+d.dtslot}else if(d.dtsave!==undefined){saveDream();return}
@@ -5587,6 +5603,18 @@ setTimeout(async function adminBugs(){if(!(SB&&me&&ADMIN)){setTimeout(adminBugs,
   try{const k="rf_bugdeep";if(Date.now()-(+localStorage.getItem(k)||0)>216e5){localStorage.setItem(k,String(Date.now()));await bugChecks(true)}}catch(e){}
   try{const{data,error}=await SB.rpc("admin_errors");if(error||!data)return;const seenAt=+localStorage.getItem("rf_bugseen")||0,n=data.filter(b=>+new Date(b.last_at)>seenAt).length;if(n&&!(tab==="admin"&&asub==="bugs"))toast(`🐞 ${n} new ${n===1?"problem":"problems"} found automatically · Admin → Bugs`)}catch(e){}},30000);
 
+/* Admin -> News: the keywords that make a story important */
+function kwPage(){if(!SB)return'<p class="sl">Needs Supabase.</p>';if(KW===undefined){kwLoad();return'<p class="sl">Loading…</p>'}
+  const list=KW||[],I=newsImp(ALL()),top=newsRank(ALL(),0).slice(0,12);
+  const pts=v=>`<b class="kwp ${v>0?"up":v<0?"down":""}">${v>0?"+":""}${v}</b>`;
+  return`<div class="panel"><h3>📰 Important news keywords</h3><p class="sl" style="margin-top:0">When a headline contains one of these words it gets its points: <b>+</b> makes the story more important, <b>−</b> less important. All the words in one headline add up (from −4 to +6). A story covered by several outlets also gets up to +6. Importance is 0 to 10, and each point counts like the story being 24 minutes newer. Capitals and accents don't matter.</p>
+  ${KWMSG?`<p class="amsg" role="alert">${esc(KWMSG)}</p>`:""}
+  <div class="kwadd"><input id="kwword" maxlength="40" placeholder="Word or phrase, e.g. sacked" aria-label="Keyword"><select id="kwpts" aria-label="Points">${[5,4,3,2,1,-1,-2,-3,-4,-5].map(v=>`<option value="${v}" ${v===2?"selected":""}>${v>0?"+":""}${v}</option>`).join("")}</select><button class="btn" data-kwadd="1">Add / change</button></div>
+  <div class="kwlist">${list.map(k=>`<div class="kwrow"><span>${esc(k.word)}</span>${pts(k.points)}<button class="back" data-kwset="${k.id}" data-kww="${esc(k.word)}" data-kwv="${Math.max(-5,k.points-1)}" aria-label="Less important">−</button><button class="back" data-kwset="${k.id}" data-kww="${esc(k.word)}" data-kwv="${Math.min(5,k.points+1)}" aria-label="More important">+</button><button class="back" data-kwdel="${k.id}" aria-label="Remove ${esc(k.word)}">✕</button></div>`).join("")||'<p class="sl">No keywords yet.</p>'}</div></div>
+  <div class="panel"><h3>Most important stories right now</h3><p class="sl" style="margin-top:0">How the current news scores with these keywords.</p>${top.map(n=>`<div class="kwrow kwstory"><span>${esc(n.t)}</span>${pts(I[n.id||n.t]||0)}</div>`).join("")}</div>`}
+async function kwSave(word,pts){word=String(word||"").trim();if(word.length<2){toast("Type a word first");return}const{error}=await SB.rpc("admin_kw_save",{p_word:word,p_points:+pts});if(error){toast(error.message);return}await kwLoad(true)}
+async function kwDel(id){const{error}=await SB.rpc("admin_kw_delete",{p_id:+id});if(error){toast(error.message);return}await kwLoad(true)}
+
 /* Admin -> Bugs */
 let BUGS={list:null,loading:false,run:null,msg:""};
 async function bugLoad(){if(BUGS.loading)return;BUGS.loading=true;const{data,error}=await SB.rpc("admin_errors");BUGS.loading=false;BUGS.list=error?[]:(data||[]);
@@ -5680,6 +5708,11 @@ function espnFuture(){if(FUTBUSY||Date.now()-FUTAT<6*36e5)return;FUTBUSY=true;FU
   /* signing in later loads your things too */
   let wasMe=!!me;setInterval(()=>{if(!!me!==wasMe){wasMe=!!me;if(me){started=false;preload()}}},3000);
 })();
+</script>
+<script>
+/* when a newer version of the site is on GitHub, switch to it (once a minute at most, never in the middle of a game) */
+(function(){const mine=document.documentElement.dataset.build;async function check(){try{if(tab==="arcade"&&document.getElementById("cv"))return;const t=await (await fetch(location.pathname+"?build="+Date.now(),{cache:"no-store"})).text(),m=t.match(/data-build="([^"]+)"/);if(m&&m[1]!==mine){const k="rf_build_reload";if(Date.now()-(+sessionStorage.getItem(k)||0)<6e4)return;sessionStorage.setItem(k,String(Date.now()));location.reload()}}catch(e){}}
+setTimeout(check,8000);setInterval(check,5*6e4);document.addEventListener("visibilitychange",()=>{if(!document.hidden)check()})})();
 </script>
 <script>
 /* games: no background music (also for people who had it on before), and the game area is drawn on its own */
