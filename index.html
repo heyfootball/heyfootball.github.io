@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="guest" data-build="2026-11-18b"><head><meta charset="utf-8"><meta name="author" content="Lucsis and Andreas">
+<html lang="en" class="guest" data-build="2026-11-18d"><head><meta charset="utf-8"><meta name="author" content="Lucsis and Andreas">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HeyFootball: football news, scores, games and cards</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%235ad1ff'/%3E%3Cstop offset='1' stop-color='%231b4fd8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8z' fill='url(%23g)'/%3E%3Ccircle cx='20' cy='20' r='9' fill='%23fff'/%3E%3Cpath d='M20 14.5l4.5 3.3-1.7 5.3h-5.6l-1.7-5.3z' fill='%230a1020'/%3E%3C/svg%3E">
@@ -478,7 +478,9 @@ header{transition:box-shadow .3s}body.scrolled header{box-shadow:0 8px 24px #000
 @media (prefers-reduced-motion:reduce){.ibbtn.has,.ibbtn.has .ibbell,.ibbtn.ring .ibbell{animation:none}}
 .guest .ibbtn{display:none}
 main#app:empty~footer{visibility:hidden}
-:root:not(#z) :is([data-t="friends"],[data-t="chat"],[data-t="fanzone"],[data-t="tournament"],[data-t="form"],[data-t="getapp"],[data-t="social"]){display:none!important}
+/* pack opening: cards appear one by one (fade in and rise), no flipping */
+.flipset .flip-in,.flipset .flip-in .flip-front{transform:none!important}.flipset .flip-in{opacity:0;animation:packin .45s var(--d) ease-out forwards!important}.flipset .flip-back{display:none!important}:root:not(#zz) .reveal:not(.flipset) .pc.pc{animation:packin .45s both!important}:root:not(#zz) .flipset .pc.pc:not(.x){animation:none!important}:root:not(#zz) .flipset .flip.big .flip-front .pc.pc{animation:glow 1.6s calc(var(--d) + .45s) ease-in-out infinite!important}@keyframes packin{from{opacity:0;transform:translateY(18px) scale(.96)}to{opacity:1;transform:none}}
+:root:not(#z) :is([data-dshare],[data-share],[data-gochat],.sharebox,[data-lqaddopen],[data-fzshare],[data-fzscore],[data-newg],[data-addcode],[data-shareto]),:root:not(#z) :is([data-t="friends"],[data-t="chat"],[data-t="fanzone"],[data-t="tournament"],[data-t="form"],[data-t="getapp"],[data-t="social"]){display:none!important}
 .hx .xhero.xhnoimg{min-height:300px;background:#0a0a0a}
 .hx .xhero.xhnoimg .xtxt{background:none}
 .kwadd{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.kwadd input{flex:1 1 200px;min-width:0}
@@ -1491,8 +1493,8 @@ let NIMP={},NIMPK="";
 let KW=undefined,KWRX=[],KWBUSY=false;
 const kwNorm=t=>String(t||"").normalize("NFD").replace(/\p{M}/gu,"").toLowerCase();
 function kwBuild(){KWRX=(KW||[]).map(k=>({k,rx:new RegExp("(?<![\\p{L}\\p{N}])"+kwNorm(k.word).replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+"(?![\\p{L}\\p{N}])","u")}))}
-async function kwLoad(force){if(KWBUSY||!SB||(KW!==undefined&&!force))return;KWBUSY=true;try{const{data,error}=await SB.from("news_keywords").select("id,word,points").order("points",{ascending:false}).order("word");KW=error?null:(data||[]);KWMSG=error?(/relation|does not exist|schema cache/i.test(error.message)?"Run supabase-news-keywords.sql in Supabase to switch this on.":error.message):""}catch(e){KW=null}KWBUSY=false;kwBuild();NIMPK="";if(["home","news","admin"].includes(tab))render()}
-let KWMSG="";
+async function kwLoad(force){if(KWBUSY||!SB||(KW!==undefined&&!force))return;KWBUSY=true;const old=KW===undefined?"?":JSON.stringify(KW||null);try{const{data,error}=await SB.from("news_keywords").select("id,word,points").order("points",{ascending:false}).order("word");KW=error?(KW||null):(data||[]);if(!error)try{localStorage.setItem("rf_kw",JSON.stringify(KW))}catch(e){}KWMSG=error?(/relation|does not exist|schema cache/i.test(error.message)?"Run supabase-news-keywords.sql in Supabase to switch this on.":error.message):""}catch(e){KW=null}KWBUSY=false;const same=JSON.stringify(KW||null)===old;if(!same){kwBuild();NIMPK=""}if(tab==="admin"&&(!same||force))render()}
+let KWMSG="";/* the keywords from last time are used straight away, so the news order doesn't jump when the fresh list arrives */try{const c=JSON.parse(localStorage.getItem("rf_kw")||"null");if(Array.isArray(c)&&c.length){KW=c;kwBuild();setTimeout(()=>kwLoad(true),3000)}}catch(e){}
 /* how many points the keywords give a headline (the words it contains, together -4 to +6) */
 function kwScore(t){const n=kwNorm(t);let p=0;for(const x of KWRX)if(x.rx.test(n))p+=x.k.points;return Math.max(-4,Math.min(6,p))}
 function nKeys(t){return [...new Set(String(t||"").toLowerCase().replace(/[^\p{L}\p{N} ]+/gu," ").split(" ").filter(w=>w.length>=4&&!NSTOP.has(w)))]}
