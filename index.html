@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="guest" data-build="2026-11-16a"><head><meta charset="utf-8"><meta name="author" content="Lucsis and Andreas">
+<html lang="en" class="guest" data-build="2026-11-18b"><head><meta charset="utf-8"><meta name="author" content="Lucsis and Andreas">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HeyFootball: football news, scores, games and cards</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%235ad1ff'/%3E%3Cstop offset='1' stop-color='%231b4fd8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8z' fill='url(%23g)'/%3E%3Ccircle cx='20' cy='20' r='9' fill='%23fff'/%3E%3Cpath d='M20 14.5l4.5 3.3-1.7 5.3h-5.6l-1.7-5.3z' fill='%230a1020'/%3E%3C/svg%3E">
@@ -478,6 +478,7 @@ header{transition:box-shadow .3s}body.scrolled header{box-shadow:0 8px 24px #000
 @media (prefers-reduced-motion:reduce){.ibbtn.has,.ibbtn.has .ibbell,.ibbtn.ring .ibbell{animation:none}}
 .guest .ibbtn{display:none}
 main#app:empty~footer{visibility:hidden}
+:root:not(#z) :is([data-t="friends"],[data-t="chat"],[data-t="fanzone"],[data-t="tournament"],[data-t="form"],[data-t="getapp"],[data-t="social"]){display:none!important}
 .hx .xhero.xhnoimg{min-height:300px;background:#0a0a0a}
 .hx .xhero.xhnoimg .xtxt{background:none}
 .kwadd{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px}.kwadd input{flex:1 1 200px;min-width:0}
@@ -1130,11 +1131,35 @@ html,body{overscroll-behavior-y:none}
 :root:not(#z) body>header .ibbtn{background:none!important;border:1px solid #333!important;width:38px;height:38px}
 :root:not(#z) body>header .hdacc{all:unset;cursor:pointer;font:700 12px/1 Inter,sans-serif;letter-spacing:1.4px;text-transform:uppercase;background:#fff;color:#0a0a0a;padding:12px 16px;white-space:nowrap}
 :root:not(#z) body>header .hdacc.on{background:var(--flare);color:#fff}
+@media(max-width:1180px){
+  :root:not(#z) body>header .bar{gap:14px!important;padding:0 16px!important}
+  :root:not(#z) body>header .logo{font-size:24px!important}
+  :root:not(#z) body>header .bar nav{gap:2px!important;min-width:0;overflow-x:auto!important;scrollbar-width:none}
+  :root:not(#z) body>header .bar nav::-webkit-scrollbar{display:none}
+  :root:not(#z) body>header .bar nav :is(button,a){font-size:12px!important;letter-spacing:.6px!important;flex:1 0 auto!important}
+  :root:not(#z) body>header .hdtools{gap:8px}
+  :root:not(#z) body>header .hdacc{padding:10px 12px;max-width:150px;overflow:hidden;text-overflow:ellipsis}
+}
+@media(max-width:900px){
+  :root:not(#z) body>header .logo{font-size:21px!important}
+  :root:not(#z) body>header .bar nav :is(button,a){font-size:11px!important;letter-spacing:0!important;padding:0 4px!important}
+  :root:not(#z) body>header .hdacc .avatar+span{display:none}
+}
 @media(max-width:760px){
-  :root:not(#z) body>header .bar{height:56px!important;padding:0 14px!important;gap:12px!important}
+  :root:not(#z) body>header .bar{height:56px!important;padding:0 12px!important;gap:10px!important}
+  :root:not(#z) body>header .hdacc .avatar+span{display:inline}
+  :root:not(#z) body>header .hdtools{gap:6px;min-width:0}
+  :root:not(#z) body>header :is(.searchbtn,.ibbtn){width:34px!important;height:34px!important}
+  :root:not(#z) body>header .hdacc{max-width:120px}
+  :root:not(#z) body>header .hdacc span{overflow:hidden;text-overflow:ellipsis}
   :root:not(#z) body>header .bar nav{display:none!important}
   :root:not(#z) body>header .logo{font-size:24px!important}
   :root:not(#z) body>header .hdacc{padding:10px 12px;font-size:11px}
+}
+@media(max-width:400px){
+  :root:not(#z) body>header .logo{font-size:20px!important}
+  :root:not(#z) body>header .hdacc .avatar+span{display:none}
+  :root:not(#z) body>header .hdacc{padding:8px 10px}
 }
 /* the old side menus, sub-tab bar and side icons are gone */
 #subbar,.hrail,#hpop{display:none!important}
@@ -1196,7 +1221,7 @@ body.hassub main#app{padding-bottom:24px!important}
 .hx .xcard .xkicker{margin:12px 0 6px}
 .hx .xcard h3{font:700 17px/1.3 Inter;margin:0;text-align:left}
 .hx .xcard time{display:block;color:var(--g3);font-size:12px;margin-top:8px;text-align:left}
-.hx .xtwo{display:grid;grid-template-columns:1.25fr 1fr;gap:calc(var(--gut)*2)}
+.hx .xtwo{display:grid;grid-template-columns:1.25fr 1fr;gap:calc(var(--gut)*2)}.hx .xtwo>*,.hx .xplay>*{min-width:0}.hx .xtabs{overflow-x:auto;scrollbar-width:none}
 .hx .xtabs{display:flex;gap:22px;border-bottom:1px solid var(--g2);margin-bottom:6px;overflow-x:auto;scrollbar-width:none}
 .hx .xtabs button{all:unset;cursor:pointer;font:700 12px/1 Inter;letter-spacing:1.2px;text-transform:uppercase;color:var(--g3);padding:10px 0 12px;border-bottom:3px solid transparent;margin-bottom:-1px;white-space:nowrap}
 .hx .xtabs button.on{color:#0a0a0a;border-bottom-color:var(--flare)}
@@ -1227,7 +1252,7 @@ body.hassub main#app{padding-bottom:24px!important}
 .hx .xpcm i{font-style:normal;align-self:stretch;background:var(--rc);color:#fff;font:400 22px/1 Anton;padding:6px 8px;text-align:left}
 .hx .xpcm em{font-style:normal;width:46px;height:46px;border-radius:50%;background:color-mix(in srgb,var(--rc) 22%,#fff);display:grid;place-items:center;font:800 15px Inter;margin:12px 0 8px}
 .hx .xpcm b{font:800 11px/1.2 Inter;text-transform:uppercase;text-align:center}
-.hx .xgames{display:grid;grid-template-columns:1fr 1fr;gap:var(--gut)}
+.hx .xgames{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--gut)}@media(max-width:400px){.hx .xgame{padding:16px;min-height:130px}.hx .xgame b{font-size:14px;overflow-wrap:anywhere}}
 .hx .xgame{all:unset;box-sizing:border-box;cursor:pointer;background:var(--g1);padding:22px;display:flex;flex-direction:column;justify-content:space-between;min-height:158px;border-top:3px solid #0a0a0a;text-align:left}
 .hx .xgame:hover{background:#ececec}
 .hx .xgame .xgi{font-size:28px}
@@ -1235,7 +1260,7 @@ body.hassub main#app{padding-bottom:24px!important}
 .hx .xgame small{color:var(--g4);font-size:13px}
 @media(max-width:900px){
   .hx{--gut:16px}
-  .hx .xlead,.hx .xtwo,.hx .xplay{grid-template-columns:1fr}
+  .hx .xlead,.hx .xtwo,.hx .xplay{grid-template-columns:minmax(0,1fr)}
   .hx .xhero{min-height:360px}.hx .xhero h1{font-size:36px}.hx .xhero .xtxt{padding:20px}
   .hx .xgrid4{grid-template-columns:1fr 1fr}
   .hx .xshead h2{font-size:28px}
@@ -1650,21 +1675,26 @@ async function ibSync(){if(!(SB&&me))return;const{data,error}=await SB.rpc("inbo
   const s=reqSeen(),add=data.filter(x=>x.startsWith("rq:")).map(x=>x.slice(3)).filter(i=>!s.includes(i));
   if(add.length){try{localStorage.setItem(reqSeenKey(),JSON.stringify([...s,...add].slice(-200)))}catch(e){}const all=reqSeen();REQ_NEW=REQ_IDS.filter(id=>!all.includes(id)).length;updateFriendsDot()}ibUpdate()}
 function ibMark(ids){ids=ids.filter(i=>i&&!IBSRV.has(i));if(!(SB&&me)||!ids.length)return;ids.forEach(i=>IBSRV.add(i));SB.rpc("inbox_mark",{p_ids:ids.slice(0,100)}).then(()=>{},()=>{})}
-function ibPush(icon,text,go,id){if(!me)return;const log=ibLoad();if(id&&log.some(x=>x.id===id))return;log.unshift({id:id||String(Date.now())+Math.random(),icon,text,go,at:Date.now(),read:!!(id&&IBSRV.has(id))});IB.log=log.slice(0,40);ibSave();ibUpdate()}
-function ibLive(){const out=[];if(!me)return out;
+function ibPush(icon,text,go,id){if(!me||!ibOk({go}))return;const log=ibLoad();if(id&&log.some(x=>x.id===id))return;log.unshift({id:id||String(Date.now())+Math.random(),icon,text,go,at:Date.now(),read:!!(id&&IBSRV.has(id))});IB.log=log.slice(0,40);ibSave();ibUpdate()}
+/* only pages that still exist can send notifications (the old design keeps all of them) */
+const IBPAGES=new Set(["home","news","matches","tables","gallery","arcade","account","setup","admin","settings"]);
+const ibOk=x=>!!(x&&(ST.classic||!x.go||IBPAGES.has(x.go.t)));
+const ibLog=()=>ibLoad().filter(ibOk);
+function ibLive(){return ibLive0().filter(ibOk)}
+function ibLive0(){const out=[];if(!me)return out;
   try{UNREAD.forEach(r=>{const c=((allChats().find(x=>x[0]===r)||[])[1]||L("a chat")).replace(/^\S+\s/,"");out.push({icon:"💬",text:L("New messages in")+" "+c,go:{t:"chat",room:r}})})}catch(e){}
   try{if(REQ_NEW>0)out.push({icon:"👥",text:REQ_NEW===1?L("You have a new friend request"):REQ_NEW+" "+L("new friend requests"),go:{t:"friends",fs:"list"}})}catch(e){}
   try{incomingTrades().forEach(t=>out.push({icon:"🔄",text:fname(t.from_user)+" "+L("sent you a trade offer"),go:{t:"friends",fs:"trades"},at:new Date(t.created_at).getTime()}))}catch(e){}
   try{const n=collReady().length;if(n)out.push({icon:"🎁",text:n===1?L("A collection reward is ready to claim"):n+" "+L("collection rewards are ready to claim"),go:{t:"gallery",gs:"goals"}})}catch(e){}
   try{btIn().forEach(b=>out.push({icon:"⚔️",text:b.other+" "+L("challenged you to a card battle"),go:{t:"gallery",gs:"battle"},at:new Date(b.created_at).getTime()}))}catch(e){}
   return out}
-function ibUpdate(){const b=$(".ibbtn");if(!b)return;const n=ibLive().length+ibLoad().filter(x=>!x.read).length,c=b.querySelector(".ibcount");if(c){c.textContent=n>9?"9+":n;c.hidden=!n}b.classList.toggle("has",n>0);
+function ibUpdate(){const b=$(".ibbtn");if(!b)return;const n=ibLive().length+ibLog().filter(x=>!x.read).length,c=b.querySelector(".ibcount");if(c){c.textContent=n>9?"9+":n;c.hidden=!n}b.classList.toggle("has",n>0);
   // something new arrived: ring the bell, show a message, and put the number in the browser tab title
-  if(IB.lastN!=null&&n>IB.lastN&&!IB.open){b.classList.remove("ring");void b.offsetWidth;b.classList.add("ring");setTimeout(()=>b.classList.remove("ring"),3000);const nw=[...ibLive(),...ibLoad().filter(x=>!x.read)][0];toast("🔔 "+(nw?nw.text:L("New in your inbox")))}IB.lastN=n;
+  if(IB.lastN!=null&&n>IB.lastN&&!IB.open){b.classList.remove("ring");void b.offsetWidth;b.classList.add("ring");setTimeout(()=>b.classList.remove("ring"),3000);const nw=[...ibLive(),...ibLog().filter(x=>!x.read)][0];toast("🔔 "+(nw?nw.text:L("New in your inbox")))}IB.lastN=n;
   const t0=document.title.replace(/^\(\d+\+?\) /,"");document.title=n?"("+(n>9?"9+":n)+") "+t0:t0;b.setAttribute("aria-label",n?L("Inbox")+", "+n+" "+L("new"):L("Inbox"));if(IB.open)ibDraw()}
 function ibDraw(){let p=document.getElementById("ibpanel");if(!IB.open||!me){if(p)p.remove();return}
   if(!p){p=document.createElement("div");p.id="ibpanel";p.setAttribute("role","dialog");p.setAttribute("aria-label",L("Inbox"));document.body.appendChild(p)}
-  const live=ibLive(),log=ibLoad(),row=(x,k)=>`<button class="ibrow${x.read===false?" new":""}" data-ibgo="${k}"><b>${x.icon}</b><span>${esc(x.text)}${x.at?`<small>${ago(x.at)}</small>`:""}</span><em>${L("Go")} →</em></button>`;
+  const live=ibLive(),log=ibLog(),row=(x,k)=>`<button class="ibrow${x.read===false?" new":""}" data-ibgo="${k}"><b>${x.icon}</b><span>${esc(x.text)}${x.at?`<small>${ago(x.at)}</small>`:""}</span><em>${L("Go")} →</em></button>`;
   IB.items=[...live,...log];
   p.innerHTML=`<div class="ibhead"><b>🔔 ${L("Inbox")}</b><button class="back" data-ibclose="1" aria-label="${L("Close")}">✕</button></div>${live.length?`<p class="ibsec">${L("Waiting for you")}</p>${live.map((x,i)=>row(x,i)).join("")}`:""}${log.length?`<p class="ibsec">${L("What happened")}</p>${log.map((x,i)=>row(x,live.length+i)).join("")}`:""}${!live.length&&!log.length?`<p class="sl ibempty">${L("Nothing new. When something happens, it shows up here.")}</p>`:""}`}
 function ibToggle(){IB.open=!IB.open;ibDraw();if(IB.open)setTimeout(()=>{if(!me)return;ibLoad().forEach(x=>x.read=true);ibSave();ibMark([...ibLoad().map(x=>x.id),...REQ_IDS.map(i=>"rq:"+i)]);const b=$(".ibbtn"),n=ibLive().length,c=b&&b.querySelector(".ibcount");if(c){c.textContent=n>9?"9+":n;c.hidden=!n}if(b)b.classList.toggle("has",n>0)},1500)}
@@ -4815,7 +4845,7 @@ const top=dailyHtml()+`<div class="gtop"><span class="coins">🪙 <span class="c
 if(gsub==="goals")return h+top+collGoalsHtml();if(gsub==="battle")return h+top+battleHtml();if(gsub==="dream")return h+top+dreamPage();if(gsub==="open"&&PULL){const pk=PULL.pack,free=PCRED[pk.id]||0,again=free>0||(WAL!=null&&WAL>=packPrice(pk)),others=Object.entries(PCRED).filter(([k,n])=>k!==pk.id&&n>0);
 return h+top+`<div class="panel" style="text-align:center"><h3>${pk.e} ${esc(pk.n)}${PULL.n>1?" ×"+PULL.n:""}</h3>${revealHtml()}<div class="row" style="justify-content:center;gap:10px;flex-wrap:wrap"><button class="btn packbtn ${pkCan(pk)?"can":"cant"}" data-pack="${esc(pk.id)}" ${gBusy?"disabled":""}>${gBusy?"Opening…":"↻ "+pkLabel(pk)}</button>${others.map(([k,n])=>{const q=PACKS.find(x=>x.id===k);return q?`<button class="btn packbtn can" data-pack1="${esc(k)}" ${gBusy?"disabled":""}>🎁 ${L("Open free")} ${esc(q.n)} (${n})</button>`:""}).join("")}<button class="btn ghost" data-sharepull="1">📤 ${L("Share my pull")}</button>${(()=>{const ps=[...new Set((PULL.cards||[]).map(c=>c.player_id))].map(id=>GP.find(x=>x.id===id)).filter(Boolean).sort((a,b)=>(RANKR[b.rarity]||0)-(RANKR[a.rarity]||0)).slice(0,50);return ps.length?fzBtn("card",{cards:ps.map(fzPack)}):""})()}<button class="btn ghost" data-gs="col">See my collection</button><button class="btn ghost" data-gs="packs">All packs</button></div></div>`}
 if(gsub==="packs")return h+top+(Object.keys(PCRED).length?`<div class="freebar">🎁 ${L("You have free packs!")} ${Object.entries(PCRED).map(([k,n])=>`<b>${esc((PACKS.find(p=>p.id===k)||{n:k}).n)} ×${n}</b>`).join(" · ")}</div>`:"")+`<p class="sl">Earn 🪙 coins by playing any game in the Arcade, with no daily limit. Duplicates give some coins back.</p><div class="packs">${PACKS.map(pk=>{const free=PCRED[pk.id]||0,can=free>0||(WAL!=null&&WAL>=packPrice(pk));return`<div class="panel pk"><div class="pk-e">${pk.e}</div><h3>${esc(pk.n)}</h3><p class="sl" style="margin:2px 0 8px">${esc(pk.d)}</p><div class="odds">${packOdds(pk).map(([k,v])=>`<span>${rarOf(k)[2]} ${rarOf(k)[1]} <b>${v}%</b></span>`).join("")}</div>${pkChips(pk)}<button class="btn packbtn ${pkCan(pk)?"can":"cant"}" data-pack="${esc(pk.id)}" ${gBusy?"disabled":""}>${gBusy?"Opening…":pkLabel(pk)}</button></div>`}).join("")}<div class="panel pk chestpk"><div class="pk-e">🧰</div><h3>${L("Treasure chest")}</h3><p class="sl" style="margin:2px 0 8px">${L("5 random prizes: Basic, Rare, Epic, Legendary, Rising Stars, Icons or club packs, or 2000 coins.")}</p><button class="btn packbtn ${WAL!=null&&WAL>=CHEST_PRICE?"can":"cant"}" data-buychest="1">${WAL!=null&&WAL>=CHEST_PRICE?"Open":"🔒"} · 🪙 ${CHEST_PRICE}</button></div></div>`;
-if(gsub==="dbl"){const d=GP.filter(p=>(COL[p.id]||0)>=2).sort((a,b)=>COL[b.id]-COL[a.id]);return h+top+`<p class="sl">Players you have more than one of. Trade them with friends: open a friend in the Friends tab and tap 🔄 Trade doubles. You can only swap a double for a double.</p><button class="btn" data-t="friends" style="margin:0 0 14px">🔄 ${L("Go to Friends to trade")} →</button>${d.length?`<div class="pgrid">${d.map(p=>pcard(p,COL[p.id],`<span class="pbadge dup">${COL[p.id]-1} spare</span>`)).join("")}</div>`:'<p class="sl">No doubles yet. When you get a player you already have from a pack, it shows up here.</p>'}`}
+if(gsub==="dbl"){const d=GP.filter(p=>(COL[p.id]||0)>=2).sort((a,b)=>COL[b.id]-COL[a.id]);return h+top+`${ST.classic?`<p class="sl">Players you have more than one of. Trade them with friends: open a friend in the Friends tab and tap 🔄 Trade doubles. You can only swap a double for a double.</p><button class="btn" data-t="friends" style="margin:0 0 14px">🔄 ${L("Go to Friends to trade")} →</button>`:`<p class="sl">${L("Players you have more than one of.")}</p>`}${d.length?`<div class="pgrid">${d.map(p=>pcard(p,COL[p.id],`<span class="pbadge dup">${COL[p.id]-1} spare</span>`)).join("")}</div>`:'<p class="sl">No doubles yet. When you get a player you already have from a pack, it shows up here.</p>'}`}
 const list=GP.filter(p=>gfil==="all"||(gfil==="owned"?COL[p.id]:!COL[p.id])).sort((a,b)=>(!!COL[b.id]-!!COL[a.id])||(COL[a.id]&&COL[b.id]?((RANKR[b.rarity]||0)-(RANKR[a.rarity]||0))||(b.rating-a.rating):a.id-b.id));// your cards first, best rarity first
 return h+top+`<div class="chips">${[["all","All "+GP.length],["owned",`Collected (${owned})`],["missing",`Missing (${GP.length-owned})`]].map(([k,l])=>`<button class="chip" data-gf="${k}" aria-pressed="${gfil===k}">${l}</button>`).join("")}</div>
 <div class="rtally">${RAR.slice().reverse().map(r=>`<span>${r[2]} ${r[1]} <b>${GP.filter(p=>p.rarity===r[0]&&COL[p.id]).length}/${GP.filter(p=>p.rarity===r[0]).length}</b></span>`).join("")}</div>
