@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="guest" data-build="2026-11-19a"><head><meta charset="utf-8"><meta name="author" content="Lucsis and Andreas">
+<html lang="en" class="guest" data-build="2026-11-24b"><head><meta charset="utf-8"><meta name="author" content="Lucsis and Andreas">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>HeyFootball: football news, scores, games and cards</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%235ad1ff'/%3E%3Cstop offset='1' stop-color='%231b4fd8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M20 2 36 8v12c0 9-7 15-16 18C11 35 4 29 4 20V8z' fill='url(%23g)'/%3E%3Ccircle cx='20' cy='20' r='9' fill='%23fff'/%3E%3Cpath d='M20 14.5l4.5 3.3-1.7 5.3h-5.6l-1.7-5.3z' fill='%230a1020'/%3E%3C/svg%3E">
@@ -503,7 +503,7 @@ main#app:empty~footer{visibility:hidden}
 .xfl{font:700 11px Inter,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:#0284c7}
 .xft{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;margin:6px 0 10px;font:700 16px/1.2 Inter,sans-serif}
 .xft span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.xft span:first-child{text-align:right}
-.xsc{font:400 24px Anton,Impact,sans-serif;color:#0c4a6e}.xsc.xlive{color:#dc2626}.xtime{font:700 14px Inter;color:#0369a1;background:#e0f2fe;padding:5px 9px}
+.xfsc{font:400 24px Anton,Impact,sans-serif;color:#0c4a6e}.xfsc.xflive{color:#dc2626}.xtime{font:700 14px Inter;color:#0369a1;background:#e0f2fe;padding:5px 9px}
 .xpks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .xpk{all:unset;box-sizing:border-box;cursor:pointer;text-align:center;border:1.5px solid #bae6fd;background:#fff;padding:9px 6px;font:600 13px Inter,sans-serif;color:#0c4a6e;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .xpk:hover:not([disabled]){border-color:var(--ice2)}.xpk.on{background:var(--ice2);border-color:var(--ice2);color:#fff}.xpk.res{box-shadow:inset 0 -3px 0 #22c55e}.xpk[disabled]{cursor:default;opacity:.7}
@@ -1259,7 +1259,7 @@ body.hassub main#app{padding-bottom:24px!important}
 .hx .xsday b{font:700 11px/1.3 Inter;letter-spacing:1.4px;text-transform:uppercase}.hx .xsday small{font-size:11px;color:var(--g3)}
 .hx .xsc{flex:none;width:176px;padding:10px 14px;border-right:1px solid var(--g2);font-size:13px;text-align:left}
 .hx .xsc .xst{font:700 10px/1 Inter;letter-spacing:1.2px;text-transform:uppercase;color:var(--g3);margin-bottom:6px;display:flex;justify-content:space-between;gap:6px}
-.hx .xsc .xst.live{color:#e11d2e}
+.hx .xsc .xst.xlv{color:#e11d2e}
 .hx .xsc .srw{display:flex;justify-content:space-between;gap:8px;line-height:1.55;white-space:nowrap}
 .hx .xsc .srw>*:first-child{overflow:hidden;text-overflow:ellipsis}
 .hx .xsc .srw.lose{color:var(--g3)}.hx .xsc .srw.lose b{font-weight:400}
@@ -3257,7 +3257,7 @@ function homePage(){if(!gTried&&SB&&me)setTimeout(loadGallery,0);
   // score strip: live first, then the latest big results, then the next big games
   const live=(DATA.live||[]).slice(0,6),fin=pickM((DATA.res||[]).filter(m=>now-new Date(m.t)<4*864e5),"big",6,true),up=pickM((DATA.fx||[]).filter(m=>new Date(m.t)>now),"big",6);
   const cell=(m,st)=>{const lg=esc(LGS_(m.c)||"");if(st==="up")return`<div class="xsc"><div class="xst"><span>${esc(day(m.t).split(" ")[0])} ${esc(hm(m.t))}</span><span>${lg}</span></div><div class="srw"><span>${esc(m.h)}</span></div><div class="srw"><span>${esc(m.a)}</span></div></div>`;
-    const hw=m.hs>m.as,aw=m.as>m.hs,lv=st==="live";return`<div class="xsc"><div class="xst${lv?" live":""}"><span>${lv?"● "+esc(liveMin(m)):"FT"}</span><span>${lg}</span></div><div class="srw${aw&&!lv?" lose":""}"><b>${esc(m.h)}</b><b>${m.hs}</b></div><div class="srw${hw&&!lv?" lose":""}"><b>${esc(m.a)}</b><b>${m.as}</b></div></div>`};
+    const hw=m.hs>m.as,aw=m.as>m.hs,lv=st==="live";return`<div class="xsc"><div class="xst${lv?" xlv":""}"><span>${lv?"● "+esc(liveMin(m)):"FT"}</span><span>${lg}</span></div><div class="srw${aw&&!lv?" lose":""}"><b>${esc(m.h)}</b><b>${m.hs}</b></div><div class="srw${hw&&!lv?" lose":""}"><b>${esc(m.a)}</b><b>${m.as}</b></div></div>`};
   const strip=[...live.map(m=>cell(m,"live")),...fin.map(m=>cell(m,"ft")),...up.map(m=>cell(m,"up"))].join("");
   // matches: today / yesterday / tomorrow, by league
   const dm=dayMatches(HMD,false).slice(0,9);let lastLg="";
@@ -5735,7 +5735,7 @@ function xFixHtml(){const F=xFix(),P=xPicks(),now=Date.now();
   for(const x of F){const t=new Date(x.t),k=t.toDateString();if(k!==day){day=k;h+=`<h3 class="xday">${t.toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"long"})}</h3>`}
     const started=+t<=now,p=P[x.id],r=x.r,o=r?xOut(r):null,st=r&&p?(p===o?"won":"lost"):r?"lost":"open";
     const btn=(k,lab)=>`<button class="xpk${p===k?" on":""}${o===k?" res":""}" data-xpick="${esc(x.id)}|${k}" ${started?"disabled":""} aria-pressed="${p===k}">${esc(lab)}</button>`;
-    const mid=r?`<b class="xsc">${r.hs}–${r.as}</b>`:x.lv?`<b class="xsc xlive">${x.lv.hs==null?0:x.lv.hs}–${x.lv.as==null?0:x.lv.as}</b>`:`<span class="xtime">${t.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}</span>`;
+    const mid=r?`<b class="xfsc">${r.hs}–${r.as}</b>`:x.lv?`<b class="xfsc xflive">${x.lv.hs==null?0:x.lv.hs}–${x.lv.as==null?0:x.lv.as}</b>`:`<span class="xtime">${t.toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"})}</span>`;
     const note=r?(p?(p===o?"🎉 Ornament won! It's hanging on your tree.":"❌ Not this time. This ornament got away."):"Finished. No pick was made."):started?(p?"🔒 Pick locked in. Waiting for the result…":"🔒 Kicked off. Too late to pick."):p?"✓ Pick saved. You can change it until kick-off.":"Pick who wins to play for this ornament.";
     h+=`<div class="xfx ${st}${p&&!r?" picked":""}"><div class="xfo">${orn(x.id,st)}</div><div class="xfm"><div class="xfl">${esc(LGN(x.c)||x.c||"")}</div><div class="xft"><span>${esc(x.h)}</span>${mid}<span>${esc(x.a)}</span></div><div class="xpks">${btn("h",x.h)}${btn("d","Draw")}${btn("a",x.a)}</div><p class="xnote">${note}</p></div></div>`}
   return intro+h}
@@ -5766,12 +5766,12 @@ async function xSend(kind){if(XG.busy||!me)return;XG.busy=true;XG.msg="Wrapping�
   if(r.error){XG.msg=xErr(r.error.message);if(/Already a gift/.test(r.error.message)){XG.form="";await xGiftPeek()}render();return}
   XG.form="";XG.cards=[];XG.pack="";XG.has=true;XG.mine=true;XG.from=me.name||"you";XG.msg="🎁 Your present is under the tree! Anyone can open it.";if(r.data&&typeof r.data.coins==="number"){WAL=r.data.coins;showCoins()}loadGallery();render()}
 function xGiftHtml(){if(XG.has===null&&!XG.busy)setTimeout(xGiftPeek,0);const f=XG.form;
-  let h=`<p class="xintro">There's one present spot for the whole site. Put a present under the tree (some of your cards, or a pack you buy) and <b>anyone</b> can open it. Once it's opened, the spot is free for the next present.</p>
+  let h=`<p class="xintro">There's one present spot for the whole site. Put a present under the tree (some of your doubles, or a pack you buy) and <b>anyone</b> can open it. Once it's opened, the spot is free for the next present.</p>
   <div class="xgiftbox"><button class="btn xgiftbtn" data-xgift="1">🎁 Gift</button><button class="xpresent${XG.has?" on":""}" data-xredeem="1" aria-label="${XG.has?"Open the present":"The present spot is empty"}">${XPRESENT(!!XG.has)}</button>
   <p class="xpcap">${XG.has===null?"Looking under the tree…":XG.has?`A present from <b>${esc(XG.from||"someone")}</b>${XG.mine?" (that's yours!)":""}. Tap it to open it!`:"The present spot is empty."}</p>${XG.msg?`<p class="xmsg" role="status">${esc(XG.msg)}</p>`:""}</div>`;
-  if(f==="choose")h+=`<div class="xmcard"><h3>What do you want to give?</h3><div class="xgchoice"><button class="btn" data-xgk="cards">🃏 Give some of my cards</button><button class="btn" data-xgk="pack">📦 Buy a pack for someone</button><button class="btn ghost" data-xgk="x">Cancel</button></div></div>`;
-  if(f==="cards"){const mine=GP.filter(p=>(COL[p.id]||0)>0).sort((a,b)=>(RANKR[b.rarity]||0)-(RANKR[a.rarity]||0)||b.rating-a.rating);
-    h+=`<div class="xmcard"><h3>Pick up to 5 cards to give (${XG.cards.length}/5)</h3><p class="sl" style="margin-top:0">One copy of each card you pick leaves your collection when you wrap the present.</p>${!GP.length?'<p class="sl">Loading your cards…</p>':mine.length?`<div class="xgcards">${mine.map(p=>`<button class="xgc${XG.cards.includes(p.id)?" on":""}" data-xgc="${p.id}" aria-pressed="${XG.cards.includes(p.id)}" aria-label="${esc(p.name)}">${pcard(p,COL[p.id])}</button>`).join("")}</div>`:'<p class="sl">You have no cards yet. Open some packs in Cards first.</p>'}
+  if(f==="choose")h+=`<div class="xmcard"><h3>What do you want to give?</h3><div class="xgchoice"><button class="btn" data-xgk="cards">🃏 Give some of my doubles</button><button class="btn" data-xgk="pack">📦 Buy a pack for someone</button><button class="btn ghost" data-xgk="x">Cancel</button></div></div>`;
+  if(f==="cards"){const mine=GP.filter(p=>(COL[p.id]||0)>=2)/* only doubles can be given */.sort((a,b)=>(RANKR[b.rarity]||0)-(RANKR[a.rarity]||0)||b.rating-a.rating);
+    h+=`<div class="xmcard"><h3>Pick up to 5 doubles to give (${XG.cards.length}/5)</h3><p class="sl" style="margin-top:0">You can only give doubles. One copy of each card you pick goes in the present, and you keep the rest.</p>${!GP.length?'<p class="sl">Loading your cards…</p>':mine.length?`<div class="xgcards">${mine.map(p=>`<button class="xgc${XG.cards.includes(p.id)?" on":""}" data-xgc="${p.id}" aria-pressed="${XG.cards.includes(p.id)}" aria-label="${esc(p.name)}">${pcard(p,COL[p.id],`<span class="pbadge">×${COL[p.id]}</span>`)}</button>`).join("")}</div>`:'<p class="sl">You have no doubles yet. When you get the same player twice from packs, you can give the spare one here.</p>'}
     <div class="xgchoice"><button class="btn" data-xgsend="cards" ${XG.cards.length&&!XG.busy?"":"disabled"}>🎀 Wrap it up</button><button class="btn ghost" data-xgk="x">Cancel</button></div></div>`}
   if(f==="pack"){const ok=PACKS.filter(p=>XGPRICE[p.id]);h+=`<div class="xmcard"><h3>Choose a pack to give</h3><p class="sl" style="margin-top:0">You pay now, and whoever opens the present gets the pack free. You have 🪙 <span class="coinv">${WAL==null?"…":WAL}</span>.</p><div class="xgpacks">${ok.map(p=>`<button class="xgp${XG.pack===p.id?" on":""}" data-xgp="${p.id}" aria-pressed="${XG.pack===p.id}"><span>${p.e}</span><b>${esc(p.n)}</b><small>🪙 ${XGPRICE[p.id]}</small></button>`).join("")}</div>
     <div class="xgchoice"><button class="btn" data-xgsend="pack" ${XG.pack&&!XG.busy?"":"disabled"}>🎀 Buy and wrap${XG.pack?" · 🪙 "+XGPRICE[XG.pack]:""}</button><button class="btn ghost" data-xgk="x">Cancel</button></div></div>`}
